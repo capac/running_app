@@ -1,0 +1,9 @@
+.DS_Store
+.vscode/
+*.png
+*.heic
+*.gif
+*.html
+__pycache__/
+shoes/
+marathon_programs/
