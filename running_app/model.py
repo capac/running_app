@@ -9,7 +9,7 @@ class SQLModel:
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Time': {'req': True, 'type': FT.time_string},
         'Distance': {'req': True, 'type': FT.decimal},
-        'Location': {'req': True, 'type': FT.boolean},
+        'Location': {'req': True, 'type': FT.string},
     }
 
     # create tables if not existing
@@ -17,7 +17,18 @@ class SQLModel:
                                     '(date DATE UNIQUE NOT NULL, '
                                     'time TIME NOT NULL, '
                                     'distance REAL NOT NULL, '
+                                    'location TEXT NOT NULL, '
                                     'PRIMARY KEY(date))')
+
+    # insert running session in running table
+    running_insert_query = ('INSERT INTO running VALUES (:date, '
+                            ':time, :distance, :location) ')
+
+    # update running session in running table
+    running_update_query = ('UPDATE running SET time=:time, '
+                            'distance=:distance, '
+                            'location=:location, '
+                            'WHERE date=:date')
 
     # create or connect to a database
     def __init__(self, database):
@@ -34,3 +45,9 @@ class SQLModel:
             self.connection.commit()
             if cursor.description is not None:
                 return cursor.fetchall()
+
+    # only upon first run of the running application
+    def create_db_and_tables(self):
+        '''Creates database and tables if they don't already exist'''
+
+        self.query(self.create_running_table_command)
