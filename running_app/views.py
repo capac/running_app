@@ -18,17 +18,16 @@ class DataRecordForm(tk.Frame):
         self.record_label = ttk.Label(self)
         self.record_label.grid(row=0, column=0, padx=2, pady=(4, 0))
 
-        # office information
+        # running input
         runninginfo = tk.LabelFrame(self, text='Running information', padx=5, pady=5)
 
-        # line 1
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date',
                                            field_spec=fields['Date'])
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Time'] = w.LabelInput(runninginfo, 'Time',
                                            field_spec=fields['Time'])
         self.inputs['Time'].grid(row=0, column=1)
-        self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance',
+        self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'])
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location',
