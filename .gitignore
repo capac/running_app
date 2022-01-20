@@ -1,9 +1,14 @@
+__pycache__/
+marathon_programs/
+shoes/
 .DS_Store
 .vscode/
 *.png
 *.heic
 *.gif
 *.html
-__pycache__/
-shoes/
-marathon_programs/
+*.txt
+check_paces.py
+cal_VO2Max.py
+marathon_plan.py
+mod_data_layout.py
