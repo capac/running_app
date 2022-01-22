@@ -7,7 +7,7 @@ class SQLModel:
 
     fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
-        'Time': {'req': True, 'type': FT.time_string},
+        'Time': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal},
         'Location': {'req': True, 'type': FT.string},
     }
