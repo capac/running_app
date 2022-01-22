@@ -22,10 +22,12 @@ class DataRecordForm(tk.Frame):
         runninginfo = tk.LabelFrame(self, text='Running information', padx=5, pady=5)
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date',
-                                           field_spec=fields['Date'])
+                                           field_spec=fields['Date'],
+                                           label_args={'style': 'RecordInfo.TLabel'})
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Time'] = w.LabelInput(runninginfo, 'Time',
-                                           field_spec=fields['Time'])
+                                           field_spec=fields['Time'],
+                                           label_args={'style': 'RecordInfo.TLabel'})
         self.inputs['Time'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'])
