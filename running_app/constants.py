@@ -3,7 +3,7 @@ import enum
 
 class FieldTypes(enum.Enum):
     iso_date_string = 1
-    time_string = 2
+    iso_time_string = 2
     decimal = 3
     string = 4
     boolean = 5
