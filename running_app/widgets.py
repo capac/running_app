@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import datetime
+from datetime import datetime, time
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
 
@@ -121,6 +121,38 @@ class RequiredEntry(ValidatedMixin, ttk.Entry):
         if not self.get():
             valid = False
             self.error.set('A value is required')
+        return valid
+
+
+class TimeEntry(ValidatedMixin, ttk.Entry):
+
+    def _key_validate(self, action, index, char, **kwargs):
+        valid = True
+
+        if action == '0':
+            valid = True
+        elif index in ('0', '1', '3', '4', '6', '7'):
+            valid = char.isdigit()
+        elif index in ('2'):
+            valid = char == 'h'
+        elif index in ('5'):
+            valid = char == 'm'
+        elif index in ('8'):
+            valid = char == 's'
+        else:
+            valid = False
+        return valid
+
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            self.error.set('A value is required')
+            valid = False
+        try:
+            time.strptime(self.get(), '%hh%Mm%Ss')
+        except ValueError:
+            self.error.set('Invalid time')
+            valid = False
         return valid
 
 
