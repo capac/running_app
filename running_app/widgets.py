@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import datetime, time
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
 
@@ -140,7 +140,7 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             self.error.set('A value is required')
             valid = False
         try:
-            time.strptime(self.get(), '%hh%Mm%Ss')
+            datetime.strptime(self.get(), '%Hh%Mm%Ss').time()
         except ValueError:
             self.error.set('Invalid time')
             valid = False
