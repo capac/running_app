@@ -86,6 +86,7 @@ class ValidatedMixin:
 
 
 class DateEntry(ValidatedMixin, ttk.Entry):
+    '''An entry for ISO-style dates (Year-month-day)'''
 
     def _key_validate(self, action, index, char, **kwargs):
         valid = True
@@ -113,18 +114,8 @@ class DateEntry(ValidatedMixin, ttk.Entry):
         return valid
 
 
-class RequiredEntry(ValidatedMixin, ttk.Entry):
-    '''A class requiring all entry fields to not be empty'''
-
-    def _focusout_validate(self, event):
-        valid = True
-        if not self.get():
-            valid = False
-            self.error.set('A value is required')
-        return valid
-
-
 class TimeEntry(ValidatedMixin, ttk.Entry):
+    '''An entry for ISO-style times (hours-minutes-seconds)'''
 
     def _key_validate(self, action, index, char, **kwargs):
         valid = True
@@ -153,6 +144,17 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
         except ValueError:
             self.error.set('Invalid time')
             valid = False
+        return valid
+
+
+class RequiredEntry(ValidatedMixin, ttk.Entry):
+    '''A class requiring all entry fields to not be empty'''
+
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            valid = False
+            self.error.set('A value is required')
         return valid
 
 
