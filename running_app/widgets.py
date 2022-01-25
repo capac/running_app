@@ -140,7 +140,7 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             self.error.set('A value is required')
             valid = False
         try:
-            datetime.strptime(self.get(), '%Hh%Mm%Ss').time()
+            datetime.strptime(self.get(), '%Hh%Mm%Ss') - datetime(1900, 1, 1)
         except ValueError:
             self.error.set('Invalid time')
             valid = False
