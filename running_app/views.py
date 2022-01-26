@@ -6,10 +6,9 @@ from . import widgets as w
 class DataRecordForm(tk.Frame):
     '''The record form for our widgets'''
 
-    def __init__(self, parent, fields, callbacks, input_var, *args, **kwargs):
+    def __init__(self, parent, fields, callbacks, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
-        self.input_var = input_var
 
         # a dictionary to keep track of input widgets
         self.inputs = {}
