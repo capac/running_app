@@ -28,11 +28,22 @@ class Application(tk.Tk):
             self.destroy()
             return
 
+        # create data model
+        self.callbacks = {
+            # menu bar callbacks
+            # 'file->import': self.on_file_import,
+            # 'file->export': self.on_file_export,
+            # method callbacks
+            'on_save': self.on_save,
+        }
+
         # data record form
-        self.recordform = v.DataRecordForm(self, self.data_model.fields,
-                                           self.callbacks, self.attachment_option)
+        self.recordform = v.DataRecordForm(self, self.data_model.fields, self.callbacks)
         self.recordform.grid(row=2, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
     def database_login(self, database):
         self.data_model = m.SQLModel(database)
+
+    def on_save(self):
+        pass
