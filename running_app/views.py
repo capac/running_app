@@ -34,3 +34,10 @@ class DataRecordForm(tk.Frame):
                                                field_spec=fields['Location'])
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
+
+        # command section
+        command_section = tk.LabelFrame(self, text='Commands', padx=5, pady=5)
+        self.updatebutton = w.LabelInput(command_section, 'Save data',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_save'])
+        command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
