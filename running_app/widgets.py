@@ -69,12 +69,12 @@ class ValidatedMixin:
                               action=action)
 
     def _focusout_invalid(self, **kwargs):
-        '''Handle invalid data on a focus event'''
+        '''Handle invalid data on a focus event. . By default we want to do nothing.'''
 
         pass
 
     def _key_invalid(self, **kwargs):
-        ''''Handle invalid data on a key event. By default we want to do nothing'''
+        ''''Handle invalid data on a key event. By default we want to do nothing.'''
 
         pass
 
@@ -164,7 +164,7 @@ class ValidatedSpinbox(ValidatedMixin, TtkSpinbox):
                  focus_update_var=None, from_='1', to='100',
                  **kwargs):
         super().__init__(*args, from_=from_, to=to, **kwargs)
-        self.resolution = Decimal(str(kwargs.get('increment', '1.0')))
+        self.resolution = Decimal(str(kwargs.get('increment', '0.1')))
         self.precision = self.resolution.normalize().as_tuple().exponent
         # there should always be a variable else some of our code will fail
         self.variable = kwargs.get('textvariable') or tk.DoubleVar
