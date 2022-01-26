@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from . import views as v
+from . import models as m
 
 
 class Application(tk.Tk):
@@ -19,3 +21,12 @@ class Application(tk.Tk):
 
         # application name
         ttk.Label(self, text='Running List', font=('TkDefaultFont', 16)).grid(row=0, padx=60)
+
+        # data record form
+        self.recordform = v.DataRecordForm(self, self.data_model.fields,
+                                           self.callbacks, self.attachment_option)
+        self.recordform.grid(row=2, padx=10, sticky='NSEW')
+        self.recordform.columnconfigure(0, weight=1)
+
+    def database_login(self, database):
+        self.data_model = m.SQLModel(database)
