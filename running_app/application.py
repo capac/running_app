@@ -22,6 +22,12 @@ class Application(tk.Tk):
         # application name
         ttk.Label(self, text='Running List', font=('TkDefaultFont', 16)).grid(row=0, padx=60)
 
+        # database login
+        self.database_login('running.db')
+        if not hasattr(self, 'data_model'):
+            self.destroy()
+            return
+
         # data record form
         self.recordform = v.DataRecordForm(self, self.data_model.fields,
                                            self.callbacks, self.attachment_option)
