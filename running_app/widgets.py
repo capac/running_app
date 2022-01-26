@@ -269,8 +269,10 @@ class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
     field_types = {
+        FT.iso_date_string: (RequiredEntry, tk.StringVar),
+        FT.iso_time_string: (RequiredEntry, tk.StringVar),
+        FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
         FT.string: (RequiredEntry, tk.StringVar),
-        FT.integer: (ValidatedSpinbox, tk.IntVar),
     }
 
     def __init__(self, parent, label='', input_class=None, input_var=None,
