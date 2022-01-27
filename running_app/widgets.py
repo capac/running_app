@@ -157,7 +157,7 @@ class RequiredEntry(ValidatedMixin, ttk.Entry):
 
 class ValidatedSpinbox(ValidatedMixin, TtkSpinbox):
     def __init__(self, *args, min_var=None, max_var=None,
-                 focus_update_var=None, from_='1', to='100',
+                 focus_update_var=None, from_='0', to='100',
                  **kwargs):
         super().__init__(*args, from_=from_, to=to, **kwargs)
         self.resolution = Decimal(str(kwargs.get('increment', '0.1')))
@@ -281,6 +281,13 @@ class LabelInput(tk.Frame):
             input_class = input_class or self.field_types.get(field_type)[0]
             var_type = self.field_types.get(field_type)[1]
             self.variable = input_var if input_var else var_type()
+            # min, max, increment
+            if 'min' in field_spec and 'from_' not in input_args:
+                input_args['from_'] = field_spec.get('min')
+            if 'max' in field_spec and 'to' not in input_args:
+                input_args['to'] = field_spec.get('max')
+            if 'inc' in field_spec and 'increment' not in input_args:
+                input_args['increment'] = field_spec.get('inc')
             # values
             if 'values' in field_spec and 'values' not in input_args:
                 input_args['values'] = field_spec.get('values')
