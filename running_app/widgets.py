@@ -124,12 +124,8 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             valid = True
         elif index in ('0', '1', '3', '4', '6', '7'):
             valid = char.isdigit()
-        elif index in ('2'):
-            valid = char == 'h'
-        elif index in ('5'):
-            valid = char == 'm'
-        elif index in ('8'):
-            valid = char == 's'
+        elif index in ('2', '5', '8'):
+            valid = char == ':'
         else:
             valid = False
         return valid
