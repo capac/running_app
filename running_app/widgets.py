@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
 
@@ -140,8 +140,8 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             self.error.set('A value is required')
             valid = False
         try:
-            datetime.timedelta(hours=int(self.get()[0:2]), minutes=int(self.get()[3:5]),
-                               seconds=int(self.get()[6:8]), microseconds=0)
+            timedelta(hours=int(self.get()[0:2]), minutes=int(self.get()[3:5]),
+                      seconds=int(self.get()[6:8]), microseconds=0)
         except ValueError:
             self.error.set('Invalid time')
             valid = False
@@ -269,8 +269,8 @@ class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
     field_types = {
-        FT.iso_date_string: (RequiredEntry, tk.StringVar),
-        FT.iso_time_string: (RequiredEntry, tk.StringVar),
+        FT.iso_date_string: (DateEntry, tk.StringVar),
+        FT.iso_time_string: (TimeEntry, tk.StringVar),
         FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
         FT.string: (RequiredEntry, tk.StringVar),
     }
