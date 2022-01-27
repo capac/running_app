@@ -23,7 +23,7 @@ class DataRecordForm(tk.Frame):
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],)
         self.inputs['Date'].grid(row=0, column=0)
-        self.inputs['Time'] = w.LabelInput(runninginfo, 'Time (h:m:s)',
+        self.inputs['Time'] = w.LabelInput(runninginfo, 'Time (hh:mm:ss)',
                                            field_spec=fields['Time'],)
         self.inputs['Time'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
