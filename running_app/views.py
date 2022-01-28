@@ -36,8 +36,12 @@ class DataRecordForm(tk.Frame):
 
         # command section
         command_section = tk.LabelFrame(self, text='Commands', padx=5, pady=5)
-        self.savebutton = w.LabelInput(command_section, 'Save data',
-                                       input_class=ttk.Button,
-                                       input_var=self.callbacks['on_save'])
-        self.savebutton.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.insertbutton = w.LabelInput(command_section, 'Insert data',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_insert'])
+        self.insertbutton.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.removebutton = w.LabelInput(command_section, 'Remove data',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_remove'])
+        self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
