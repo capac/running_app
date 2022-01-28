@@ -1,6 +1,60 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from . import widgets as w
+
+
+class MainMenu(tk.Menu):
+    '''The Application's main menu'''
+
+    def __init__(self, parent, callbacks, *args, **kwargs):
+        '''Constructor for MainMenu
+
+        arguments:
+            parent - the parent widget
+            callbacks - a dict containing Python callbacks
+            settings - dict to save user settings
+        '''
+        super().__init__(parent, *args, **kwargs)
+
+        # the file menu
+        file_menu = tk.Menu(self, tearoff=False)
+        file_menu.add_command(
+            # 8230: ASCII value for horizontal ellipsis
+            label='Import file with running data'+chr(8230),
+            command=callbacks['file->import']
+            )
+        file_menu.add_command(
+            # 8230: ASCII value for horizontal ellipsis
+            label='Export file with running data'+chr(8230),
+            command=callbacks['file->export']
+            )
+        self.add_cascade(label='File', menu=file_menu)
+        file_menu.add_separator()
+        stats_menu = tk.Menu(file_menu, tearoff=False)
+        file_menu.add_cascade(label='Show statistics', menu=stats_menu)
+        stats_menu.add_command(
+            label='Show running progression',
+            command=callbacks['on_show_running_progression']
+            )
+        stats_menu.add_command(
+            label='Show VO2Max',
+            command=callbacks['on_show_vo2max']
+            )
+
+        # the help menu
+        help_menu = tk.Menu(self, tearoff=False)
+        help_menu.add_command(label='About'+chr(8230), command=self.show_about)
+        self.add_cascade(label='Help', menu=help_menu)
+
+    def show_about(self):
+        '''Show the about dialog'''
+        about_message = 'Running Application'
+        about_details = ('Running record application \
+                         for the query of information \
+                         concerning training progression and personal bests.\n\n\
+                         For assistance please contact the author.')
+        messagebox.showinfo(title='About', message=about_message, detail=about_details)
 
 
 class DataRecordForm(tk.Frame):
