@@ -103,7 +103,7 @@ class Application(tk.Tk):
                                      detail=str(e))
                 return
 
-    def on_update(self):
+    def insert(self):
         '''Handles tenant updates to database'''
 
         # check for errors first
@@ -120,7 +120,7 @@ class Application(tk.Tk):
         # get data
         data = self.recordform.get()
         try:
-            self.data_model.add_tenant(data)
+            self.data_model.add_record(data)
         except Exception as e:
             messagebox.showerror(
                 title='Error',
@@ -139,9 +139,6 @@ class Application(tk.Tk):
             elif self.data_model.last_write == 'insert record':
                 self.inserted_rows.append(key)
             self.populate_recordlist()
-
-    def insert(self):
-        pass
 
     def remove(self):
         pass
