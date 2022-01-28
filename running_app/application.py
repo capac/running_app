@@ -34,12 +34,20 @@ class Application(tk.Tk):
         # create data model
         self.callbacks = {
             # menu bar callbacks
-            'file->import': self.on_file_import,
-            'file->export': self.on_file_export,
+            'file->import': self.file_import,
+            'file->export': self.file_export,
+            'on_show_running_progression': self.show_running_progression,
+            'on_show_vo2max': self.show_vo2max,
             # method callbacks
-            'on_insert': self.on_insert,
-            'on_remove': self.on_remove,
+            'on_insert': self.insert,
+            'on_remove': self.remove,
         }
+
+        menu = v.MainMenu(self, self.callbacks)
+        self.config(menu=menu)
+
+        # create database and tables if non-existent
+        self.data_model.create_db_and_tables()
 
         # treeview record form
         self.recordlist = v.RecordList(self, self.callbacks,
@@ -132,16 +140,22 @@ class Application(tk.Tk):
                 self.inserted_rows.append(key)
             self.populate_recordlist()
 
-    def on_insert(self):
+    def insert(self):
         pass
 
-    def on_remove(self):
+    def remove(self):
         pass
 
-    def on_file_import(self):
+    def file_import(self):
         pass
 
-    def on_file_export(self):
+    def file_export(self):
+        pass
+
+    def show_running_progression(self):
+        pass
+
+    def show_vo2max(self):
         pass
 
     def database_login(self, database):
