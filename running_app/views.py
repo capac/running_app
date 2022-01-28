@@ -52,10 +52,11 @@ class RecordList(tk.Frame):
 
     column_defs = {
         '#0': {'label': 'Row', 'anchor': tk.W},
-        'Date': {'label': 'Date', 'width': 120},
-        'Time': {'label': 'Time', 'width': 120},
-        'Distance': {'label': 'Distance', 'width': 80},
-        'Location': {'label': 'Location', 'width': 200},
+        'Date': {'label': 'Date (YYYY-mm-dd)', 'width': 160},
+        'Time': {'label': 'Time (hh:mm:ss)', 'width': 160},
+        'Distance': {'label': 'Distance (km)', 'width': 120},
+        'Pace': {'label': 'Pace (min/km)', 'width': 120},
+        'Location': {'label': 'Location', 'width': 240},
     }
     default_width = 100
     default_minwidth = 20
@@ -123,8 +124,8 @@ class RecordList(tk.Frame):
 
         valuekeys = list(self.column_defs.keys())[1:]
         for rowdata in rows:
-            rowkey = (str(rowdata['Date']), str(rowdata['Time']),
-                      str(rowdata['Distance']), str(rowdata['Location']),)
+            rowkey = (str(rowdata['Date']), str(rowdata['Time']), str(rowdata['Distance']),
+                      str(rowdata['Pace']), str(rowdata['Location']),)
             values = [rowdata[key] for key in valuekeys]
             if self.inserted and rowkey in self.inserted:
                 tag = 'inserted_record'
@@ -132,7 +133,7 @@ class RecordList(tk.Frame):
                 tag = 'updated_record'
             else:
                 tag = ''
-            stringkey = '{}|{}|{}|{}'.format(*rowkey)
+            stringkey = '{}|{}|{}|{}|{}'.format(*rowkey)
             self.treeview.insert('', 'end', iid=stringkey, text=stringkey,
                                  values=values, tag=tag)
 
