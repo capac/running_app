@@ -100,6 +100,34 @@ class DataRecordForm(tk.Frame):
         self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
+    def get(self):
+        '''Retrieve data from Tkinter and place it in regular Python objects'''
+
+        data = {}
+        for key, widget in self.inputs.items():
+            data[key] = widget.get()
+        return data
+
+    def get_errors(self):
+        '''Get a list of field errors in the form'''
+
+        errors = {}
+        for key, widget in self.inputs.items():
+            if hasattr(widget.input, 'trigger_focusout_validation'):
+                widget.input.trigger_focusout_validation()
+            if widget.error.get():
+                errors[key] = widget.error.get()
+        return errors
+
+    def load_record(self, rowkey, data=None):
+        self.record_label.config(text='Date: {}'.format(rowkey))
+        for key, widget in self.inputs.items():
+            self.inputs[key].set(data.get(key, ''))
+            try:
+                widget.input.trigger_focusout_validation()
+            except AttributeError:
+                pass
+
 
 class RecordList(tk.Frame):
     '''Display records in the database'''
