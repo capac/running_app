@@ -52,3 +52,8 @@ class SQLModel:
         '''Creates database and tables if they don't already exist'''
 
         self.query(self.create_running_table_command)
+
+    def get_all_records(self):
+        query = ('SELECT * FROM running '
+                 'ORDER BY "Date"')
+        return self.query(query)
