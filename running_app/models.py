@@ -31,6 +31,9 @@ class SQLModel:
                             'location=:location, '
                             'WHERE date=:date')
 
+    # delete record
+    running_delete_query = ('DELETE FROM running WHERE date = :date')
+
     # create or connect to a database
     def __init__(self, database):
         self.connection = sqlite3.connect(database)
@@ -57,3 +60,26 @@ class SQLModel:
         query = ('SELECT * FROM running '
                  'ORDER BY "Date"')
         return self.query(query)
+
+    def get_record(self, date):
+        query = ('SELECT * FROM running '
+                 'WHERE "Date" = :date')
+        result = self.query(query, {"date": date})
+        return result[0] if result else {}
+
+    def add_record(self, record):
+        # add record information
+        insert_query = self.running_insert_query
+        self.last_write = 'insert record'
+        self.query(insert_query, record)
+
+    def update_record(self, record):
+        # add record information
+        update_query = self.running_update_query
+        self.last_write = 'update record'
+        self.query(update_query, record)
+
+    def delete_record(self, record):
+        # delete record information
+        delete_query = self.running_delete_query
+        self.query(delete_query, record)
