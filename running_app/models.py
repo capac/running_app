@@ -15,11 +15,10 @@ class SQLModel:
 
     # create tables if not existing
     create_running_table_command = ('CREATE TABLE IF NOT EXISTS running '
-                                    '(date DATE UNIQUE NOT NULL, '
-                                    'time TIME NOT NULL, '
+                                    '(date TEXT PRIMARY KEY, '
+                                    'time TEXT NOT NULL, '
                                     'distance REAL NOT NULL, '
-                                    'location TEXT NOT NULL, '
-                                    'PRIMARY KEY(date))')
+                                    'location TEXT NOT NULL)')
 
     # insert running session in running table
     running_insert_query = ('INSERT INTO running VALUES (:date, '
@@ -32,7 +31,7 @@ class SQLModel:
                             'WHERE date=:date')
 
     # delete record
-    running_delete_query = ('DELETE FROM running WHERE date = :date')
+    running_delete_query = ('DELETE FROM running WHERE date=:date')
 
     # create or connect to a database
     def __init__(self, database):
@@ -41,7 +40,11 @@ class SQLModel:
     def query(self, query, parameters=None):
         cursor = self.connection.cursor()
         try:
-            cursor.execute(query)
+            if parameters is not None:
+                cursor.execute(query, parameters)
+            else:
+                parameters = {}
+                cursor.execute(query, parameters)
         except (sqlite3.Error) as e:
             self.connection.rollback()
             raise e
@@ -58,12 +61,12 @@ class SQLModel:
 
     def get_all_records(self):
         query = ('SELECT * FROM running '
-                 'ORDER BY "Date"')
+                 'ORDER BY Date')
         return self.query(query)
 
     def get_record(self, date):
         query = ('SELECT * FROM running '
-                 'WHERE "Date" = :date')
+                 'WHERE date=:date')
         result = self.query(query, {"date": date})
         return result[0] if result else {}
 
