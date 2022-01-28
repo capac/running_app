@@ -34,7 +34,8 @@ class Application(tk.Tk):
             # 'file->import': self.on_file_import,
             # 'file->export': self.on_file_export,
             # method callbacks
-            'on_save': self.on_save,
+            'on_insert': self.on_insert,
+            'on_remove': self.on_remove,
         }
 
         # data record form
@@ -45,5 +46,8 @@ class Application(tk.Tk):
     def database_login(self, database):
         self.data_model = m.SQLModel(database)
 
-    def on_save(self):
+    def on_insert(self):
+        pass
+
+    def on_remove(self):
         pass
