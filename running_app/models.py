@@ -18,6 +18,7 @@ class SQLModel:
                                     '(date TEXT PRIMARY KEY, '
                                     'time TEXT NOT NULL, '
                                     'distance REAL NOT NULL, '
+                                    'pace REAL NOT NULL, '
                                     'location TEXT NOT NULL)')
 
     # insert running session in running table
@@ -66,8 +67,8 @@ class SQLModel:
 
     def get_record(self, date):
         query = ('SELECT * FROM running '
-                 'WHERE date=:date')
-        result = self.query(query, {"date": date})
+                 'WHERE date=:Date')
+        result = self.query(query, {"Date": date})
         return result[0] if result else {}
 
     def add_record(self, record):
