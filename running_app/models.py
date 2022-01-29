@@ -21,17 +21,17 @@ class SQLModel:
                                     'location TEXT NOT NULL)')
 
     # insert running session in running table
-    running_insert_query = ('INSERT INTO running VALUES (:date, '
-                            ':time, :distance, :location) ')
+    running_insert_command = ('INSERT INTO running VALUES (:Date, '
+                              ':Time, :Distance, :Location)')
 
     # update running session in running table
-    running_update_query = ('UPDATE running SET time=:time, '
-                            'distance=:distance, '
-                            'location=:location, '
-                            'WHERE date=:date')
+    running_update_command = ('UPDATE running SET time=:Time, '
+                              'distance=:Distance, '
+                              'location=:Location, '
+                              'WHERE date=:Date')
 
     # delete record
-    running_delete_query = ('DELETE FROM running WHERE date=:date')
+    running_delete_command = ('DELETE FROM running WHERE date=:Date')
 
     # create or connect to a database
     def __init__(self, database):
@@ -72,17 +72,17 @@ class SQLModel:
 
     def add_record(self, record):
         # add record information
-        insert_query = self.running_insert_query
+        insert_query = self.running_insert_command
         self.last_write = 'insert record'
         self.query(insert_query, record)
 
     def update_record(self, record):
         # add record information
-        update_query = self.running_update_query
+        update_query = self.running_update_command
         self.last_write = 'update record'
         self.query(update_query, record)
 
     def delete_record(self, record):
         # delete record information
-        delete_query = self.running_delete_query
+        delete_query = self.running_delete_command
         self.query(delete_query, record)
