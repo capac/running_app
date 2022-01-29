@@ -40,6 +40,7 @@ class Application(tk.Tk):
             'on_show_vo2max': self.show_vo2max,
             # method callbacks
             'on_insert': self.insert,
+            'on_update': self.update,
             'on_remove': self.remove,
         }
 
@@ -139,6 +140,9 @@ class Application(tk.Tk):
             elif self.data_model.last_write == 'insert record':
                 self.inserted_rows.append(key)
             self.populate_recordlist()
+
+    def update(self):
+        pass
 
     def remove(self):
         pass
