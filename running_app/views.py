@@ -83,7 +83,7 @@ class DataRecordForm(tk.Frame):
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'])
         self.inputs['Distance'].grid(row=0, column=2)
-        self.inputs['Location'] = w.LabelInput(runninginfo, 'Location',
+        self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
                                                field_spec=fields['Location'])
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
@@ -94,10 +94,14 @@ class DataRecordForm(tk.Frame):
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'])
         self.insertbutton.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.insertbutton = w.LabelInput(command_section, 'Update data',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_update'])
+        self.insertbutton.grid(row=0, column=1, padx=10, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
-        self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
+        self.removebutton.grid(row=0, column=2, padx=10, pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
@@ -138,7 +142,7 @@ class RecordList(tk.Frame):
         'Time': {'label': 'Time (hh:mm:ss)', 'width': 160},
         'Distance': {'label': 'Distance (km)', 'width': 120},
         'Pace': {'label': 'Pace (min/km)', 'width': 120},
-        'Location': {'label': 'Location', 'width': 240},
+        'Location': {'label': 'Location (City, Country)', 'width': 240},
     }
     default_width = 100
     default_minwidth = 20
