@@ -105,7 +105,7 @@ class Application(tk.Tk):
                 return
 
     def insert(self):
-        '''Handles tenant updates to database'''
+        '''Handles record updates to database'''
 
         # check for errors first
         errors = self.recordform.get_errors()
