@@ -10,7 +10,7 @@ class SQLModel:
         'Time': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.decimal},
+        'Pace': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
     }
 
@@ -19,7 +19,7 @@ class SQLModel:
                                     '(date TEXT PRIMARY KEY, '
                                     'time TEXT NOT NULL, '
                                     'distance REAL NOT NULL, '
-                                    'pace REAL NOT NULL, '
+                                    'pace TEXT NOT NULL, '
                                     'location TEXT NOT NULL)')
 
     # insert running session in running table
@@ -63,7 +63,7 @@ class SQLModel:
 
     def get_all_records(self):
         query = ('SELECT * FROM running '
-                 'ORDER BY Date')
+                 'ORDER BY date')
         return self.query(query)
 
     def get_record(self, date):
