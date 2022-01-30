@@ -10,6 +10,7 @@ class SQLModel:
         'Time': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
+        'Pace': {'req': True, 'type': FT.decimal},
         'Location': {'req': True, 'type': FT.string},
     }
 
