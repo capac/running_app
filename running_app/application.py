@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from datetime import timedelta
 from . import views as v
 from . import models as m
 
@@ -120,6 +121,13 @@ class Application(tk.Tk):
 
         # get data
         data = self.recordform.get()
+        duration, distance = data['Time'], data['Distance']
+        time_in_secs = timedelta(hours=int(duration[0:2]),
+                                 minutes=int(duration[3:5]),
+                                 seconds=int(duration[6:8]),
+                                 microseconds=0).total_seconds()
+        minutes, seconds = divmod(time_in_secs/float(distance), 60)
+        data['Pace'] = f'{int(minutes)}:{int(round(seconds, 0))}'
         try:
             self.data_model.add_record(data)
         except Exception as e:
