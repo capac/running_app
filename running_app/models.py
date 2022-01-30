@@ -23,7 +23,7 @@ class SQLModel:
 
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
-                              ':Time, :Distance, :Location)')
+                              ':Time, :Distance, :Pace, :Location)')
 
     # update running session in running table
     running_update_command = ('UPDATE running SET time=:Time, '
