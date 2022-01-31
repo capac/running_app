@@ -210,8 +210,9 @@ class RecordList(tk.Frame):
 
         valuekeys = list(self.column_defs.keys())[1:]
         for rowdata in rows:
-            rowkey = (str(rowdata['Date']), str(rowdata['Time']), str(rowdata['Distance']),
-                      str(rowdata['Pace']), str(rowdata['Location']),)
+            rowkey = (str(rowdata['Date']), str(rowdata['Time']),
+                      str(rowdata['Distance']), str(rowdata['Pace']),
+                      str(rowdata['Location']))
             values = [rowdata[key] for key in valuekeys]
             if self.inserted and rowkey in self.inserted:
                 tag = 'inserted_record'
