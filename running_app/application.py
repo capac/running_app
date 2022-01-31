@@ -40,6 +40,7 @@ class Application(tk.Tk):
             'on_show_running_progression': self.show_running_progression,
             'on_show_vo2max': self.show_vo2max,
             # method callbacks
+            'on_open_record': self.open_record,
             'on_insert': self.insert,
             'on_update': self.update,
             'on_remove': self.remove,
@@ -91,7 +92,7 @@ class Application(tk.Tk):
             self.recordlist.populate(rows)
 
     def open_record(self, rowkey=None):
-        '''rowkey is simply row_id, while data contains the information for the row_id'''
+        '''rowkey is simply date, while data contains the information for the date'''
 
         if rowkey is None:
             data = None
@@ -141,10 +142,10 @@ class Application(tk.Tk):
             self.records_updated += 1
             self.main_status.set(f'{self.records_updated} record(s) updated this session')
             key = (data['Date'], data['Time'], data['Distance'], data['Location'])
-            # old property with updated tenant
+            # updated record
             if self.data_model.last_write == 'update record':
                 self.updated_rows.append(key)
-            # new property with added tenant
+            # added record
             elif self.data_model.last_write == 'insert record':
                 self.inserted_rows.append(key)
             self.populate_recordlist()
