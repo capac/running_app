@@ -16,24 +16,24 @@ class SQLModel:
 
     # create tables if not existing
     create_running_table_command = ('CREATE TABLE IF NOT EXISTS running '
-                                    '(date TEXT PRIMARY KEY, '
-                                    'time TEXT NOT NULL, '
-                                    'distance REAL NOT NULL, '
-                                    'pace TEXT NOT NULL, '
-                                    'location TEXT NOT NULL)')
+                                    '(Date TEXT PRIMARY KEY, '
+                                    'Time TEXT NOT NULL, '
+                                    'Distance REAL NOT NULL, '
+                                    'Pace TEXT NOT NULL, '
+                                    'Location TEXT NOT NULL)')
 
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
                               ':Time, :Distance, :Pace, :Location)')
 
     # update running session in running table
-    running_update_command = ('UPDATE running SET time=:Time, '
-                              'distance=:Distance, '
-                              'location=:Location, '
-                              'WHERE date=:Date')
+    running_update_command = ('UPDATE running SET Time=:Time, '
+                              'Distance=:Distance, '
+                              'Location=:Location, '
+                              'WHERE Date=:Date')
 
     # delete record
-    running_delete_command = ('DELETE FROM running WHERE date=:Date')
+    running_delete_command = ('DELETE FROM running WHERE Date=:Date')
 
     # create or connect to a database
     def __init__(self, database):
@@ -65,12 +65,12 @@ class SQLModel:
 
     def get_all_records(self):
         query = ('SELECT * FROM running '
-                 'ORDER BY date')
+                 'ORDER BY Date')
         return self.query(query)
 
     def get_record(self, date):
         query = ('SELECT * FROM running '
-                 'WHERE date=:Date')
+                 'WHERE Date=:Date')
         result = self.query(query, {"Date": date})
         return result[0] if result else {}
 
