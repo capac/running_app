@@ -38,6 +38,7 @@ class SQLModel:
     # create or connect to a database
     def __init__(self, database):
         self.connection = sqlite3.connect(database)
+        self.connection.row_factory = sqlite3.Row
 
     def query(self, query, parameters=None):
         cursor = self.connection.cursor()
@@ -53,7 +54,8 @@ class SQLModel:
         else:
             self.connection.commit()
             if cursor.description is not None:
-                return cursor.fetchall()
+                result = [dict(row) for row in cursor.fetchall()]
+                return result
 
     # only upon first run of the running application
     def create_db_and_tables(self):
