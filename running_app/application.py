@@ -128,7 +128,7 @@ class Application(tk.Tk):
                                  seconds=int(duration[6:8]),
                                  microseconds=0).total_seconds()
         minutes, seconds = divmod(time_in_secs/float(distance), 60)
-        data['Pace'] = f'{int(minutes)}:{int(round(seconds, 0))}'
+        data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
         # zero padding for seconds column
         data['Time'] = ':'.join(x.zfill(2) for x in data['Time'].split(':'))
         try:
