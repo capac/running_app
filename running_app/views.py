@@ -90,18 +90,14 @@ class DataRecordForm(tk.Frame):
 
         # command section
         command_section = tk.LabelFrame(self, text='Commands', padx=5, pady=5)
-        self.insertbutton = w.LabelInput(command_section, 'Insert data',
+        self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'])
         self.insertbutton.grid(row=0, column=0, padx=10, pady=(10, 0))
-        self.insertbutton = w.LabelInput(command_section, 'Update data',
-                                         input_class=ttk.Button,
-                                         input_var=self.callbacks['on_update'])
-        self.insertbutton.grid(row=0, column=1, padx=10, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
-        self.removebutton.grid(row=0, column=2, padx=10, pady=(10, 0))
+        self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
