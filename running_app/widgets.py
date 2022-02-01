@@ -124,7 +124,7 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             valid = True
         elif index in ('0', '1', '3', '4', '6', '7'):
             valid = char.isdigit()
-        elif index in ('2', '5', '8'):
+        elif index in ('2', '5'):
             valid = char == ':'
         else:
             valid = False
@@ -139,7 +139,7 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
             timedelta(hours=int(self.get()[0:2]), minutes=int(self.get()[3:5]),
                       seconds=int(self.get()[6:8]), microseconds=0)
         except ValueError:
-            self.error.set('Invalid time')
+            self.error.set('Invalid duration')
             valid = False
         return valid
 
