@@ -29,7 +29,8 @@ class SQLModel:
     # update running session in running table
     running_update_command = ('UPDATE running SET Time=:Time, '
                               'Distance=:Distance, '
-                              'Location=:Location, '
+                              'Pace=:Pace, '
+                              'Location=:Location '
                               'WHERE Date=:Date')
 
     # delete record
@@ -76,15 +77,16 @@ class SQLModel:
 
     def add_record(self, record):
         # add record information
-        insert_query = self.running_insert_command
-        self.last_write = 'insert record'
-        self.query(insert_query, record)
-
-    def update_record(self, record):
-        # add record information
-        update_query = self.running_update_command
-        self.last_write = 'update record'
-        self.query(update_query, record)
+        query_date = record['Date']
+        query = ('SELECT * FROM running WHERE Date = :Date')
+        results = self.query(query, {"Date": query_date})
+        if not results:
+            query = self.running_insert_command
+            self.last_write = 'insert record'
+        else:
+            query = self.running_update_command
+            self.last_write = 'update record'
+        self.query(query, record)
 
     def delete_record(self, record):
         # delete record information
