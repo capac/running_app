@@ -76,13 +76,13 @@ class SQLModel:
         return result[0] if result else {}
 
     def add_record(self, record):
-        # add record information
         query_date = record['Date']
-        query = ('SELECT * FROM running WHERE Date = :Date')
-        results = self.query(query, {"Date": query_date})
+        results = self.get_record(query_date)
+        # if no previous record exists then add it
         if not results:
             query = self.running_insert_command
             self.last_write = 'insert record'
+        # if the record exists then update it
         else:
             query = self.running_update_command
             self.last_write = 'update record'
