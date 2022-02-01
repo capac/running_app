@@ -77,9 +77,9 @@ class DataRecordForm(tk.Frame):
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],)
         self.inputs['Date'].grid(row=0, column=0)
-        self.inputs['Time'] = w.LabelInput(runninginfo, 'Time (hh:mm:ss)',
-                                           field_spec=fields['Time'],)
-        self.inputs['Time'].grid(row=0, column=1)
+        self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
+                                               field_spec=fields['Duration'],)
+        self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'])
         self.inputs['Distance'].grid(row=0, column=2)
@@ -135,7 +135,7 @@ class RecordList(tk.Frame):
     column_defs = {
         '#0': {'label': 'Row', 'anchor': tk.W},
         'Date': {'label': 'Date (YYYY-mm-dd)', 'width': 160},
-        'Time': {'label': 'Time (hh:mm:ss)', 'width': 160},
+        'Duration': {'label': 'Duration (hh:mm:ss)', 'width': 160},
         'Distance': {'label': 'Distance (km)', 'width': 120},
         'Pace': {'label': 'Pace (min/km)', 'width': 120},
         'Location': {'label': 'Location (City, Country)', 'width': 240},
@@ -206,7 +206,7 @@ class RecordList(tk.Frame):
 
         valuekeys = list(self.column_defs.keys())[1:]
         for rowdata in rows:
-            rowkey = (str(rowdata['Date']), str(rowdata['Time']),
+            rowkey = (str(rowdata['Date']), str(rowdata['Duration']),
                       str(rowdata['Distance']), str(rowdata['Pace']),
                       str(rowdata['Location']))
             values = [rowdata[key] for key in valuekeys]

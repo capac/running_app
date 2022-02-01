@@ -7,7 +7,7 @@ class SQLModel:
 
     fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
-        'Time': {'req': True, 'type': FT.iso_time_string},
+        'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
         'Pace': {'req': True, 'type': FT.string},
@@ -17,17 +17,17 @@ class SQLModel:
     # create tables if not existing
     create_running_table_command = ('CREATE TABLE IF NOT EXISTS running '
                                     '(Date TEXT PRIMARY KEY, '
-                                    'Time TEXT NOT NULL, '
+                                    'Duration TEXT NOT NULL, '
                                     'Distance REAL NOT NULL, '
                                     'Pace TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
-                              ':Time, :Distance, :Pace, :Location)')
+                              ':Duration, :Distance, :Pace, :Location)')
 
     # update running session in running table
-    running_update_command = ('UPDATE running SET Time=:Time, '
+    running_update_command = ('UPDATE running SET Duration=:Duration, '
                               'Distance=:Distance, '
                               'Pace=:Pace, '
                               'Location=:Location '

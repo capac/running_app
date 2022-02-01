@@ -121,7 +121,7 @@ class Application(tk.Tk):
 
         # get data
         data = self.recordform.get()
-        duration, distance = data['Time'], data['Distance']
+        duration, distance = data['Duration'], data['Distance']
         time_in_secs = timedelta(hours=int(duration[0:2]),
                                  minutes=int(duration[3:5]),
                                  seconds=int(duration[6:8]),
@@ -129,7 +129,7 @@ class Application(tk.Tk):
         minutes, seconds = divmod(time_in_secs/float(distance), 60)
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
         # zero padding for seconds column
-        data['Time'] = ':'.join(x.zfill(2) for x in data['Time'].split(':'))
+        data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
         try:
             self.data_model.add_record(data)
         except Exception as e:
@@ -142,7 +142,7 @@ class Application(tk.Tk):
         else:
             self.records_updated += 1
             self.main_status.set(f'{self.records_updated} record(s) updated this session')
-            key = (data['Date'], data['Time'], data['Distance'], data['Location'])
+            key = (data['Date'], data['Duration'], data['Distance'], data['Location'])
             # updated record
             if self.data_model.last_write == 'update record':
                 self.updated_rows.append(key)
