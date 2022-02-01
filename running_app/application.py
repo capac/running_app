@@ -107,7 +107,7 @@ class Application(tk.Tk):
                 return
 
     def insert(self):
-        '''Handles record updates to database'''
+        '''Handles adding new record(s) to database'''
 
         # check for errors first
         errors = self.recordform.get_errors()
@@ -129,6 +129,8 @@ class Application(tk.Tk):
                                  microseconds=0).total_seconds()
         minutes, seconds = divmod(time_in_secs/float(distance), 60)
         data['Pace'] = f'{int(minutes)}:{int(round(seconds, 0))}'
+        # zero padding for seconds column
+        data['Time'] = ':'.join(x.zfill(2) for x in data['Time'].split(':'))
         try:
             self.data_model.add_record(data)
         except Exception as e:
