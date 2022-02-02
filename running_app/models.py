@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import timedelta
 from .constants import FieldTypes as FT
 
 
@@ -92,3 +93,17 @@ class SQLModel:
         # delete record information
         delete_query = self.running_delete_command
         self.query(delete_query, record)
+
+    def data_addition(self, data):
+        '''Adds 'Pace' column and adds zero-padding to 'Duration' column data'''
+
+        duration, distance = data['Duration'], data['Distance']
+        time_in_secs = timedelta(hours=int(duration[0:2]),
+                                 minutes=int(duration[3:5]),
+                                 seconds=int(duration[6:8]),
+                                 microseconds=0).total_seconds()
+        minutes, seconds = divmod(time_in_secs/float(distance), 60)
+        data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
+        # zero padding for seconds column
+        data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
+        return data
