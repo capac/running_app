@@ -142,7 +142,24 @@ class Application(tk.Tk):
             self.populate_recordlist()
 
     def remove(self):
-        pass
+        '''Removes record from database'''
+
+        # get data
+        data = self.recordform.get()
+        try:
+            self.data_model.delete_record(data)
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem deleting record',
+                detail=str(e)
+            )
+            self.main_status.set('Problem deleting record')
+        else:
+            self.records_deleted += 1
+            self.main_status.set(f'{self.records_deleted} record(s) deleted this session')
+            self.recordform.reset()
+            self.populate_recordlist()
 
     def file_import(self):
         pass
