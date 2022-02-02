@@ -68,10 +68,10 @@ class Application(tk.Tk):
         self.update()
 
         # status bar
-        self.main_status = tk.StringVar()
-        self.main_statusbar = ttk.Label(self, textvariable=self.main_status)
-        self.main_statusbar.grid(row=3, padx=10, sticky=('WE'))
-        self.main_statusbar.columnconfigure(0, weight=1)
+        self.status = tk.StringVar()
+        self.statusbar = ttk.Label(self, textvariable=self.status)
+        self.statusbar.grid(row=3, padx=10, sticky=('WE'))
+        self.statusbar.columnconfigure(0, weight=1)
 
         self.records_saved = 0
         self.records_updated = 0
@@ -128,10 +128,10 @@ class Application(tk.Tk):
                 message='Problem saving record',
                 detail=str(e)
             )
-            self.main_status.set('Problem saving record')
+            self.status.set('Problem saving record')
         else:
             self.records_updated += 1
-            self.main_status.set(f'{self.records_updated} record(s) updated this session')
+            self.status.set(f'{self.records_updated} record(s) updated this session')
             key = (data['Date'], data['Duration'], data['Distance'], data['Location'])
             # updated record
             if self.data_model.last_write == 'update record':
@@ -154,10 +154,10 @@ class Application(tk.Tk):
                 message='Problem deleting record',
                 detail=str(e)
             )
-            self.main_status.set('Problem deleting record')
+            self.status.set('Problem deleting record')
         else:
             self.records_deleted += 1
-            self.main_status.set(f'{self.records_deleted} record(s) deleted this session')
+            self.status.set(f'{self.records_deleted} record(s) deleted this session')
             self.recordform.reset()
             self.populate_recordlist()
 
