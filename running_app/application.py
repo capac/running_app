@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from datetime import timedelta
 from . import views as v
 from . import models as m
 
@@ -119,17 +118,8 @@ class Application(tk.Tk):
             messagebox.showerror(title='Error', message=message, detail=detail)
             return False
 
-        # get data
-        data = self.recordform.get()
-        duration, distance = data['Duration'], data['Distance']
-        time_in_secs = timedelta(hours=int(duration[0:2]),
-                                 minutes=int(duration[3:5]),
-                                 seconds=int(duration[6:8]),
-                                 microseconds=0).total_seconds()
-        minutes, seconds = divmod(time_in_secs/float(distance), 60)
-        data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
-        # zero padding for seconds column
-        data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
+        # get data and add 'Pace' column
+        data = self.data_model.data_addition(self.recordform.get())
         try:
             self.data_model.add_record(data)
         except Exception as e:
