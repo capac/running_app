@@ -119,6 +119,13 @@ class DataRecordForm(tk.Frame):
                 errors[key] = widget.error.get()
         return errors
 
+    def reset(self):
+        '''Resets the form entries'''
+
+        # clear all values
+        for widget in self.inputs.values():
+            widget.set('')
+
     def load_record(self, rowkey, data=None):
         self.record_label.config(text='Date: {}'.format(rowkey))
         for key, widget in self.inputs.items():
