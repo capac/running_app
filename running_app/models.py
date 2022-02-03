@@ -21,16 +21,19 @@ class SQLModel:
                                     'Duration TEXT NOT NULL, '
                                     'Distance REAL NOT NULL, '
                                     'Pace TEXT NOT NULL, '
+                                    'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
-                              ':Duration, :Distance, :Pace, :Location)')
+                              ':Duration, :Distance, :Pace, :Speed, '
+                              ':Location)')
 
     # update running session in running table
     running_update_command = ('UPDATE running SET Duration=:Duration, '
                               'Distance=:Distance, '
                               'Pace=:Pace, '
+                              'Speed=:Speed, '
                               'Location=:Location '
                               'WHERE Date=:Date')
 
@@ -102,8 +105,11 @@ class SQLModel:
                                  minutes=int(duration[3:5]),
                                  seconds=int(duration[6:8]),
                                  microseconds=0).total_seconds()
-        minutes, seconds = divmod(time_in_secs/float(distance), 60)
+        pace_in_secs = time_in_secs/float(distance)
+        minutes, seconds = divmod(pace_in_secs, 60)
+        # zero padding added for seconds
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
-        # zero padding for seconds column
+        data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
+        # zero padding added for seconds
         data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
         return data
