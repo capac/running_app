@@ -1,4 +1,6 @@
 import sqlite3
+import csv
+import os
 from datetime import timedelta
 from .constants import FieldTypes as FT
 
@@ -12,6 +14,7 @@ class SQLModel:
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
         'Pace': {'req': True, 'type': FT.string},
+        'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
     }
 
@@ -113,3 +116,52 @@ class SQLModel:
         # zero padding added for seconds
         data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
         return data
+
+
+class CSVModel:
+    '''CSV file retrieval and storage'''
+
+    fields = {
+        'Date': {'req': True, 'type': FT.iso_date_string},
+        'Duration': {'req': True, 'type': FT.iso_time_string},
+        'Distance': {'req': True, 'type': FT.decimal,
+                     'min': 0, 'max': 100, 'inc': 0.1},
+        'Pace': {'req': True, 'type': FT.string},
+        'Speed': {'req': True, 'type': FT.string},
+        'Location': {'req': True, 'type': FT.string},
+    }
+
+    def __init__(self, filename, filepath=None):
+
+        if filepath:
+            if not os.path.exists(filepath):
+                os.mkdir(filepath)
+            self.filename = os.path.join(filepath, filename)
+        else:
+            self.filename = filename
+
+    def read_records(self):
+        '''Read in all records from the CSV and return a list'''
+
+        if not os.path.exists(self.filename):
+            return []
+
+        with open(self.filename, 'r', encoding='utf-8') as fh:
+            # turning fh into a list is necessary for our unit tests
+            csvreader = csv.DictReader(list(fh.readlines()))
+            missing_fields = set(self.fields.keys()) - set(csvreader.fieldnames)
+            if len(missing_fields) > 0:
+                raise Exception(
+                    f'''File is missing fields: {', '.join(missing_fields)}'''
+                )
+            else:
+                return list(csvreader)
+
+    def save_records(self, rows, keys):
+        '''Save a dict of data to a CSV file'''
+
+        with open(self.filename, 'w') as fh:
+            csvwriter = csv.DictWriter(fh, fieldnames=keys)
+            csvwriter.writeheader()
+            for row in rows:
+                csvwriter.writerow(row)
