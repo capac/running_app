@@ -140,7 +140,7 @@ class CSVModel:
         else:
             self.filename = filename
 
-    def read_records(self):
+    def load_records(self):
         '''Read in all records from the CSV and return a list'''
 
         if not os.path.exists(self.filename):
