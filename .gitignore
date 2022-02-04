@@ -3,10 +3,11 @@ marathon_programs/
 shoes/
 .DS_Store
 .vscode/
-*.png
-*.heic
+*.csv
 *.gif
+*.heic
 *.html
+*.png
 *.txt
 check_paces.py
 cal_VO2Max.py
