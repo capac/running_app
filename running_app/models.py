@@ -102,9 +102,15 @@ class SQLModel:
         self.query(delete_query, record)
 
     def data_addition(self, data):
-        '''Adds 'Pace' column and adds zero-padding to 'Duration' column data'''
+        '''Adds 'Pace' and 'Speed' columns and adds
+        zero-padding to 'Duration' column data'''
 
         duration, distance = data['Duration'], data['Distance']
+
+        # change time format from '<hh>h<mm>m<ss>s' to '<hh>:<mm>:<ss>:'
+        separators = [str(duration[item]) for item in range(2, 9, 3)]
+        if separators == ['h', 'm', 's']:
+            data['Duration'] = f'{duration[0:2]}:{duration[3:5]}:{duration[6:8]}'
         time_in_secs = timedelta(hours=int(duration[0:2]),
                                  minutes=int(duration[3:5]),
                                  seconds=int(duration[6:8]),
@@ -115,7 +121,6 @@ class SQLModel:
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
         data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
         # zero padding added for seconds
-        data['Duration'] = ':'.join(x.zfill(2) for x in data['Duration'].split(':'))
         return data
 
 
