@@ -141,14 +141,14 @@ class CSVModel:
             self.filename = filename
 
     def load_records(self):
-        '''Read in all records from the CSV and return a list'''
+        '''Reads in all records from the CSV file and returns a list'''
 
         if not os.path.exists(self.filename):
             return []
 
         with open(self.filename, 'r', encoding='utf-8') as fh:
-            # turning fh into a list is necessary for our unit tests
-            csvreader = csv.DictReader(list(fh.readlines()), delimiter=' ')
+            # turning fh into a list is necessary for the unit tests
+            csvreader = csv.DictReader(list(fh.readlines()))
             missing_fields = set(self.fields.keys()) - set(csvreader.fieldnames)
             if len(missing_fields) > 0:
                 raise Exception(
@@ -158,7 +158,7 @@ class CSVModel:
                 return list(csvreader)
 
     def save_records(self, rows, keys):
-        '''Save a dict of data to a CSV file'''
+        '''Save a dictionary of data to a CSV file'''
 
         with open(self.filename, 'w') as fh:
             csvwriter = csv.DictWriter(fh, fieldnames=keys)
