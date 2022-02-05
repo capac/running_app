@@ -1,3 +1,4 @@
+import platform
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from . import views as v
@@ -10,6 +11,7 @@ class Application(tk.Tk):
     # supported platforms: macOS and Windows
     config_dirs = {
         'Darwin': "~/Library/Application Support/RunningApp",
+        'Windows': "~/AppData/Local/RunningApp",
     }
 
     def __init__(self, *args, **kwargs):
@@ -25,8 +27,13 @@ class Application(tk.Tk):
         self.inserted_rows = []
         self.updated_rows = []
 
+        # settings model and settings
+        config_dir = self.config_dirs.get(platform.system(), '~')
+        self.settings_model = m.SettingsModel(path=config_dir)
+        self.load_settings()
+
         # database login
-        self.database_login('running.db')
+        self.database_login()
         if not hasattr(self, 'data_model'):
             self.destroy()
             return
@@ -197,5 +204,33 @@ class Application(tk.Tk):
     def show_vo2max(self):
         pass
 
-    def database_login(self, database):
-        self.data_model = m.SQLModel(database)
+    def load_settings(self):
+        '''Load settings into our self.settings dict'''
+
+        vartypes = {
+            'bool': tk.BooleanVar,
+            'str': tk.StringVar,
+            'int': tk.IntVar,
+            'float': tk.DoubleVar
+        }
+
+        # create our dict of settings variables from the model's settings
+        self.settings = {}
+        for key, data in self.settings_model.variables.items():
+            vartype = vartypes.get(data['type'], tk.StringVar)
+            self.settings[key] = vartype(value=data['value'])
+
+        # put a trace on the variables so they get stored when changed
+        for var in self.settings.values():
+            var.trace('w', self.save_settings)
+
+    def save_settings(self, *args):
+        '''Save the current settings to a preferences file'''
+
+        for key, variable in self.settings.items():
+            self.settings_model.set(key, variable.get())
+        self.settings_model.save()
+
+    def database_login(self):
+        db_name = self.settings['db_name'].get()
+        self.data_model = m.SQLModel(db_name)
