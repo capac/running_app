@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from . import views as v
 from . import models as m
 
@@ -161,8 +161,32 @@ class Application(tk.Tk):
             self.recordform.reset()
             self.populate_recordlist()
 
+    # import records from CSV file to database
     def file_import(self):
-        pass
+        '''Handles the file->import action from the menu'''
+
+        filename = filedialog.askopenfilename(
+            title='Select the file to import into the database',
+            defaultextension='.csv',
+            filetypes=[('Comma-Separated Values', '*.csv, *.CSV')]
+        )
+        if filename:
+            self.filename.set(filename)
+            try:
+                csv_read = m.CSVModel(filename=self.filename.get(),
+                                      filepath=None)
+            except Exception as e:
+                messagebox.showerror(
+                    title='Error',
+                    message='Problem reading file',
+                    detail=str(e)
+                )
+            else:
+                records = csv_read.load_records()
+                for row in records:
+                    self.data_model.add_record(row)
+                self.status.set(f'''Loaded data into {self.settings['db_name'].get()}''')
+                self.populate_recordlist()
 
     def file_export(self):
         pass
