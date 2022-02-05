@@ -197,6 +197,7 @@ class Application(tk.Tk):
             else:
                 records = csv_read.load_records()
                 for row in records:
+                    row = self.data_model.data_addition(row)
                     self.data_model.add_record(row)
                 self.status.set(f'''Loaded data into {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
