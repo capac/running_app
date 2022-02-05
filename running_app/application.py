@@ -1,4 +1,5 @@
 import platform
+from datetime import datetime
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from . import views as v
@@ -26,6 +27,11 @@ class Application(tk.Tk):
 
         self.inserted_rows = []
         self.updated_rows = []
+
+        # default filename
+        datestring = datetime.today().strftime("%Y-%m-%d")
+        default_filename = "record_{}.csv".format(datestring)
+        self.filename = tk.StringVar(value=default_filename)
 
         # settings model and settings
         config_dir = self.config_dirs.get(platform.system(), '~')
