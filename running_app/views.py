@@ -215,7 +215,8 @@ class RecordList(tk.Frame):
         valuekeys = list(self.column_defs.keys())[1:]
         for rowdata in rows:
             rowkey = (str(rowdata['Date']), str(rowdata['Duration']),
-                      str(rowdata['Distance']), str(rowdata['Location']))
+                      str(rowdata['Distance']), str(rowdata['Pace']),
+                      str(rowdata['Speed']), str(rowdata['Location']))
             values = [rowdata[key] for key in valuekeys]
             if self.inserted and rowkey in self.inserted:
                 tag = 'inserted_record'
@@ -223,7 +224,7 @@ class RecordList(tk.Frame):
                 tag = 'updated_record'
             else:
                 tag = ''
-            stringkey = '{}|{}|{}|{}'.format(*rowkey)
+            stringkey = '{}|{}|{}|{}|{}|{}'.format(*rowkey)
             self.treeview.insert('', 'end', iid=stringkey, text=stringkey,
                                  values=values, tag=tag)
 
