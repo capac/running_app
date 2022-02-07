@@ -118,7 +118,7 @@ class Application(tk.Tk):
                 return
 
     def insert(self):
-        '''Handles adding new record(s) to database'''
+        '''Handles adding or updating new record(s) to database'''
 
         # check for errors first
         errors = self.recordform.get_errors()
@@ -131,7 +131,7 @@ class Application(tk.Tk):
             messagebox.showerror(title='Error', message=message, detail=detail)
             return False
 
-        # get data and add 'Pace' column
+        # get data and add 'Pace' and 'Speed' columns
         data = self.data_model.data_addition(self.recordform.get())
         try:
             self.data_model.add_record(data)
@@ -205,7 +205,28 @@ class Application(tk.Tk):
                 self.populate_recordlist()
 
     def file_export(self):
-        pass
+        '''Handles the file->export action from the menu'''
+
+        filename = filedialog.asksaveasfilename(
+            title='Select the target file for saving records',
+            defaultextension='.csv',
+            filetypes=[('Comma-Separated Values', '*.csv *.CSV')]
+        )
+        if filename:
+            self.filename.set(filename)
+            try:
+                rows = self.data_model.get_all_records()
+            except Exception as e:
+                messagebox.showerror(
+                    title='Error',
+                    message='Problem reading database',
+                    detail=str(e)
+                )
+            else:
+                self.status.set(f'Saved data to {self.filename.get()}')
+                csv_write = m.CSVModel(filename=self.filename.get(),
+                                       filepath=None)
+                csv_write.save_records(rows, csv_write.fields.keys())
 
     def show_running_progression(self):
         pass
