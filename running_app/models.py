@@ -108,9 +108,12 @@ class SQLModel:
         duration, distance = data['Duration'], data['Distance']
 
         # change time format from '<hh>h<mm>m<ss>s' to '<hh>:<mm>:<ss>:'
-        separators = [str(duration[item]) for item in range(2, 9, 3)]
-        if separators == ['h', 'm', 's']:
-            data['Duration'] = f'{duration[0:2]}:{duration[3:5]}:{duration[6:8]}'
+        try:
+            separators = [str(duration[item]) for item in range(2, 9, 3)]
+            if separators == ['h', 'm', 's']:
+                data['Duration'] = f'{duration[0:2]}:{duration[3:5]}:{duration[6:8]}'
+        except IndexError:
+            pass
         time_in_secs = timedelta(hours=int(duration[0:2]),
                                  minutes=int(duration[3:5]),
                                  seconds=int(duration[6:8]),
