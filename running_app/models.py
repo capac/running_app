@@ -120,6 +120,11 @@ class SQLModel:
                                  microseconds=0).total_seconds()
         pace_in_secs = time_in_secs/float(distance)
         minutes, seconds = divmod(pace_in_secs, 60)
+        # in case rounded seconds add up to 60 add extra minute
+        # and set seconds variable to zero
+        if int(round(seconds, 0)) == 60:
+            minutes += 1
+            seconds = 0
         # zero padding added for seconds
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
         data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
