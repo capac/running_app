@@ -145,7 +145,9 @@ class Application(tk.Tk):
         else:
             self.records_updated += 1
             self.status.set(f'{self.records_updated} record(s) updated this session')
-            key = (data['Date'], data['Duration'], data['Distance'], data['Location'])
+            key = (str(data['Date']), str(data['Duration']),
+                   str(data['Distance']), str(data['Pace']),
+                   str(data['Speed']), str(data['Location']))
             # updated record
             if self.data_model.last_write == 'update record':
                 self.updated_rows.append(key)
