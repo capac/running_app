@@ -209,6 +209,20 @@ class RecordList(tk.Frame):
         except IndexError:
             pass
 
+    def on_sort_records(self, event):
+        '''Sorts treeview list by column header name'''
+
+        region = self.treeview.identify_region(event.x, event.y)
+        print(f'region: {region}')
+        if region == 'heading':
+            itemlist = list(self.treeview.get_children(''))
+            itemlist.sort(key=lambda x: self.treeview.set(x, region))
+            for index, iid in enumerate(itemlist):
+                self.treeview.move(iid, self.treeview.parent(iid), index)
+
+            self.treeview.heading(region, text=region.title(), command=lambda:
+                                  self.sort(self.treeview, region))
+
     def populate(self, rows):
         '''Clear the treeview and write the supplied data rows to it'''
 
@@ -237,16 +251,3 @@ class RecordList(tk.Frame):
             self.treeview.focus_set()
             self.treeview.selection_set(firstrow)
             self.treeview.focus(firstrow)
-
-    def on_sort_records(self, event):
-        '''Sorts treeview list by column name'''
-
-        region = self.treeview.identify('region', event.x, event.y)
-        if region == 'heading':
-            itemlist = list(self.treeview.get_children(''))
-            itemlist.sort(key=lambda x: self.treeview.set(x, region))
-            for index, iid in enumerate(itemlist):
-                self.treeview.move(iid, self.treeview.parent(iid), index)
-
-            self.treeview.heading(region, text=region.title(), command=lambda:
-                                  self.sort(self.treeview, region))
