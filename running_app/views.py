@@ -194,8 +194,11 @@ class RecordList(tk.Frame):
         self.treeview.tag_configure('inserted_record', background='lightgreen')
         self.treeview.tag_configure('updated_record', background='deepskyblue')
 
-        # bind selection
+        # bind on row selection
         self.treeview.bind('<<TreeviewSelect>>', self.on_open_record)
+
+        # bind on header selection
+        self.treeview.bind('<<Button-1>>', self.on_sort_records)
 
     def on_open_record(self, *args):
         try:
@@ -235,13 +238,15 @@ class RecordList(tk.Frame):
             self.treeview.selection_set(firstrow)
             self.treeview.focus(firstrow)
 
-    def sort(self, col):
+    def on_sort_records(self, event):
         '''Sorts treeview list by column name'''
 
-        itemlist = list(self.treeview.get_children(''))
-        itemlist.sort(key=lambda x: self.treeview.set(x, col))
-        for index, iid in enumerate(itemlist):
-            self.treeview.move(iid, self.treeview.parent(iid), index)
+        region = self.treeview.identify('region', event.x, event.y)
+        if region == 'heading':
+            itemlist = list(self.treeview.get_children(''))
+            itemlist.sort(key=lambda x: self.treeview.set(x, region))
+            for index, iid in enumerate(itemlist):
+                self.treeview.move(iid, self.treeview.parent(iid), index)
 
-        self.treeview.heading('col', text=col.title(), command=lambda:
-                              self.sort(self.treeview, 'col'))
+            self.treeview.heading(region, text=region.title(), command=lambda:
+                                  self.sort(self.treeview, region))
