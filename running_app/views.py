@@ -234,3 +234,14 @@ class RecordList(tk.Frame):
             self.treeview.focus_set()
             self.treeview.selection_set(firstrow)
             self.treeview.focus(firstrow)
+
+    def sort(self, col):
+        '''Sorts treeview list by column name'''
+
+        itemlist = list(self.treeview.get_children(''))
+        itemlist.sort(key=lambda x: self.treeview.set(x, col))
+        for index, iid in enumerate(itemlist):
+            self.treeview.move(iid, self.treeview.parent(iid), index)
+
+        self.treeview.heading('col', text=col.title(), command=lambda:
+                              self.sort(self.treeview, 'col'))
