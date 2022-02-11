@@ -226,11 +226,12 @@ class RecordList(tk.Frame):
                 itemlist.sort(key=lambda x: x, reverse=self.reverse_sort.get())
             for index, (_, iid) in enumerate(itemlist):
                 self.treeview.move(iid, self.treeview.parent(iid), index)
-        # set sorting variable
-        if self.reverse_sort.get() is True:
-            self.reverse_sort.set(False)
-        elif self.reverse_sort.get() is False:
-            self.reverse_sort.set(True)
+        # the following is equivalent to the commented code below
+        self.reverse_sort.set(not (False | self.reverse_sort.get()))
+        # if self.reverse_sort.get() is True:
+        #     self.reverse_sort.set(False)
+        # elif self.reverse_sort.get() is False:
+        #     self.reverse_sort.set(True)
 
     def populate(self, rows):
         '''Clear the treeview and write the supplied data rows to it'''
