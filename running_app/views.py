@@ -209,8 +209,9 @@ class RecordList(tk.Frame):
         except IndexError:
             pass
 
-    def on_sort_records(self, event):
-        '''Sorts treeview list by column header name'''
+    def on_sort_records(self, event, reverse=False):
+        '''Sorts treeview list by column header name.
+        See https://stackoverflow.com/questions/22032152/python-ttk-treeview-sort-numbers'''
 
         region = self.treeview.identify_region(event.x, event.y)
         column = self.treeview.identify_column(event.x)
@@ -218,9 +219,9 @@ class RecordList(tk.Frame):
             itemlist = list((self.treeview.set(x, column), x) for x in
                             self.treeview.get_children(''))
             if column in ('#3', '#5'):
-                itemlist.sort(key=lambda x: float(x[0]))
+                itemlist.sort(key=lambda x: float(x[0]), reverse=reverse)
             else:
-                itemlist.sort(key=lambda x: x)
+                itemlist.sort(key=lambda x: x, reverse=reverse)
             for index, (_, iid) in enumerate(itemlist):
                 self.treeview.move(iid, self.treeview.parent(iid), index)
 
