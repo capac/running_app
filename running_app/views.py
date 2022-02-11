@@ -194,8 +194,13 @@ class RecordList(tk.Frame):
         self.treeview.tag_configure('inserted_record', background='lightgreen')
         self.treeview.tag_configure('updated_record', background='deepskyblue')
 
-        # bind selection
+        # bind on row selection
+        self.reverse_sort = tk.BooleanVar()
+        self.reverse_sort.set(True)
         self.treeview.bind('<<TreeviewSelect>>', self.on_open_record)
+
+        # bind on header selection
+        self.treeview.bind('<Button-1>', self.on_sort_records)
 
     def on_open_record(self, *args):
         try:
@@ -205,6 +210,28 @@ class RecordList(tk.Frame):
         # a better fix is to find a way to keep the line selected
         except IndexError:
             pass
+
+    def on_sort_records(self, event):
+        '''Sorts treeview list by column header name.
+        See https://stackoverflow.com/questions/22032152/python-ttk-treeview-sort-numbers'''
+
+        region = self.treeview.identify_region(event.x, event.y)
+        column = self.treeview.identify_column(event.x)
+        if region == 'heading':
+            itemlist = list((self.treeview.set(x, column), x) for x in
+                            self.treeview.get_children(''))
+            if column in ('#3', '#5'):
+                itemlist.sort(key=lambda x: float(x[0]), reverse=self.reverse_sort.get())
+            else:
+                itemlist.sort(key=lambda x: x, reverse=self.reverse_sort.get())
+            for index, (_, iid) in enumerate(itemlist):
+                self.treeview.move(iid, self.treeview.parent(iid), index)
+        # the following is equivalent to the commented code below
+        self.reverse_sort.set(not (False | self.reverse_sort.get()))
+        # if self.reverse_sort.get() is True:
+        #     self.reverse_sort.set(False)
+        # elif self.reverse_sort.get() is False:
+        #     self.reverse_sort.set(True)
 
     def populate(self, rows):
         '''Clear the treeview and write the supplied data rows to it'''
