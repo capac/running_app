@@ -195,6 +195,8 @@ class RecordList(tk.Frame):
         self.treeview.tag_configure('updated_record', background='deepskyblue')
 
         # bind on row selection
+        self.reverse_sort = tk.BooleanVar()
+        self.reverse_sort.set(False)
         self.treeview.bind('<<TreeviewSelect>>', self.on_open_record)
 
         # bind on header selection
@@ -209,7 +211,7 @@ class RecordList(tk.Frame):
         except IndexError:
             pass
 
-    def on_sort_records(self, event, reverse=False):
+    def on_sort_records(self, event):
         '''Sorts treeview list by column header name.
         See https://stackoverflow.com/questions/22032152/python-ttk-treeview-sort-numbers'''
 
@@ -219,14 +221,16 @@ class RecordList(tk.Frame):
             itemlist = list((self.treeview.set(x, column), x) for x in
                             self.treeview.get_children(''))
             if column in ('#3', '#5'):
-                itemlist.sort(key=lambda x: float(x[0]), reverse=reverse)
+                itemlist.sort(key=lambda x: float(x[0]), reverse=self.reverse_sort.get())
             else:
-                itemlist.sort(key=lambda x: x, reverse=reverse)
+                itemlist.sort(key=lambda x: x, reverse=self.reverse_sort.get())
             for index, (_, iid) in enumerate(itemlist):
                 self.treeview.move(iid, self.treeview.parent(iid), index)
-
-        # self.treeview.heading(column, command=lambda:
-        #                       self.on_sort_records(event, not reverse))
+        # set sorting variable
+        if self.reverse_sort.get() is True:
+            self.reverse_sort.set(False)
+        elif self.reverse_sort.get() is False:
+            self.reverse_sort.set(True)
 
     def populate(self, rows):
         '''Clear the treeview and write the supplied data rows to it'''
