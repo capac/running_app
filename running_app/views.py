@@ -225,6 +225,9 @@ class RecordList(tk.Frame):
             for index, (_, iid) in enumerate(itemlist):
                 self.treeview.move(iid, self.treeview.parent(iid), index)
 
+        # self.treeview.heading(column, command=lambda:
+        #                       self.on_sort_records(event, not reverse))
+
     def populate(self, rows):
         '''Clear the treeview and write the supplied data rows to it'''
 
