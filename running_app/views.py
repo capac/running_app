@@ -196,7 +196,7 @@ class RecordList(tk.Frame):
 
         # bind on row selection
         self.reverse_sort = tk.BooleanVar()
-        self.reverse_sort.set(False)
+        self.reverse_sort.set(True)
         self.treeview.bind('<<TreeviewSelect>>', self.on_open_record)
 
         # bind on header selection
