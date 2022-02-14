@@ -69,17 +69,14 @@ class SQLModel:
     # only upon first run of the running application
     def create_db_and_tables(self):
         '''Creates database and tables if they don't already exist'''
-
         self.query(self.create_running_table_command)
 
     def get_all_records(self):
-        query = ('SELECT * FROM running '
-                 'ORDER BY Date DESC')
-        return self.query(query)
+        query = ('SELECT * FROM running ORDER BY Date DESC')
+        self.query(query)
 
     def get_record(self, date):
-        query = ('SELECT * FROM running '
-                 'WHERE Date=:Date')
+        query = ('SELECT * FROM running WHERE Date=:Date')
         result = self.query(query, {"Date": date})
         return result[0] if result else {}
 
@@ -100,6 +97,14 @@ class SQLModel:
         # delete record information
         delete_query = self.running_delete_command
         self.query(delete_query, record)
+
+    def group_records_by_week(self):
+        # group records by weekly data per year
+        query = '''SELECT DATE(Date, 'weekday 0') AS Sunday,
+                   SUM(Distance) AS Weekly_Distance,
+                   FROM running
+                   GROUP BY Sunday'''
+        self.query(query)
 
     def data_addition(self, data):
         '''Adds 'Pace' and 'Speed' columns and adds
