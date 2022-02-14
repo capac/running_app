@@ -73,7 +73,7 @@ class SQLModel:
 
     def get_all_records(self):
         query = ('SELECT * FROM running ORDER BY Date DESC')
-        self.query(query)
+        return self.query(query)
 
     def get_record(self, date):
         query = ('SELECT * FROM running WHERE Date=:Date')
