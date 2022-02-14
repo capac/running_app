@@ -2,6 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from . import widgets as w
+# matplotlib
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib import use as mpl_use, pyplot as plt
+mpl_use('TkAgg')
+plt.style.use('ggplot')
 
 
 class MainMenu(tk.Menu):
@@ -257,3 +263,37 @@ class RecordList(tk.Frame):
             self.treeview.focus_set()
             self.treeview.selection_set(firstrow)
             self.treeview.focus(firstrow)
+
+
+class BarChartView(tk.Frame):
+    '''Graphical plots showing some statistics on occupancy'''
+
+    def __init__(self, parent, x_axis, y_axis, title):
+        super().__init__(parent)
+        self.figure = Figure(figsize=(12, 6), dpi=100, layout='tight')
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self)
+        self.canvas.get_tk_widget().pack(fill='both', expand=True)
+        # axes
+        self.axes = self.figure.add_subplot(1, 1, 1)
+        self.axes.set_xlabel(x_axis, fontsize=14)
+        self.axes.set_ylabel(y_axis, fontsize=14)
+        self.axes.set_title(title, fontsize=16)
+
+    def draw_bar_chart(self, data):
+        periods, total_distances = zip(*[row.values() for row in data])
+        self.bar = self.axes.bar(periods, total_distances, color=plt.cm.Paired.colors,
+                                 edgecolor='k', label=periods, alpha=0.8)
+        # self.axes.legend(self.bar, periods)
+        text_loc = float(self.axes.yaxis.get_data_interval()[1])
+        self.axes.set_ylim([0, text_loc+4])
+        # annotate labels
+        float_total_distances = [round(float(x), 1) for x in total_distances]
+        for x, y in zip(periods, float_total_distances):
+            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+1.5),
+                               ha='center', size=10, color='k',
+                               rotation_mode="anchor", rotation=45)
+        plt.setp(self.axes.get_xticklabels(), ha="right",
+                 rotation_mode="anchor",
+                 rotation=45, fontsize=12)
+        plt.setp(self.axes.get_yticklabels(), fontsize=12)

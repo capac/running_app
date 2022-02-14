@@ -225,8 +225,15 @@ class Application(tk.Tk):
                                        filepath=None)
                 csv_write.save_records(rows, csv_write.fields.keys())
 
-    def show_running_progression(self):
-        pass
+    def show_running_progression(self, default_year='2022'):
+        popup = tk.Toplevel()
+        bar_chart = v.BarChartView(popup,
+                                   "Weeks",
+                                   "Distance (km)",
+                                   "Distance per week")
+        bar_chart.pack(fill='both', expand=True)
+        data = self.data_model.group_records_by_week(default_year)
+        bar_chart.draw_bar_chart(data)
 
     def show_vo2max(self):
         pass
