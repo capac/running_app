@@ -98,13 +98,14 @@ class SQLModel:
         delete_query = self.running_delete_command
         self.query(delete_query, record)
 
-    def group_records_by_week(self):
+    def group_records_by_week(self, year):
         # group records by weekly data per year
-        query = '''SELECT DATE(Date, 'weekday 0') AS Sunday,
-                   SUM(Distance) AS Weekly_Distance,
+        query = '''SELECT DATE(Date, "weekday 0") AS Sunday,
+                   SUM(Distance) AS Weekly_Distance
                    FROM running
+                   WHERE strftime("%Y", Date)=:Year
                    GROUP BY Sunday'''
-        self.query(query)
+        return self.query(query, {"Year": year})
 
     def data_addition(self, data):
         '''Adds 'Pace' and 'Speed' columns and adds
