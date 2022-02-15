@@ -232,8 +232,8 @@ class Application(tk.Tk):
                                    "Distance (km)",
                                    "Distance per week")
         bar_chart.pack(fill='both', expand=True)
-        data = self.data_model.group_records_by_week(default_year)
-        bar_chart.draw_bar_chart(data)
+        periods, total_distances = self.data_model.group_records_by_week(default_year)
+        bar_chart.draw_bar_chart(periods, total_distances)
 
     def show_vo2max(self):
         pass

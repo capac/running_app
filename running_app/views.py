@@ -280,8 +280,7 @@ class BarChartView(tk.Frame):
         self.axes.set_ylabel(y_axis, fontsize=14)
         self.axes.set_title(title, fontsize=16)
 
-    def draw_bar_chart(self, data):
-        periods, total_distances = zip(*[row.values() for row in data])
+    def draw_bar_chart(self, periods, total_distances):
         self.bar = self.axes.bar(periods, total_distances, color=plt.cm.Paired.colors,
                                  edgecolor='k', label=periods, alpha=0.8)
         # self.axes.legend(self.bar, periods)

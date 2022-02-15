@@ -106,7 +106,9 @@ class SQLModel:
                    FROM running
                    WHERE strftime("%Y", Date)=:Year
                    GROUP BY Sunday'''
-        return self.query(query, {"Year": year})
+        result = self.query(query, {"Year": year})
+        periods, total_distances = zip(*[row.values() for row in result])
+        return periods, total_distances
 
     def data_addition(self, data):
         '''Adds 'Pace' and 'Speed' columns and adds
