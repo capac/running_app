@@ -281,8 +281,8 @@ class BarChartView(tk.Frame):
         self.axes.set_title(title, fontsize=16)
 
     def draw_bar_chart(self, periods, total_distances):
-        self.bar = self.axes.bar(periods, total_distances, color=plt.cm.Paired.colors,
-                                 edgecolor='k', label=periods, alpha=0.8)
+        self.bar = self.axes.bar(periods, total_distances, color='dodgerblue',
+                                 edgecolor='k', label=periods, alpha=0.6)
         # self.axes.legend(self.bar, periods)
         text_loc = float(self.axes.yaxis.get_data_interval()[1])
         self.axes.set_ylim([0, text_loc+4])
