@@ -98,15 +98,15 @@ class SQLModel:
         delete_query = self.running_delete_command
         self.query(delete_query, record)
 
-    def group_records_by_week(self, year):
+    def group_records_by_week(self):
         # group records by weekly data per year
         # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s
         query = '''SELECT DATE(Date, "weekday 0") AS Sunday,
                    SUM(Distance) AS Weekly_Distance
                    FROM running
-                   WHERE strftime("%Y", Date)=:Year
+                   WHERE DATE(Date) >= DATE('now', '-6 months')
                    GROUP BY Sunday'''
-        result = self.query(query, {"Year": year})
+        result = self.query(query)
         periods, total_distances = zip(*[row.values() for row in result])
         return periods, total_distances
 
