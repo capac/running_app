@@ -17,6 +17,8 @@ class SQLModel:
         'Pace': {'req': True, 'type': FT.string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
+        'Period': {'req': True, 'type': FT.string_list,
+                   'values': ['1', '3', '6', '9', '12']},
     }
 
     # create tables if not existing
@@ -98,7 +100,7 @@ class SQLModel:
         delete_query = self.running_delete_command
         self.query(delete_query, record)
 
-    def group_records_by_week(self, period):
+    def group_records_by_period(self, period):
         # group records by weekly data per year
         # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s
         query = '''SELECT DATE(Date, 'weekday 0') AS Sunday,
