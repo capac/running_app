@@ -261,6 +261,42 @@ class ValidatedSpinbox(ValidatedMixin, TtkSpinbox):
         return valid
 
 
+class ValidatedCombobox(ValidatedMixin, ttk.Combobox):
+    '''A class requiring comboboxes to do the following:
+         * If the proposed text matches no entries, it will be ignored,
+         * when the proposed text matches a single entry, the widget is set to that value,
+         * a delete or backspace clears the entire box.
+    '''
+
+    def _key_validate(self, proposed, action, **kwargs):
+        valid = True
+        # if the user tries to delete, just clear the field
+        if action == '0':
+            self.set('')
+            return True
+
+        # get our value list
+        values = self.cget('values')
+        # do a case-insensitive match against the entered text
+        matching = [
+            x for x in values if x.lower().startswith(proposed.lower())
+        ]
+        if len(matching) == 0:
+            valid = False
+        elif len(matching) == 1:
+            self.set(matching[0])
+            self.icursor(tk.END)
+            valid = False
+        return valid
+
+    def _focusout_validate(self, **kwargs):
+        valid = True
+        if not self.get():
+            valid = False
+            self.error.set('A value is required')
+        return valid
+
+
 class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
@@ -269,6 +305,7 @@ class LabelInput(tk.Frame):
         FT.iso_time_string: (TimeEntry, tk.StringVar),
         FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
         FT.string: (RequiredEntry, tk.StringVar),
+        FT.string_list: (ValidatedCombobox, tk.StringVar),
     }
 
     def __init__(self, parent, label='', input_class=None, input_var=None,
