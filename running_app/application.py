@@ -47,6 +47,7 @@ class Application(tk.Tk):
             'file->import': self.file_import,
             'file->export': self.file_export,
             'on_show_running_progression': self.show_running_progression,
+            'on_period_dropdown': self.period_dropdown,
             'on_show_vo2max': self.show_vo2max,
             # method callbacks
             'on_open_record': self.open_record,
@@ -226,14 +227,26 @@ class Application(tk.Tk):
                 csv_write.save_records(rows, csv_write.fields.keys())
 
     def show_running_progression(self, period=3):
-        popup = tk.Toplevel()
-        bar_chart = v.BarChartView(popup,
-                                   "Weeks",
-                                   "Distance (km)",
-                                   "Distance per week")
-        bar_chart.pack(fill='both', expand=True)
-        periods, total_distances = self.data_model.group_records_by_week(period)
-        bar_chart.draw_bar_chart(periods, total_distances)
+        self.popup = tk.Toplevel()
+        self.popup.resizable(width=False, height=False)
+        self.popup.title('Running progression')
+
+        self.bar_chart = v.BarChartView(self.popup,
+                                        "Weeks",
+                                        "Distance (km)",
+                                        "Distance per week")
+        # bar_chart.pack(fill='both', expand=True)
+        self.bar_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        self.selectionform = v.DataSelectionForm(self.popup,
+                                                 self.data_model.fields,
+                                                 self.callbacks)
+        self.selectionform.grid(row=1, column=0, padx=4, pady=(0, 4), sticky=(tk.W + tk.E))
+        self.selectionform.columnconfigure(0, weight=1)
+        periods, total_distances = self.data_model.group_records_by_period(period)
+        self.bar_chart.draw_bar_chart(periods, total_distances)
+
+    def period_dropdown(self):
+        pass
 
     def show_vo2max(self):
         pass
