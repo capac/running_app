@@ -142,6 +142,26 @@ class DataRecordForm(tk.Frame):
                 pass
 
 
+class DataSelectionForm(tk.Frame):
+    '''The selection form for our bar chart'''
+
+    def __init__(self, parent, fields, callbacks, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.callbacks = callbacks
+
+        # a dictionary to keep track of input widgets
+        self.inputs = {}
+
+        # selection dropdown
+        selectioninfo = tk.LabelFrame(self, text='Selection information', padx=5, pady=5)
+
+        self.inputs['Period'] = w.LabelInput(selectioninfo, 'Select period',
+                                             field_spec=fields['Period'],
+                                             input_var=self.callbacks['on_period_dropdown'])
+        self.inputs['Period'].grid(row=0, column=0)
+        selectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
+
 class RecordList(tk.Frame):
     '''Display records in the database'''
 
@@ -268,8 +288,8 @@ class RecordList(tk.Frame):
 class BarChartView(tk.Frame):
     '''Graphical plots showing some statistics on occupancy'''
 
-    def __init__(self, parent, x_axis, y_axis, title):
-        super().__init__(parent)
+    def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
         self.figure = Figure(figsize=(12, 6), dpi=100, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self)
