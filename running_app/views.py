@@ -149,24 +149,19 @@ class DataSelectionForm(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
 
-        # a dictionary to keep track of input widgets
-        self.inputs = {}
-
         # selection dropdown
         selectioninfo = tk.LabelFrame(self, text='Selection information', padx=5, pady=5)
-        self.inputs['Period'] = w.LabelInput(selectioninfo, 'Select period',
-                                             field_spec=fields['Period'],
-                                             input_var=self.callbacks['on_period_dropdown'])
-        self.inputs['Period'].grid(row=0, column=0)
+        self.selectionvalue = w.LabelInput(selectioninfo, 'Select period',
+                                           field_spec=fields['Period'])
+        self.selectionvalue.grid(row=0, column=0)
+        self.selectbutton = w.LabelInput(selectioninfo, 'Select',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_period_dropdown'])
+        self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
         selectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
-        '''Retrieve data from Tkinter and place it in regular Python objects'''
-
-        data = {}
-        for key, widget in self.inputs.items():
-            data[key] = widget.get()
-        return data
+        return self.selectionvalue.get()
 
 
 class RecordList(tk.Frame):
@@ -293,7 +288,7 @@ class RecordList(tk.Frame):
 
 
 class BarChartView(tk.Frame):
-    '''Graphical plots showing some statistics on occupancy'''
+    '''Graphical plots showing some statistics on running'''
 
     def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -308,6 +303,7 @@ class BarChartView(tk.Frame):
         self.axes.set_title(title, fontsize=16)
 
     def draw_bar_chart(self, periods, total_distances):
+        self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color='dodgerblue',
                                  edgecolor='k', label=periods, alpha=0.6)
         # self.axes.legend(self.bar, periods)
@@ -323,3 +319,4 @@ class BarChartView(tk.Frame):
                  rotation_mode="anchor",
                  rotation=45, fontsize=12)
         plt.setp(self.axes.get_yticklabels(), fontsize=12)
+        self.canvas.draw()
