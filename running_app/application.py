@@ -226,7 +226,7 @@ class Application(tk.Tk):
                                        filepath=None)
                 csv_write.save_records(rows, csv_write.fields.keys())
 
-    def show_running_progression(self, period=3):
+    def show_running_progression(self):
         self.popup = tk.Toplevel()
         self.popup.resizable(width=False, height=False)
         self.popup.title('Running progression')
@@ -235,18 +235,20 @@ class Application(tk.Tk):
                                         "Weeks",
                                         "Distance (km)",
                                         "Distance per week")
-        # bar_chart.pack(fill='both', expand=True)
         self.bar_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
         self.selectionform = v.DataSelectionForm(self.popup,
                                                  self.data_model.fields,
                                                  self.callbacks)
         self.selectionform.grid(row=1, column=0, padx=4, pady=(0, 4), sticky=(tk.W + tk.E))
         self.selectionform.columnconfigure(0, weight=1)
-        periods, total_distances = self.data_model.group_records_by_period(period)
-        self.bar_chart.draw_bar_chart(periods, total_distances)
 
     def period_dropdown(self):
-        pass
+        period = self.selectionform.get()
+        periods, total_distances = self.data_model.group_records_by_period(period)
+        self.bar_chart.tkraise()
+        self.bar_chart.draw_bar_chart(periods, total_distances)
+        self.bar_chart.update()
 
     def show_vo2max(self):
         pass
