@@ -154,12 +154,19 @@ class DataSelectionForm(tk.Frame):
 
         # selection dropdown
         selectioninfo = tk.LabelFrame(self, text='Selection information', padx=5, pady=5)
-
         self.inputs['Period'] = w.LabelInput(selectioninfo, 'Select period',
                                              field_spec=fields['Period'],
                                              input_var=self.callbacks['on_period_dropdown'])
         self.inputs['Period'].grid(row=0, column=0)
         selectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
+    def get(self):
+        '''Retrieve data from Tkinter and place it in regular Python objects'''
+
+        data = {}
+        for key, widget in self.inputs.items():
+            data[key] = widget.get()
+        return data
 
 
 class RecordList(tk.Frame):
