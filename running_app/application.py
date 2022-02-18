@@ -244,11 +244,9 @@ class Application(tk.Tk):
         self.selectionform.columnconfigure(0, weight=1)
 
     def period_dropdown(self):
-        period = self.selectionform.get()
+        period = self.selectionform.get() if self.selectionform.get() else 1
         periods, total_distances = self.data_model.group_records_by_period(period)
-        self.bar_chart.tkraise()
         self.bar_chart.draw_bar_chart(periods, total_distances)
-        self.bar_chart.update()
 
     def show_vo2max(self):
         pass
