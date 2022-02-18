@@ -4,7 +4,7 @@ from tkinter import messagebox
 from . import widgets as w
 # matplotlib
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib import use as mpl_use, pyplot as plt
 mpl_use('TkAgg')
 plt.style.use('ggplot')
@@ -294,7 +294,6 @@ class BarChartView(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.figure = Figure(figsize=(12, 6), dpi=100, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
         self.axes = self.figure.add_subplot(1, 1, 1)
