@@ -240,11 +240,13 @@ class Application(tk.Tk):
         self.selectionform = v.DataSelectionForm(self.popup,
                                                  self.data_model.fields,
                                                  self.callbacks)
+        periods, total_distances = self.data_model.group_records_by_period(period=1)
+        self.bar_chart.draw_bar_chart(periods, total_distances)
         self.selectionform.grid(row=1, column=0, padx=4, pady=(0, 4), sticky=(tk.W + tk.E))
         self.selectionform.columnconfigure(0, weight=1)
 
     def period_dropdown(self):
-        period = self.selectionform.get() if self.selectionform.get() else 1
+        period = self.selectionform.get()
         periods, total_distances = self.data_model.group_records_by_period(period)
         self.bar_chart.draw_bar_chart(periods, total_distances)
 
