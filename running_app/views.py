@@ -7,7 +7,9 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib import use as mpl_use, pyplot as plt
 mpl_use('TkAgg')
-plt.style.use('ggplot')
+# To list all available styles, use: print(plt.style.available)
+# https://matplotlib.org/stable/tutorials/introductory/customizing.html
+plt.style.use('fivethirtyeight')
 
 
 class MainMenu(tk.Menu):
