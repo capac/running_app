@@ -42,12 +42,12 @@ class MainMenu(tk.Menu):
         stats_menu = tk.Menu(file_menu, tearoff=False)
         file_menu.add_cascade(label='Show statistics', menu=stats_menu)
         stats_menu.add_command(
-            label='Show running progression',
-            command=callbacks['on_show_running_progression']
+            label='Show running progression by period',
+            command=callbacks['on_show_progression']
             )
         stats_menu.add_command(
-            label='Show VO2Max',
-            command=callbacks['on_show_vo2max']
+            label='Show cumulative running progression',
+            command=callbacks['on_show_cumulative_progression']
             )
 
         # the help menu

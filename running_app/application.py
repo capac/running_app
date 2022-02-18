@@ -46,9 +46,9 @@ class Application(tk.Tk):
             # menu bar callbacks
             'file->import': self.file_import,
             'file->export': self.file_export,
-            'on_show_running_progression': self.show_running_progression,
+            'on_show_progression': self.show_progression,
             'on_period_dropdown': self.period_dropdown,
-            'on_show_vo2max': self.show_vo2max,
+            'on_show_cumulative_progression': self.show_cumulative_progression,
             # method callbacks
             'on_open_record': self.open_record,
             'on_insert': self.insert,
@@ -226,7 +226,7 @@ class Application(tk.Tk):
                                        filepath=None)
                 csv_write.save_records(rows, csv_write.fields.keys())
 
-    def show_running_progression(self):
+    def show_progression(self):
         self.popup = tk.Toplevel()
         self.popup.resizable(width=False, height=False)
         self.popup.title('Running progression')
@@ -246,11 +246,11 @@ class Application(tk.Tk):
         self.selectionform.columnconfigure(0, weight=1)
 
     def period_dropdown(self):
-        period = self.selectionform.get()
+        period = self.selectionform.get() if self.selectionform.get() else 1
         periods, total_distances = self.data_model.group_records_by_period(period)
         self.bar_chart.draw_bar_chart(periods, total_distances)
 
-    def show_vo2max(self):
+    def show_cumulative_progression(self):
         pass
 
     def load_settings(self):
