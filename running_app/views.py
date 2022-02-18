@@ -225,12 +225,7 @@ class RecordList(tk.Frame):
         self.treeview.tag_configure('updated_record', background='deepskyblue')
 
         # bind on row selection
-        self.reverse_sort = tk.BooleanVar()
-        self.reverse_sort.set(False)
         self.treeview.bind('<<TreeviewSelect>>', self.on_open_record)
-
-        # bind on header selection
-        self.treeview.bind('<Button-1>', self.on_sort_records)
 
     def on_open_record(self, *args):
         try:
@@ -240,6 +235,11 @@ class RecordList(tk.Frame):
         # a better fix is to find a way to keep the line selected
         except IndexError:
             pass
+
+        # bind on header selection
+        self.reverse_sort = tk.BooleanVar()
+        self.reverse_sort.set(False)
+        self.treeview.bind('<Button-1>', self.on_sort_records)
 
     def on_sort_records(self, event):
         '''Sorts treeview list by column header name.
