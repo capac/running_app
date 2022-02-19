@@ -104,13 +104,14 @@ class SQLModel:
         # group records by weekly data per year
         # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s
         query = '''SELECT DATE(Date, 'weekday 0') AS Sunday,
-                   SUM(Distance) AS Weekly_Distance
+                   SUM(Distance) AS Weekly_Distance,
+                   ROUND(AVG(Speed), 2) AS Weekly_Mean_Speed
                    FROM running
                    WHERE DATE(Date) >= DATE('now', :Period)
                    GROUP BY Sunday'''
         result = self.query(query, {"Period": '-'+str(period)+' months'})
-        periods, total_distances = zip(*[row.values() for row in result])
-        return periods, total_distances
+        periods, total_distances, mean_speed = zip(*[row.values() for row in result])
+        return periods, total_distances, mean_speed
 
     def data_addition(self, data):
         '''Adds 'Pace' and 'Speed' columns and adds
