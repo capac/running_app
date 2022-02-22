@@ -103,12 +103,14 @@ class SQLModel:
     def group_records_by_period(self, period):
         # group records by weekly data per year
         # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s
-        query = '''SELECT DATE(Date, 'weekday 0') AS Sunday,
-                   SUM(Distance) AS Weekly_Distance,
-                   ROUND(AVG(Speed), 2) AS Weekly_Mean_Speed
-                   FROM running
-                   WHERE DATE(Date) >= DATE('now', :Period)
-                   GROUP BY Sunday'''
+        query = ("WITH RECURSIVE start_of_week(date) AS "
+                 "(VALUES((SELECT MIN(Date) FROM running)) UNION ALL "
+                 "SELECT DATE(date, 'weekday 0', '+7 days') FROM start_of_week "
+                 "WHERE date < DATE('now')) SELECT DATE(sow.date, 'weekday 0') AS Sunday, "
+                 "SUM(rng.Distance) AS Weekly_Distance, ROUND(AVG(rng.Speed), 2) "
+                 "AS Weekly_Mean_Speed FROM start_of_week AS sow LEFT JOIN running AS rng "
+                 "ON rng.Date = sow.date WHERE DATE(sow.date) >= DATE('now', :Period) "
+                 "GROUP BY Sunday")
         result = self.query(query, {"Period": '-'+str(period)+' months'})
         periods, total_distances, mean_speed = zip(*[row.values() for row in result])
         return periods, total_distances, mean_speed
