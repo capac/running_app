@@ -102,7 +102,12 @@ class SQLModel:
 
     def group_records_by_period(self, period):
         # group records by weekly data per year
-        # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s
+        # created 'all_dates' table with all Sundays until
+        # 2032 and left-joined it with 'running' table,
+        # 'all_dates' table created using suggestion below
+        # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s,
+        # subsequent null entries in table converted to
+        # zeros with COALESCE command in SQL.
         query = ("SELECT date_entry, COALESCE(ROUND(Weekly_Distance, 1), 0) "
                  "AS Weekly_Distance, COALESCE(ROUND(Weekly_Mean_Speed, 1), 0) AS "
                  "Weekly_Mean_Speed FROM all_dates AS ad LEFT JOIN (SELECT DATE(rng.Date, "
