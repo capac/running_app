@@ -106,10 +106,10 @@ class SQLModel:
         query = ("WITH RECURSIVE start_of_week(date) AS "
                  "(VALUES((SELECT MIN(Date) FROM running)) UNION ALL "
                  "SELECT DATE(date, 'weekday 0', '+7 days') FROM start_of_week "
-                 "WHERE date < DATE('now')) SELECT DATE(sow.date, 'weekday 0') AS Sunday, "
+                 "WHERE date < DATE('now')) SELECT DATE(rng.Date, 'weekday 0') AS Sunday, "
                  "SUM(rng.Distance) AS Weekly_Distance, ROUND(AVG(rng.Speed), 2) "
-                 "AS Weekly_Mean_Speed FROM start_of_week AS sow LEFT JOIN running AS rng "
-                 "ON rng.Date = sow.date WHERE DATE(sow.date) >= DATE('now', :Period) "
+                 "AS Weekly_Mean_Speed FROM running AS rng LEFT JOIN start_of_week AS sow "
+                 "ON rng.Date = sow.date WHERE DATE(rng.Date) >= DATE('now', :Period) "
                  "GROUP BY Sunday")
         result = self.query(query, {"Period": '-'+str(period)+' months'})
         periods, total_distances, mean_speed = zip(*[row.values() for row in result])
