@@ -65,13 +65,13 @@ class Application(tk.Tk):
         self.recordlist = v.RecordList(self, self.callbacks,
                                        inserted=self.inserted_rows,
                                        updated=self.updated_rows,)
-        self.recordlist.grid(row=1, padx=10, sticky='NSEW')
+        self.recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
         self.recordlist.columnconfigure(0, weight=1)
         self.populate_recordlist()
 
         # data record form
         self.recordform = v.DataRecordForm(self, self.data_model.fields, self.callbacks)
-        self.recordform.grid(row=2, padx=10, sticky='NSEW')
+        self.recordform.grid(row=1, column=0, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
         # refresh screen to update recordlist / recordform, solution found below:
@@ -81,7 +81,7 @@ class Application(tk.Tk):
         # status bar
         self.status = tk.StringVar()
         self.statusbar = ttk.Label(self, textvariable=self.status)
-        self.statusbar.grid(row=3, padx=10, sticky=('WE'))
+        self.statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
         self.statusbar.columnconfigure(0, weight=1)
 
         self.records_saved = 0
