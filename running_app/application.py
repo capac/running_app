@@ -74,10 +74,6 @@ class Application(tk.Tk):
         self.recordform.grid(row=1, column=0, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
-        # refresh screen to update recordlist / recordform, solution found below:
-        # https://stackoverflow.com/questions/44768319/tkinter-label-not-appearing
-        self.update()
-
         # status bar
         self.status = tk.StringVar()
         self.statusbar = ttk.Label(self, textvariable=self.status)
