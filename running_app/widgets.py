@@ -3,6 +3,14 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
+# matplotlib
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib import use as mpl_use, pyplot as plt
+mpl_use('TkAgg')
+# To list all available styles, use: print(plt.style.available)
+# https://matplotlib.org/stable/tutorials/introductory/customizing.html
+plt.style.use('fivethirtyeight')
 
 
 class TtkSpinbox(ttk.Entry):
@@ -374,3 +382,37 @@ class LabelInput(tk.Frame):
         else:  # input must be an Entry-type widget with no variable
             self.input.delete(0, tk.END)
             self.input.insert('1.0', value)
+
+
+class BarChartWidget(tk.Frame):
+    '''Graphical plots showing some statistics on running'''
+
+    def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.figure = Figure(figsize=(9, 4), dpi=100, layout='tight')
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self)
+        self.canvas.get_tk_widget().pack(fill='both', expand=True)
+        # axes
+        self.axes = self.figure.add_subplot(1, 1, 1)
+        self.axes.set_xlabel(x_axis, fontsize=14)
+        self.axes.set_ylabel(y_axis, fontsize=14)
+        self.axes.set_title(title, fontsize=16)
+
+    def draw_bar_chart(self, periods, total_distances, color):
+        self.axes.clear()
+        self.bar = self.axes.bar(periods, total_distances, color=color,
+                                 edgecolor='k', label=periods, alpha=0.6)
+        # self.axes.legend(self.bar, periods)
+        text_loc = float(self.axes.yaxis.get_data_interval()[1])
+        self.axes.set_ylim([0, text_loc+4])
+        # annotate labels
+        float_total_distances = [round(float(x), 1) for x in total_distances]
+        for x, y in zip(periods, float_total_distances):
+            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+1.8),
+                               ha='center', size=10, color='k',
+                               rotation_mode="anchor", rotation=45)
+        plt.setp(self.axes.get_xticklabels(), ha="right",
+                 rotation_mode="anchor",
+                 rotation=45, fontsize=12)
+        plt.setp(self.axes.get_yticklabels(), fontsize=12)
+        self.canvas.draw()
