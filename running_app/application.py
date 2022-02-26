@@ -61,17 +61,15 @@ class Application(tk.Tk):
         # create database and tables if non-existent
         self.data_model.create_db_and_tables()
 
-        # bar chart plot
-        self.bar_chart = v.BarChartView(self, "Weeks", "Distance (km)",
-                                        "Distance per week")
-        self.bar_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        # bar chart plots
+        self.barchartplots = v.BarChartView(self, self.data_model.group_records_by_period)
+        self.barchartplots.grid(row=0, column=0, sticky=('NSEW'))
+        self.barchartplots.columnconfigure(0, weight=1)
 
+        # selection form
         self.selectionform = v.DataSelectionForm(self, self.data_model.fields,
                                                  self.callbacks)
-        periods, total_distances, _ = self.data_model.group_records_by_period(period=1)
-        self.bar_chart.draw_bar_chart(periods, total_distances)
-        self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0),
-                                sticky=(tk.N + tk.S + tk.W + tk.E))
+        self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
 
         # treeview record form
