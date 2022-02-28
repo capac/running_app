@@ -30,17 +30,6 @@ class MainMenu(tk.Menu):
             command=callbacks['file->export']
             )
         self.add_cascade(label='File', menu=file_menu)
-        file_menu.add_separator()
-        stats_menu = tk.Menu(file_menu, tearoff=False)
-        file_menu.add_cascade(label='Show statistics', menu=stats_menu)
-        stats_menu.add_command(
-            label='Show running progression by period',
-            command=callbacks['on_show_progression']
-            )
-        stats_menu.add_command(
-            label='Show cumulative running progression',
-            command=callbacks['on_show_cumulative_progression']
-            )
 
         # the help menu
         help_menu = tk.Menu(self, tearoff=False)
@@ -283,7 +272,7 @@ class RecordList(tk.Frame):
 
 
 class BarChartView(tk.Frame):
-    def __init__(self, parent, fields, *args, **kwargs):
+    def __init__(self, parent, fields, selection=1, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.fields = fields
 
@@ -296,7 +285,7 @@ class BarChartView(tk.Frame):
                                             "Weekly average speed")
         self.speed_chart.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
-        periods, distances, average_speed = self.fields(period=1)
+        periods, distances, average_speed = self.fields(period=selection)
         self.distance_chart.draw_bar_chart(periods, distances, 'dodgerblue')
         self.speed_chart.draw_bar_chart(periods, average_speed, 'limegreen')
         plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
