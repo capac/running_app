@@ -46,9 +46,7 @@ class Application(tk.Tk):
             # menu bar callbacks
             'file->import': self.file_import,
             'file->export': self.file_export,
-            'on_show_progression': self.show_progression,
             'on_period_dropdown': self.period_dropdown,
-            'on_show_cumulative_progression': self.show_cumulative_progression,
             # method callbacks
             'on_open_record': self.open_record,
             'on_insert': self.insert,
@@ -233,32 +231,11 @@ class Application(tk.Tk):
                                        filepath=None)
                 csv_write.save_records(rows, csv_write.fields.keys())
 
-    def show_progression(self):
-        self.popup = tk.Toplevel()
-        self.popup.resizable(width=False, height=False)
-        self.popup.title('Running progression')
-
-        self.bar_chart = v.BarChartView(self.popup,
-                                        "Weeks",
-                                        "Distance (km)",
-                                        "Distance per week")
-        self.bar_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
-
-        self.selectionform = v.DataSelectionForm(self.popup,
-                                                 self.data_model.fields,
-                                                 self.callbacks)
-        periods, total_distances, _ = self.data_model.group_records_by_period(period=1)
-        self.bar_chart.draw_bar_chart(periods, total_distances)
-        self.selectionform.grid(row=1, column=0, padx=4, pady=(0, 4), sticky=(tk.W + tk.E))
-        self.selectionform.columnconfigure(0, weight=1)
-
     def period_dropdown(self):
         period = self.selectionform.get()
-        periods, total_distances, _ = self.data_model.group_records_by_period(period)
-        self.bar_chart.draw_bar_chart(periods, total_distances)
-
-    def show_cumulative_progression(self):
-        pass
+        self.new_barchartplots = v.BarChartView(self, self.data_model.group_records_by_period,
+                                                period)
+        self.new_barchartplots.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
