@@ -389,7 +389,7 @@ class BarChartWidget(tk.Frame):
 
     def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=(9, 4), dpi=100, layout='tight')
+        self.figure = Figure(figsize=(9, 4), dpi=85, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
