@@ -155,14 +155,14 @@ class RecordList(tk.Frame):
         '#0': {'label': 'Row', 'anchor': tk.W},
         'Date': {'label': 'Date (YYYY-mm-dd)', 'width': 140},
         'Duration': {'label': 'Duration (hh:mm:ss)', 'width': 140},
-        'Distance': {'label': 'Distance (km)', 'width': 120},
+        'Distance': {'label': 'Distance (km)'},
         'Pace': {'label': 'Pace (min/km)'},
         'Speed': {'label': 'Speed (km/hr)'},
-        'Location': {'label': 'Location (City, Country)', 'width': 200},
+        'Location': {'label': 'Location (City, Country)', 'width': 180},
     }
     default_width = 100
     default_minwidth = 20
-    default_anchor = tk.CENTER
+    default_anchor = tk.W
 
     def __init__(self, parent, callbacks,
                  inserted, updated,

@@ -350,7 +350,7 @@ class LabelInput(tk.Frame):
             self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
             input_args['textvariable'] = self.variable
 
-        self.input = input_class(self, **input_args)
+        self.input = input_class(self, width=15, **input_args)
         self.input.grid(row=1, column=0, sticky=(tk.W + tk.E))
         self.columnconfigure(0, weight=1)
         # show actual error message
@@ -389,7 +389,7 @@ class BarChartWidget(tk.Frame):
 
     def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=(9, 4), dpi=85, layout='tight')
+        self.figure = Figure(figsize=(12, 4), dpi=85, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
