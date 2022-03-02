@@ -60,9 +60,9 @@ class Application(tk.Tk):
         self.data_model.create_db_and_tables()
 
         # bar chart plots
-        self.barchartplots = v.BarChartView(self, self.data_model.group_records_by_period)
-        self.barchartplots.grid(row=0, column=0, sticky=('NSEW'))
-        self.barchartplots.columnconfigure(0, weight=1)
+        self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period)
+        self.barcharts.grid(row=0, column=0, sticky=('NSEW'))
+        self.barcharts.columnconfigure(0, weight=1)
 
         # selection form
         self.selectionform = v.DataSelectionForm(self, self.data_model.fields,
@@ -233,9 +233,9 @@ class Application(tk.Tk):
 
     def period_dropdown(self):
         period = self.selectionform.get()
-        self.new_barchartplots = v.BarChartView(self, self.data_model.group_records_by_period,
-                                                period)
-        self.new_barchartplots.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        self.newbarcharts = v.BarChartView(self, self.data_model.group_records_by_period,
+                                           period)
+        self.newbarcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
