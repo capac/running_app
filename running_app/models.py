@@ -120,10 +120,12 @@ class SQLModel:
                  "SUM(rng.Distance) AS Weekly_Distance, "
                  "ROUND(AVG(rng.Speed), 2) AS Weekly_Mean_Speed "
                  "FROM running AS rng "
-                 "WHERE Sunday BETWEEN DATE('now', :Period) AND DATE('now') "
+                 "WHERE Sunday BETWEEN DATE('now', :Period) AND "
+                 "DATE('now', 'weekday 0', '+7 days') "
                  "GROUP BY DATE(rng.Date, 'weekday 0')) AS rr "
                  "ON sow.date_entry = rr.Sunday "
-                 "WHERE sow.date_entry BETWEEN DATE('now', :Period) AND DATE('now')")
+                 "WHERE sow.date_entry BETWEEN DATE('now', :Period) AND "
+                 "DATE('now', 'weekday 0', '+7 days')")
         result = self.query(query, {"Period": '-'+str(period)+' months'})
         periods, total_distances, mean_speed = zip(*[row.values() for row in result])
         return periods, total_distances, mean_speed
