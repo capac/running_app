@@ -162,7 +162,7 @@ class RecordList(tk.Frame):
     }
     default_width = 100
     default_minwidth = 20
-    default_anchor = tk.W
+    default_anchor = tk.CENTER
 
     def __init__(self, parent, callbacks,
                  inserted, updated,
