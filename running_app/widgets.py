@@ -408,11 +408,11 @@ class BarChartWidget(tk.Frame):
         # annotate labels
         float_total_distances = [round(float(x), 1) for x in total_distances]
         for x, y in zip(periods, float_total_distances):
-            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+1.8),
+            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+2.0),
                                ha='center', size=10, color='k',
                                rotation_mode="anchor", rotation=45)
         plt.setp(self.axes.get_xticklabels(), ha="right",
                  rotation_mode="anchor",
                  rotation=45, fontsize=12)
         plt.setp(self.axes.get_yticklabels(), fontsize=12)
-        self.canvas.draw()
+        self.canvas.flush_events()
