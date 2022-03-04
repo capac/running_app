@@ -233,9 +233,9 @@ class Application(tk.Tk):
 
     def period_dropdown(self):
         period = self.selectionform.get()
-        self.newbarcharts = v.BarChartView(self, self.data_model.group_records_by_period,
-                                           period)
-        self.newbarcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period,
+                                        period)
+        self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
