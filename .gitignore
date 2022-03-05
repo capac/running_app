@@ -10,6 +10,7 @@ shoes/
 *.png
 *.txt
 *.sql
+*.log
 check_paces.py
 cal_VO2Max.py
 marathon_plan.py
