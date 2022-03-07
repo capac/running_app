@@ -286,6 +286,6 @@ class BarChartView(tk.Frame):
         speed_chart.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
         periods, distances, average_speed = self.fields(period=selection)
-        distance_chart.draw_bar_chart(periods, distances, 'dodgerblue')
-        speed_chart.draw_bar_chart(periods, average_speed, 'limegreen')
+        distance_chart.draw_bar_chart(periods, distances, selection, 'dodgerblue')
+        speed_chart.draw_bar_chart(periods, average_speed, selection, 'limegreen')
         plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))

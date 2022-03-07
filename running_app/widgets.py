@@ -398,7 +398,7 @@ class BarChartWidget(tk.Frame):
         self.axes.set_ylabel(y_axis, fontsize=14)
         self.axes.set_title(title, fontsize=16)
 
-    def draw_bar_chart(self, periods, total_distances, color):
+    def draw_bar_chart(self, periods, total_distances, selection, color):
         self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.6)
@@ -408,11 +408,11 @@ class BarChartWidget(tk.Frame):
         # annotate labels
         float_total_distances = [round(float(x), 1) for x in total_distances]
         for x, y in zip(periods, float_total_distances):
-            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+2.0),
-                               ha='center', size=10, color='k',
-                               rotation_mode="anchor", rotation=45)
+            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+2.5),
+                               ha='center', size=11-int(int(selection)/5.0),
+                               color='k', rotation_mode="anchor", rotation=45)
         plt.setp(self.axes.get_xticklabels(), ha="right",
                  rotation_mode="anchor",
-                 rotation=45, fontsize=12)
-        plt.setp(self.axes.get_yticklabels(), fontsize=12)
+                 rotation=45, fontsize=13-int(int(selection)/4.0))
+        plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
         self.canvas.flush_events()
