@@ -158,6 +158,7 @@ class Application(tk.Tk):
             elif self.data_model.last_write == 'insert record':
                 self.inserted_rows.append(key)
             self.populate_recordlist()
+            self.period_dropdown()
 
     def remove(self):
         '''Removes record from database'''
