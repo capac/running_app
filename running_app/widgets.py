@@ -389,7 +389,7 @@ class BarChartWidget(tk.Frame):
 
     def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=(12, 4), dpi=85, layout='tight')
+        self.figure = Figure(figsize=(12, 3), dpi=80, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
@@ -412,7 +412,7 @@ class BarChartWidget(tk.Frame):
                                ha='center', size=11-int(int(selection)/5.0),
                                color='k', rotation_mode="anchor", rotation=45)
         plt.setp(self.axes.get_xticklabels(), ha="right",
-                 rotation_mode="anchor",
-                 rotation=45, fontsize=13-int(int(selection)/4.0))
+                 rotation_mode="anchor", rotation=35,
+                 fontsize=13-int(int(selection)/4.0))
         plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
         self.canvas.flush_events()
