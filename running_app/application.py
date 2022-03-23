@@ -51,6 +51,8 @@ class Application(tk.Tk):
             'on_open_record': self.open_record,
             'on_insert': self.insert,
             'on_remove': self.remove,
+            'show_novice_1_plan': self.show_novice_1_plan,
+            'show_novice_2_plan': self.show_novice_2_plan,
         }
 
         menu = v.MainMenu(self, self.callbacks)
@@ -237,6 +239,12 @@ class Application(tk.Tk):
         self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period,
                                         period)
         self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
+    def show_novice_1_plan(self):
+        pass
+
+    def show_novice_2_plan(self):
+        pass
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
