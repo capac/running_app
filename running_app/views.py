@@ -29,6 +29,17 @@ class MainMenu(tk.Menu):
             label='Export file with running data'+chr(8230),
             command=callbacks['file->export']
             )
+        file_menu.add_separator()
+        file_menu.add_command(
+            # 8230: ASCII value for horizontal ellipsis
+            label='Show level-1 novice marathon plan'+chr(8230),
+            command=callbacks['show_novice_1_plan']
+            )
+        file_menu.add_command(
+            # 8230: ASCII value for horizontal ellipsis
+            label='Show level-2 novice marathon plan'+chr(8230),
+            command=callbacks['show_novice_2_plan']
+            )
         self.add_cascade(label='File', menu=file_menu)
 
         # the help menu
