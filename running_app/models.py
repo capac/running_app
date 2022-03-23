@@ -113,11 +113,13 @@ class SQLModel:
                  "FROM start_of_week WHERE date_entry < DATE('now')) "
                  "SELECT date_entry, "
                  "COALESCE(ROUND(Weekly_Distance, 1), 0) AS Weekly_Distance, "
+                 "COALESCE(Num_Weekly_Sessions, 0) AS Num_Weekly_Sessions, "
                  "COALESCE(ROUND(Weekly_Mean_Speed, 1), 0) AS Weekly_Mean_Speed "
                  "FROM start_of_week AS sow "
                  "LEFT JOIN "
                  "(SELECT DATE(rng.Date, 'weekday 0') AS Sunday, "
                  "SUM(rng.Distance) AS Weekly_Distance, "
+                 "COUNT(rng.Distance) AS Num_Weekly_Sessions, "
                  "ROUND(AVG(rng.Speed), 2) AS Weekly_Mean_Speed "
                  "FROM running AS rng "
                  "WHERE Sunday BETWEEN DATE('now', :Period) AND "
@@ -127,8 +129,8 @@ class SQLModel:
                  "WHERE sow.date_entry BETWEEN DATE('now', :Period) AND "
                  "DATE('now', 'weekday 0', '+7 days')")
         result = self.query(query, {"Period": '-'+str(period)+' months'})
-        periods, total_distances, mean_speed = zip(*[row.values() for row in result])
-        return periods, total_distances, mean_speed
+        periods, total_distances, tot_counts, mean_speed = zip(*[row.values() for row in result])
+        return periods, total_distances, tot_counts, mean_speed
 
     def data_addition(self, data):
         '''Adds 'Pace' and 'Speed' columns and adds
