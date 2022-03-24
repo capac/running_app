@@ -20,6 +20,7 @@ Features
 * Allows sorting by date, distance, pace, speed and location
 * Shows bar chart of weekly cumulative distance achievement
 * Shows bar chart of weekly average speed achievement
+* Shows bar chart of of number of weekly running sessions
 * Allows bar chart views over the previous 1, 3, 6, 9 and 12 month spans
 * Import and export of data in CSV formats
 
@@ -35,7 +36,7 @@ Notes
 =====
 
 * Import of CSV data needs columns containing Date, Duration, Distance, Pace, Speed and Location
-* Export feature will extract in a likewise column fashion
+* Export feature will extract to a CSV file in a likewise column fashion
 
 Issues
 ======
