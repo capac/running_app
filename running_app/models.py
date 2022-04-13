@@ -156,7 +156,11 @@ class SQLModel:
                  "WHERE sow.date_entry BETWEEN DATE('now', :Period) AND "
                  "DATE('now', 'weekday 0', '+7 days')")
         result = self.query(query, {"Period": '-'+str(period)+' months'})
-        periods, total_distances, tot_counts, mean_speed = zip(*[row.values() for row in result])
+        try:
+            periods, total_distances, tot_counts, mean_speed = \
+                zip(*[row.values() for row in result])
+        except ValueError:
+            periods, total_distances, tot_counts, mean_speed = 0, 0, 0, 0
         return periods, total_distances, tot_counts, mean_speed
 
     def data_addition(self, data):
