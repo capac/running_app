@@ -19,6 +19,16 @@ class SQLModel:
         'Location': {'req': True, 'type': FT.string},
         'Period': {'req': True, 'type': FT.string_list,
                    'values': ['1', '3', '6', '9', '12']},
+        }
+
+    program_fields = {
+        'Mon': {'req': True, 'type': FT.decimal},
+        'Tue': {'req': True, 'type': FT.decimal},
+        'Wed': {'req': True, 'type': FT.decimal},
+        'Thu': {'req': True, 'type': FT.decimal},
+        'Fri': {'req': True, 'type': FT.decimal},
+        'Sat': {'req': True, 'type': FT.decimal},
+        'Sun': {'req': True, 'type': FT.decimal},
     }
 
     # create tables if not existing
@@ -30,10 +40,23 @@ class SQLModel:
                                     'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
+    create_program_table_command = ('CREATE TABLE IF NOT EXISTS program '
+                                    '(Mon Distance REAL PRIMARY KEY, '
+                                    'Tue Distance REAL, '
+                                    'Wed Distance REAL, '
+                                    'Thu Distance REAL, '
+                                    'Fri Distance REAL, '
+                                    'Sat Distance REAL, '
+                                    'Sun Distance REAL)')
+
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
                               ':Duration, :Distance, :Pace, :Speed, '
                               ':Location)')
+
+    program_insert_command = ('INSERT INTO program VALUES (:Mon, '
+                              ':Tue, :Wed, :Thu, :Fri, :Sat, '
+                              ':Sun)')
 
     # update running session in running table
     running_update_command = ('UPDATE running SET Duration=:Duration, '
@@ -75,6 +98,10 @@ class SQLModel:
 
     def get_all_records(self):
         query = ('SELECT * FROM running ORDER BY Date DESC')
+        return self.query(query)
+
+    def get_all_program_records(self):
+        query = ('SELECT * FROM program')
         return self.query(query)
 
     def get_record(self, date):
@@ -174,6 +201,16 @@ class CSVModel:
         'Pace': {'req': True, 'type': FT.string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
+        }
+
+    program_fields = {
+        'Mon': {'req': True, 'type': FT.decimal},
+        'Tue': {'req': True, 'type': FT.decimal},
+        'Wed': {'req': True, 'type': FT.decimal},
+        'Thu': {'req': True, 'type': FT.decimal},
+        'Fri': {'req': True, 'type': FT.decimal},
+        'Sat': {'req': True, 'type': FT.decimal},
+        'Sun': {'req': True, 'type': FT.decimal},
     }
 
     def __init__(self, filename, filepath=None):
