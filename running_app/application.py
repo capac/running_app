@@ -181,6 +181,7 @@ class Application(tk.Tk):
             self.status.set(f'{self.records_deleted} record(s) deleted this session')
             self.recordform.reset()
             self.populate_recordlist()
+            self.period_dropdown()
 
     # import records from CSV file to database
     def file_import(self):
@@ -209,6 +210,7 @@ class Application(tk.Tk):
                     self.data_model.add_record(row)
                 self.status.set(f'''Loaded data into {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
+                self.period_dropdown()
 
     def file_export(self):
         '''Handles the file->export action from the menu'''
