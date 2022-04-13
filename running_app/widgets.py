@@ -389,7 +389,7 @@ class BarChartWidget(tk.Frame):
 
     def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=(12, 3), dpi=80, layout='tight')
+        self.figure = Figure(figsize=(12, 3), dpi=75, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
@@ -398,7 +398,7 @@ class BarChartWidget(tk.Frame):
         self.axes.set_ylabel(y_axis, fontsize=14)
         self.axes.set_title(title, fontsize=16)
 
-    def draw_bar_chart(self, periods, total_distances, selection, color):
+    def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
         self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.6)
@@ -408,11 +408,16 @@ class BarChartWidget(tk.Frame):
         # annotate labels
         float_total_distances = [round(float(x), 1) for x in total_distances]
         for x, y in zip(periods, float_total_distances):
-            self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+2.5),
-                               ha='center', size=11-int(int(selection)/5.0),
-                               color='k', rotation_mode="anchor", rotation=45)
+            if not integer:
+                self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+4.0),
+                                   ha='center', size=14-int(int(selection)/4.0),
+                                   color='k', rotation_mode="anchor", rotation=35)
+            else:
+                self.axes.annotate('{0}'.format(int(y)), xy=(x, text_loc+4.0),
+                                   ha='center', size=14-int(int(selection)/4.0),
+                                   color='k', rotation_mode="anchor", rotation=35)
         plt.setp(self.axes.get_xticklabels(), ha="right",
                  rotation_mode="anchor", rotation=35,
-                 fontsize=13-int(int(selection)/4.0))
+                 fontsize=14-int(int(selection)/4.0))
         plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
         self.canvas.flush_events()
