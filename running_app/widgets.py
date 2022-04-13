@@ -403,18 +403,19 @@ class BarChartWidget(tk.Frame):
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.6)
         # self.axes.legend(self.bar, periods)
-        text_loc = float(self.axes.yaxis.get_data_interval()[1])
-        self.axes.set_ylim([0, text_loc+4])
+        y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
+        self.axes.set_xlim([self.axes.xaxis.get_data_interval()[0], self.axes.xaxis.get_data_interval()[1]])
+        self.axes.set_ylim([0, y_text_loc+4])
         # annotate labels
         if not isinstance(total_distances, int):
             total_distances = [round(float(x), 1) for x in total_distances]
             for x, y in zip(periods, total_distances):
                 if not integer:
-                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, text_loc+4.0),
+                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, y_text_loc+4.0),
                                        ha='center', size=14-int(int(selection)/4.0),
                                        color='k', rotation_mode="anchor", rotation=35)
                 else:
-                    self.axes.annotate('{0}'.format(int(y)), xy=(x, text_loc+4.0),
+                    self.axes.annotate('{0}'.format(int(y)), xy=(x, y_text_loc+4.0),
                                        ha='center', size=14-int(int(selection)/4.0),
                                        color='k', rotation_mode="anchor", rotation=35)
         plt.setp(self.axes.get_xticklabels(), ha="right",
