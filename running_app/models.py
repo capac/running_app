@@ -40,7 +40,7 @@ class SQLModel:
                                     'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
-    create_program_table_command = ('CREATE TABLE IF NOT EXISTS program '
+    create_program_table_command = ('CREATE TABLE IF NOT EXISTS {} '
                                     '(Mon Distance REAL PRIMARY KEY, '
                                     'Tue Distance REAL, '
                                     'Wed Distance REAL, '
@@ -54,7 +54,7 @@ class SQLModel:
                               ':Duration, :Distance, :Pace, :Speed, '
                               ':Location)')
 
-    program_insert_command = ('INSERT INTO program VALUES (:Mon, '
+    program_insert_command = ('INSERT INTO {} VALUES (:Mon, '
                               ':Tue, :Wed, :Thu, :Fri, :Sat, '
                               ':Sun)')
 
@@ -92,16 +92,21 @@ class SQLModel:
                 return result
 
     # only upon first run of the running application
-    def create_db_and_tables(self):
-        '''Creates database and tables if they don't already exist'''
+    def create_db_and_primary_table(self):
+        '''Creates database and table if they don't already exist'''
         self.query(self.create_running_table_command)
+
+    # only upon first run of the running application
+    def create_program_table(self, program):
+        '''Creates marathon program table if it doesn't already exist'''
+        self.query(self.create_program_table_command.format(program))
 
     def get_all_records(self):
         query = ('SELECT * FROM running ORDER BY Date DESC')
         return self.query(query)
 
-    def get_all_program_records(self):
-        query = ('SELECT * FROM program')
+    def get_all_program_records(self, program):
+        query = ('SELECT * FROM {}'.format(program))
         return self.query(query)
 
     def get_record(self, date):
