@@ -96,17 +96,8 @@ class SQLModel:
         '''Creates database and table if they don't already exist'''
         self.query(self.create_running_table_command)
 
-    # only upon first run of the running application
-    def create_program_table(self, program):
-        '''Creates marathon program table if it doesn't already exist'''
-        self.query(self.create_program_table_command.format(program))
-
     def get_all_records(self):
         query = ('SELECT * FROM running ORDER BY Date DESC')
-        return self.query(query)
-
-    def get_all_program_records(self, program):
-        query = ('SELECT * FROM {}'.format(program))
         return self.query(query)
 
     def get_record(self, date):
@@ -195,8 +186,17 @@ class SQLModel:
         # zero padding added for seconds
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
         data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
-        # zero padding added for seconds
         return data
+
+    # marathon program data import section
+    # only upon import of a new marathon program data import
+    def create_program_table(self, program):
+        '''Creates marathon program table if it doesn't already exist'''
+        self.query(self.create_program_table_command.format(program))
+
+    def get_all_program_records(self, program):
+        query = ('SELECT * FROM {}'.format(program))
+        return self.query(query)
 
 
 class CSVModel:
