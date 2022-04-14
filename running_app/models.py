@@ -9,7 +9,7 @@ from .constants import FieldTypes as FT
 class SQLModel:
     '''SQL database values'''
 
-    fields = {
+    running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
@@ -41,7 +41,7 @@ class SQLModel:
                                     'Location TEXT NOT NULL)')
 
     create_program_table_command = ('CREATE TABLE IF NOT EXISTS {} '
-                                    '(Mon Distance REAL PRIMARY KEY, '
+                                    '(Mon Distance REAL, '
                                     'Tue Distance REAL, '
                                     'Wed Distance REAL, '
                                     'Thu Distance REAL, '
@@ -198,11 +198,15 @@ class SQLModel:
         query = ('SELECT * FROM {}'.format(program))
         return self.query(query)
 
+    def add_program_record(self, table, record):
+        query = self.program_insert_command.format(table)
+        self.query(query, record)
+
 
 class CSVModel:
     '''CSV file retrieval and storage'''
 
-    fields = {
+    running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
@@ -231,16 +235,16 @@ class CSVModel:
         else:
             self.filename = filename
 
-    def load_records(self):
+    def load_records(self, fields):
         '''Reads in all records from the CSV file and returns a list'''
 
         if not os.path.exists(self.filename):
             return []
 
-        with open(self.filename, 'r', encoding='utf-8') as fh:
+        with open(self.filename, 'r', encoding='utf-8-sig') as fh:
             # turning fh into a list is necessary for the unit tests
             csvreader = csv.DictReader(list(fh.readlines()))
-            missing_fields = set(self.fields.keys()) - set(csvreader.fieldnames)
+            missing_fields = set(fields.keys()) - set(csvreader.fieldnames)
             if len(missing_fields) > 0:
                 raise Exception(
                     f'''File is missing fields: {', '.join(missing_fields)}'''
