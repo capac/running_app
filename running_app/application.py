@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from . import views as v
 from . import models as m
+import os
 
 
 class Application(tk.Tk):
@@ -51,8 +52,7 @@ class Application(tk.Tk):
             'on_open_record': self.open_record,
             'on_insert': self.insert,
             'on_remove': self.remove,
-            'show_novice_1_plan': self.show_novice_1_plan,
-            'show_novice_2_plan': self.show_novice_2_plan,
+            'add_plan': self.add_plan,
         }
 
         menu = v.MainMenu(self, self.callbacks)
@@ -67,7 +67,7 @@ class Application(tk.Tk):
         self.barcharts.columnconfigure(0, weight=1)
 
         # selection form
-        self.selectionform = v.DataSelectionForm(self, self.data_model.fields,
+        self.selectionform = v.DataSelectionForm(self, self.data_model.running_fields,
                                                  self.callbacks)
         self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
@@ -81,7 +81,7 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # data record form
-        self.recordform = v.DataRecordForm(self, self.data_model.fields, self.callbacks)
+        self.recordform = v.DataRecordForm(self, self.data_model.running_fields, self.callbacks)
         self.recordform.grid(row=1, column=1, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
@@ -204,11 +204,11 @@ class Application(tk.Tk):
                     detail=str(e)
                 )
             else:
-                records = csv_read.load_records()
+                records = csv_read.load_records(csv_read.running_fields)
                 for row in records:
                     row = self.data_model.data_addition(row)
                     self.data_model.add_record(row)
-                self.status.set(f'''Loaded data into {self.settings['db_name'].get()}''')
+                self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
                 self.period_dropdown()
 
@@ -234,7 +234,7 @@ class Application(tk.Tk):
                 self.status.set(f'Saved data to {self.filename.get()}')
                 csv_write = m.CSVModel(filename=self.filename.get(),
                                        filepath=None)
-                csv_write.save_records(rows, csv_write.fields.keys())
+                csv_write.save_records(rows, csv_write.running_fields.keys())
 
     def period_dropdown(self):
         period = self.selectionform.get()
@@ -242,11 +242,33 @@ class Application(tk.Tk):
                                         period)
         self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
-    def show_novice_1_plan(self):
-        self.data_model.create_program_table('novice_1')
+    def add_plan(self):
+        '''Handles marathon program import and saves data to the database,
+        creates a menu bar entry to view marathon program bar chart'''
 
-    def show_novice_2_plan(self):
-        pass
+        filename = filedialog.askopenfilename(
+            title='Select the file to import into the database',
+            defaultextension='.csv',
+            filetypes=[('Comma-Separated Values', '*.csv *.CSV')]
+        )
+        if filename:
+            self.filename.set(filename)
+            try:
+                csv_read = m.CSVModel(filename=self.filename.get(),
+                                      filepath=None)
+            except Exception as e:
+                messagebox.showerror(
+                    title='Error',
+                    message='Problem reading file',
+                    detail=str(e)
+                )
+            else:
+                basename, _ = os.path.splitext(os.path.basename(self.filename.get()))
+                self.data_model.create_program_table(basename)
+                records = csv_read.load_records(csv_read.program_fields)
+                for row in records:
+                    self.data_model.add_program_record(basename, row)
+                self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
