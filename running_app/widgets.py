@@ -405,7 +405,7 @@ class BarChartWidget(tk.Frame):
         # self.axes.legend(self.bar, periods)
         y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
         self.axes.set_xlim([self.axes.xaxis.get_data_interval()[0], self.axes.xaxis.get_data_interval()[1]])
-        self.axes.set_ylim([0, y_text_loc*1.3])
+        self.axes.set_ylim([0, y_text_loc + 2])
         # annotate labels
         if not isinstance(total_distances, int):
             total_distances = [round(float(x), 1) for x in total_distances]
