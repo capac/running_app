@@ -58,8 +58,8 @@ class Application(tk.Tk):
         menu = v.MainMenu(self, self.callbacks)
         self.config(menu=menu)
 
-        # create database and tables if non-existent
-        self.data_model.create_db_and_tables()
+        # create database and table if non-existent
+        self.data_model.create_db_and_primary_table()
 
         # bar chart plots
         self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period)
@@ -243,7 +243,7 @@ class Application(tk.Tk):
         self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
     def show_novice_1_plan(self):
-        pass
+        self.data_model.create_program_table('novice_1')
 
     def show_novice_2_plan(self):
         pass
