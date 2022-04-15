@@ -387,9 +387,9 @@ class LabelInput(tk.Frame):
 class BarChartWidget(tk.Frame):
     '''Graphical plots showing some statistics on running'''
 
-    def __init__(self, parent, x_axis, y_axis, title, *args, **kwargs):
+    def __init__(self, parent, x_axis, y_axis, title, figsize=(12, 3), *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=(12, 3), dpi=75, layout='tight')
+        self.figure = Figure(figsize=figsize, dpi=75, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
