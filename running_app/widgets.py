@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
 from numpy import ceil, linspace
-from pandas import DataFrame, Series
+from pandas import DataFrame, Series, read_sql_table
 from re import split
 # matplotlib
 from matplotlib.figure import Figure
@@ -433,54 +433,46 @@ class BarChartWidget(tk.Frame):
             cmap(linspace(minval, maxval, n)))
         return new_cmap
 
-    def draw_stacked_bar_chart(self, dframe, table_name):
+    def draw_stacked_bar_chart(self, table_name):
         self.axes.clear()
-        # stacked bar chart title
-        tmp_name = split('_', table_name)
-        title_name = tmp_name[0].title()+r' '+tmp_name[1]
         # color map
         cmap = plt.get_cmap('jet')
         truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
+        # load data from database
+        dframe = read_sql_table(table_name, 'sqlite:///running.db')
         # weekly cumulative distances
         cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
-
         # stacked bar plot using pandas dataframe
         ax = dframe.plot(kind='bar', stacked=True, figsize=(13, 8),
                          cmap=truncated_cmap, fontsize=13, width=0.75)
-        # annotate cumulative mileage for each week
+        # annotate cumulative distance for each week
         for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
             plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y+0.5), ha='center',
                          va='bottom', size=12, weight='bold', color='k')
-
-        # weekly individual mileage for each day of week
+        # weekly individual distance for each day of week
         cum_week_dists = DataFrame(
             {wk_num: dframe.loc[wk_num].cumsum() for wk_num in dframe.index})
-
-        # annotate individual mileage for each day of week
+        # annotate individual distance for each day of week
         for x in dframe.index:
             for lb, y in zip(dframe.loc[x], cum_week_dists.T.loc[x]):
                 if lb != 0.0:
                     plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y-1), ha='center',
                                  va='top', size=12, color='k')
-
         # plot legend
         ax.legend(fontsize=11, loc=0)
-
         # 5% plot padding in each direction
         ax.margins(0.05)
-
         # x-axis label and tick labels
         ax.set_xlabel('Week number')
         ax.set_xticklabels(dframe.index, rotation=0)
-
         # y-axis tick frequency and label
         ax.set_yticks(range(ceil(cumul_kms.max())), minor=True)
         ax.set_ylabel('Weekly total distance (km)')
-
-        # plot title
+        # stacked bar chart title
+        tmp_name = split('_', table_name)
+        title_name = tmp_name[0].title()+r' '+tmp_name[1]
         ax.set_title('Weekly progression for '+str(title_name) +
                      ' marathon training program')
-
         # grid style: dotted
         ax.grid(linestyle=':')
-        plt.tight_layout()
+        self.canvas.flush_events()
