@@ -3,10 +3,14 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
+from numpy import ceil, linspace
+from pandas import DataFrame, Series
+from re import split
 # matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib import use as mpl_use, pyplot as plt
+from matplotlib import colors
 mpl_use('TkAgg')
 # To list all available styles, use: print(plt.style.available)
 # https://matplotlib.org/stable/tutorials/introductory/customizing.html
@@ -402,7 +406,6 @@ class BarChartWidget(tk.Frame):
         self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.6)
-        # self.axes.legend(self.bar, periods)
         y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
         self.axes.set_xlim([self.axes.xaxis.get_data_interval()[0], self.axes.xaxis.get_data_interval()[1]])
         self.axes.set_ylim([0, y_text_loc + 3.5])
@@ -423,3 +426,61 @@ class BarChartWidget(tk.Frame):
                  fontsize=14-int(int(selection)/4.0))
         plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
         self.canvas.flush_events()
+
+    def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+        new_cmap = colors.LinearSegmentedColormap.from_list(
+            'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
+            cmap(linspace(minval, maxval, n)))
+        return new_cmap
+
+    def draw_stacked_bar_chart(self, dframe, table_name):
+        self.axes.clear()
+        # stacked bar chart title
+        tmp_name = split('_', table_name)
+        title_name = tmp_name[0].title()+r' '+tmp_name[1]
+        # color map
+        cmap = plt.get_cmap('jet')
+        truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
+        # weekly cumulative distances
+        cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
+
+        # stacked bar plot using pandas dataframe
+        ax = dframe.plot(kind='bar', stacked=True, figsize=(13, 8),
+                         cmap=truncated_cmap, fontsize=13, width=0.75)
+        # annotate cumulative mileage for each week
+        for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
+            plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y+0.5), ha='center',
+                         va='bottom', size=12, weight='bold', color='k')
+
+        # weekly individual mileage for each day of week
+        cum_week_dists = DataFrame(
+            {wk_num: dframe.loc[wk_num].cumsum() for wk_num in dframe.index})
+
+        # annotate individual mileage for each day of week
+        for x in dframe.index:
+            for lb, y in zip(dframe.loc[x], cum_week_dists.T.loc[x]):
+                if lb != 0.0:
+                    plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y-1), ha='center',
+                                 va='top', size=12, color='k')
+
+        # plot legend
+        ax.legend(fontsize=11, loc=0)
+
+        # 5% plot padding in each direction
+        ax.margins(0.05)
+
+        # x-axis label and tick labels
+        ax.set_xlabel('Week number')
+        ax.set_xticklabels(dframe.index, rotation=0)
+
+        # y-axis tick frequency and label
+        ax.set_yticks(range(ceil(cumul_kms.max())), minor=True)
+        ax.set_ylabel('Weekly total distance (km)')
+
+        # plot title
+        ax.set_title('Weekly progression for '+str(title_name) +
+                     ' marathon training program')
+
+        # grid style: dotted
+        ax.grid(linestyle=':')
+        plt.tight_layout()
