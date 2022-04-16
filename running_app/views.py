@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from . import widgets as w
+from re import split
 
 
 class MainMenu(tk.Menu):
@@ -298,4 +299,23 @@ class BarChartView(tk.Frame):
         distance_chart.draw_bar_chart(periods, distances, selection, 'dodgerblue')
         speed_chart.draw_bar_chart(periods, average_speed, selection, 'limegreen')
         count_chart.draw_bar_chart(periods, counts, selection, 'gold', integer=True)
+        plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
+
+class StackedBarChartView(tk.Frame):
+    def __init__(self, parent, fields, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.fields = fields
+
+        # stacked bar chart title
+        tmp_name = split('_', self.fields)
+        title_name = tmp_name[0]+r' '+tmp_name[1]
+
+        # bar chart plots
+        plotinfo = tk.LabelFrame(self, text='Marathon program', padx=5, pady=5)
+        distance_chart = w.BarChartWidget(self, "Week number", "Weekly distances (km)",
+                                          "Weekly progression for " + str(title_name) +
+                                          " marathon training program")
+        distance_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        distance_chart.draw_stacked_bar_chart(self.fields)
         plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
