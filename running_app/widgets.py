@@ -5,7 +5,6 @@ from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
 from numpy import ceil, linspace
 from pandas import DataFrame, Series, read_sql_table
-from re import split
 # matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -391,15 +390,15 @@ class LabelInput(tk.Frame):
 class BarChartWidget(tk.Frame):
     '''Graphical plots showing some statistics on running'''
 
-    def __init__(self, parent, x_axis, y_axis, title, figsize=(12, 3), *args, **kwargs):
+    def __init__(self, parent, x_label, y_label, title, figsize=(12, 3), *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.figure = Figure(figsize=figsize, dpi=75, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
         self.axes = self.figure.add_subplot(1, 1, 1)
-        self.axes.set_xlabel(x_axis, fontsize=14)
-        self.axes.set_ylabel(y_axis, fontsize=14)
+        self.axes.set_xlabel(x_label, fontsize=14)
+        self.axes.set_ylabel(y_label, fontsize=14)
         self.axes.set_title(title, fontsize=16)
 
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
@@ -463,16 +462,9 @@ class BarChartWidget(tk.Frame):
         # 5% plot padding in each direction
         ax.margins(0.05)
         # x-axis label and tick labels
-        ax.set_xlabel('Week number')
         ax.set_xticklabels(dframe.index, rotation=0)
         # y-axis tick frequency and label
         ax.set_yticks(range(ceil(cumul_kms.max())), minor=True)
-        ax.set_ylabel('Weekly total distance (km)')
-        # stacked bar chart title
-        tmp_name = split('_', table_name)
-        title_name = tmp_name[0].title()+r' '+tmp_name[1]
-        ax.set_title('Weekly progression for '+str(title_name) +
-                     ' marathon training program')
         # grid style: dotted
         ax.grid(linestyle=':')
         self.canvas.flush_events()
