@@ -53,10 +53,11 @@ class Application(tk.Tk):
             'on_insert': self.insert,
             'on_remove': self.remove,
             'add_plan': self.add_plan,
+            'show_plan': self.show_plan,
         }
 
-        menu = v.MainMenu(self, self.callbacks)
-        self.config(menu=menu)
+        self.menu = v.MainMenu(self, self.callbacks)
+        self.config(menu=self.menu)
 
         # create database and table if non-existent
         self.data_model.create_db_and_primary_table()
@@ -269,6 +270,10 @@ class Application(tk.Tk):
                 for row in records:
                     self.data_model.add_program_record(basename, row)
                 self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
+        self.menu.add_menu(basename)
+
+    def show_plan(self, table_name):
+        pass
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
