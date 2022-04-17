@@ -17,31 +17,44 @@ class MainMenu(tk.Menu):
             settings - dict to save user settings
         '''
         super().__init__(parent, *args, **kwargs)
+        self.callbacks = callbacks
 
         # the file menu
-        file_menu = tk.Menu(self, tearoff=False)
-        file_menu.add_command(
-            # 8230: ASCII value for horizontal ellipsis
-            label='Import file with running data'+chr(8230),
-            command=callbacks['file->import']
-            )
-        file_menu.add_command(
-            # 8230: ASCII value for horizontal ellipsis
-            label='Export file with running data'+chr(8230),
-            command=callbacks['file->export']
-            )
-        file_menu.add_separator()
-        file_menu.add_command(
-            # 8230: ASCII value for horizontal ellipsis
-            label='Add marathon plan'+chr(8230),
-            command=callbacks['add_plan']
-            )
-        self.add_cascade(label='File', menu=file_menu)
+        self.file_menu = tk.Menu(self, tearoff=False)
+        self.file_menu.add_command(
+                 # 8230: ASCII value for horizontal ellipsis
+                 label='Import file with running data'+chr(8230),
+                 command=self.callbacks['file->import']
+                 )
+        self.file_menu.add_command(
+                 # 8230: ASCII value for horizontal ellipsis
+                 label='Export file with running data'+chr(8230),
+                 command=self.callbacks['file->export']
+                 )
+        self.file_menu.add_separator()
+        self.file_menu.add_command(
+                 # 8230: ASCII value for horizontal ellipsis
+                 label='Add marathon plan'+chr(8230),
+                 command=self.callbacks['add_plan']
+                 )
+        self.add_cascade(label='File', menu=self.file_menu)
 
         # the help menu
         help_menu = tk.Menu(self, tearoff=False)
         help_menu.add_command(label='About'+chr(8230), command=self.show_about)
         self.add_cascade(label='Help', menu=help_menu)
+
+    def add_menu(self, table_name):
+        self.file_menu.add_separator()
+        self.file_menu.add_command(
+                # 8230: ASCII value for horizontal ellipsis
+                label="Show "+table_name+" marathon plan"+chr(8230),
+                command=self.callbacks['show_plan'](table_name)
+        )
+        self.add_cascade(label='File', menu=self.file_menu)
+
+    def remove_menu(self, table_name):
+        self.file_menu.delete("Show "+table_name+" marathon plan"+chr(8230))
 
     def show_about(self):
         '''Show the about dialog'''
