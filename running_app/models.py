@@ -202,6 +202,10 @@ class SQLModel:
         query = self.program_insert_command.format(table)
         self.query(query, record)
 
+    def remove_program_records(self, program):
+        query = ('DROP TABLE {}'.format(program))
+        return self.query(query)
+
 
 class CSVModel:
     '''CSV file retrieval and storage'''
