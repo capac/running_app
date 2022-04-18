@@ -40,7 +40,7 @@ class SQLModel:
                                     'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
-    create_program_table_command = ('CREATE TABLE IF NOT EXISTS {} '
+    create_program_table_command = ('CREATE TABLE {} '
                                     '(Mon Distance REAL, '
                                     'Tue Distance REAL, '
                                     'Wed Distance REAL, '
