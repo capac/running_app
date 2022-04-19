@@ -49,7 +49,7 @@ class MainMenu(tk.Menu):
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
-                command=self.callbacks['show_plan'](table_name)
+                command=lambda: self.callbacks['show_plan'](table_name)
         )
         self.add_cascade(label='File', menu=self.file_menu)
 
@@ -322,13 +322,13 @@ class StackedBarChartView(tk.Frame):
 
         # stacked bar chart title
         tmp_name = split('_', self.fields)
-        title_name = tmp_name[0]+r' '+tmp_name[1]
+        title_name = ' '.join(tmp_name)
 
         # bar chart plots
         plotinfo = tk.LabelFrame(self, text='Marathon program', padx=5, pady=5)
         distance_chart = w.BarChartWidget(self, "Week number", "Weekly distances (km)",
-                                          "Weekly progression for " + str(title_name) +
-                                          " marathon training program")
+                                          "Weekly progression for " + title_name +
+                                          " marathon training program", figsize=(15, 10))
         distance_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
         distance_chart.draw_stacked_bar_chart(self.fields)
         plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
