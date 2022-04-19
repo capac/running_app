@@ -404,7 +404,7 @@ class BarChartWidget(tk.Frame):
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
         self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color=color,
-                                 edgecolor='k', label=periods, alpha=0.6)
+                                 edgecolor='k', label=periods, alpha=0.8)
         y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
         self.axes.set_xlim([self.axes.xaxis.get_data_interval()[0], self.axes.xaxis.get_data_interval()[1]])
         self.axes.set_ylim([0, y_text_loc + 3.5])
@@ -442,7 +442,7 @@ class BarChartWidget(tk.Frame):
         # weekly cumulative distances
         cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
         # stacked bar plot using pandas dataframe
-        ax = dframe.plot(kind='bar', stacked=True, ax=self.axes,
+        ax = dframe.plot(kind='bar', stacked=True, ax=self.axes, alpha=0.8,
                          cmap=truncated_cmap, fontsize=13, width=0.75)
         # annotate cumulative distance for each week
         for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
