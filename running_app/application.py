@@ -288,9 +288,8 @@ class Application(tk.Tk):
         plan_window.title('Marathon program')
 
         # get marathon plan data
-        stackedbarchart = v.StackedBarChartView(plan_window, table_name)
         try:
-            pass
+            stackedbarchart = v.StackedBarChartView(plan_window, table_name)
         except Exception as e:
             messagebox.showerror(
                 title='Error',
