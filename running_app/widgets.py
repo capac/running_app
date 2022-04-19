@@ -3,7 +3,7 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
-from numpy import ceil, linspace
+from numpy import linspace
 from pandas import DataFrame, Series, read_sql_table
 # matplotlib
 from matplotlib.figure import Figure
@@ -426,7 +426,7 @@ class BarChartWidget(tk.Frame):
         plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
         self.canvas.flush_events()
 
-    def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    def truncate_colormap(self, cmap, minval=0.0, maxval=1.0, n=100):
         new_cmap = colors.LinearSegmentedColormap.from_list(
             'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
             cmap(linspace(minval, maxval, n)))
@@ -442,12 +442,12 @@ class BarChartWidget(tk.Frame):
         # weekly cumulative distances
         cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
         # stacked bar plot using pandas dataframe
-        ax = dframe.plot(kind='bar', stacked=True, figsize=(13, 8),
+        ax = dframe.plot(kind='bar', stacked=True, ax=self.axes,
                          cmap=truncated_cmap, fontsize=13, width=0.75)
         # annotate cumulative distance for each week
         for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
-            plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y+0.5), ha='center',
-                         va='bottom', size=12, weight='bold', color='k')
+            ax.annotate('{0:.1f}'.format(lb), xy=(x, y+0.5), ha='center',
+                        va='bottom', size=12, weight='bold', color='k')
         # weekly individual distance for each day of week
         cum_week_dists = DataFrame(
             {wk_num: dframe.loc[wk_num].cumsum() for wk_num in dframe.index})
@@ -455,8 +455,8 @@ class BarChartWidget(tk.Frame):
         for x in dframe.index:
             for lb, y in zip(dframe.loc[x], cum_week_dists.T.loc[x]):
                 if lb != 0.0:
-                    plt.annotate('{0:.1f}'.format(lb), xy=(x-1, y-1), ha='center',
-                                 va='top', size=12, color='k')
+                    ax.annotate('{0:.1f}'.format(lb), xy=(x, y), ha='center',
+                                va='top', size=12, color='k')
         # plot legend
         ax.legend(fontsize=11, loc=0)
         # 5% plot padding in each direction
@@ -464,7 +464,7 @@ class BarChartWidget(tk.Frame):
         # x-axis label and tick labels
         ax.set_xticklabels(dframe.index, rotation=0)
         # y-axis tick frequency and label
-        ax.set_yticks(range(ceil(cumul_kms.max())), minor=True)
+        ax.set_yticks(range(int(cumul_kms.max())+1), minor=True)
         # grid style: dotted
         ax.grid(linestyle=':')
         self.canvas.flush_events()
