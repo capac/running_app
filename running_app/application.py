@@ -265,15 +265,41 @@ class Application(tk.Tk):
                 )
             else:
                 basename, _ = os.path.splitext(os.path.basename(self.filename.get()))
-                self.data_model.create_program_table(basename)
-                records = csv_read.load_records(csv_read.program_fields)
-                for row in records:
-                    self.data_model.add_program_record(basename, row)
-                self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
-        self.menu.add_menu(basename)
+                try:
+                    self.data_model.create_program_table(basename)
+                except Exception as e:
+                    messagebox.showerror(
+                        title='Error',
+                        message='Problem reading table',
+                        detail=str(e)
+                    )
+                else:
+                    records = csv_read.load_records(csv_read.program_fields)
+                    for row in records:
+                        self.data_model.add_program_record(basename, row)
+                    self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
+            self.menu.add_menu(basename)
 
     def show_plan(self, table_name):
-        pass
+        '''opens new window for marathon program stacked bar chart'''
+
+        plan_window = tk.Toplevel()
+        plan_window.resizable(width=False, height=False)
+        plan_window.title('Marathon program')
+
+        # get marathon plan data
+        stackedbarchart = v.StackedBarChartView(plan_window, table_name)
+        try:
+            pass
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem reading database',
+                detail=str(e)
+            )
+        else:
+            stackedbarchart.grid(row=0, padx=5, sticky='W')
+            stackedbarchart.columnconfigure(0, weight=1)
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
