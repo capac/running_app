@@ -31,7 +31,7 @@ class SQLModel:
         'Sun': {'req': True, 'type': FT.decimal},
     }
 
-    # create tables if not existing
+    # create running table if not existing
     create_running_table_command = ('CREATE TABLE IF NOT EXISTS running '
                                     '(Date TEXT PRIMARY KEY, '
                                     'Duration TEXT NOT NULL, '
@@ -40,6 +40,7 @@ class SQLModel:
                                     'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
+    # create program table regardless if existing or not
     create_program_table_command = ('CREATE TABLE {} '
                                     '(Mon Distance REAL, '
                                     'Tue Distance REAL, '
@@ -54,6 +55,7 @@ class SQLModel:
                               ':Duration, :Distance, :Pace, :Speed, '
                               ':Location)')
 
+    # insert program data into table
     program_insert_command = ('INSERT INTO {} VALUES (:Mon, '
                               ':Tue, :Wed, :Thu, :Fri, :Sat, '
                               ':Sun)')
@@ -66,8 +68,14 @@ class SQLModel:
                               'Location=:Location '
                               'WHERE Date=:Date')
 
-    # delete record
+    # delete running record
     running_delete_command = ('DELETE FROM running WHERE Date=:Date')
+
+    # check program tables
+    check_program_tables_command = ("SELECT name FROM sqlite_schema "
+                                    "WHERE type='table' AND name "
+                                    "NOT LIKE 'sqlite_%' AND name "
+                                    "IS NOT 'running'")
 
     # create or connect to a database
     def __init__(self, database):
@@ -205,6 +213,10 @@ class SQLModel:
     def remove_program_records(self, program):
         query = ('DROP TABLE {}'.format(program))
         return self.query(query)
+
+    def check_program_tables(self):
+        results = self.query(self.check_program_tables_command)
+        return [result['name'] for result in results]
 
 
 class CSVModel:
