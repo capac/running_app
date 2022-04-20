@@ -8,7 +8,7 @@ from re import split
 class MainMenu(tk.Menu):
     '''The Application's main menu'''
 
-    def __init__(self, parent, callbacks, *args, **kwargs):
+    def __init__(self, parent, callbacks, table_checks, *args, **kwargs):
         '''Constructor for MainMenu
 
         arguments:
@@ -18,6 +18,7 @@ class MainMenu(tk.Menu):
         '''
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
+        self.table_checks = table_checks
 
         # the file menu
         self.file_menu = tk.Menu(self, tearoff=False)
@@ -37,6 +38,9 @@ class MainMenu(tk.Menu):
                  label='Add marathon plan'+chr(8230),
                  command=self.callbacks['add_plan']
                  )
+        if self.table_checks:
+            for table in self.table_checks:
+                self.add_menu(table)
         self.add_cascade(label='File', menu=self.file_menu)
 
         # the help menu
@@ -44,8 +48,8 @@ class MainMenu(tk.Menu):
         help_menu.add_command(label='About'+chr(8230), command=self.show_about)
         self.add_cascade(label='Help', menu=help_menu)
 
+    # add marathon program to drop down menu when importing program
     def add_menu(self, table_name):
-        self.file_menu.add_separator()
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
