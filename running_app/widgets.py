@@ -447,7 +447,7 @@ class BarChartWidget(tk.Frame):
         # annotate cumulative distance for each week
         for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
             ax.annotate('{0:.1f}'.format(lb), xy=(x, y+0.5), ha='center',
-                        va='bottom', size=12, weight='bold', color='k')
+                        va='bottom', size=13, weight='bold', color='k')
         # weekly individual distance for each day of week
         cum_week_dists = DataFrame(
             {wk_num: dframe.loc[wk_num].cumsum() for wk_num in dframe.index})
@@ -455,16 +455,16 @@ class BarChartWidget(tk.Frame):
         for x in dframe.index:
             for lb, y in zip(dframe.loc[x], cum_week_dists.T.loc[x]):
                 if lb != 0.0:
-                    ax.annotate('{0:.1f}'.format(lb), xy=(x, y), ha='center',
-                                va='top', size=12, color='k')
+                    ax.annotate('{0:.1f}'.format(lb), xy=(x, y-0.5), ha='center',
+                                va='top', size=13, color='k')
         # plot legend
-        ax.legend(fontsize=11, loc=0)
+        ax.legend(fontsize=13, loc=0)
         # 5% plot padding in each direction
         ax.margins(0.05)
         # x-axis label and tick labels
-        ax.set_xticklabels(dframe.index, rotation=0)
+        ax.set_xticklabels(dframe.index, rotation=0, fontsize=13)
         # y-axis tick frequency and label
-        ax.set_yticks(range(int(cumul_kms.max())+1), minor=True)
+        ax.set_yticks(range(int(cumul_kms.max())+1), minor=True, fontsize=13)
         # grid style: dotted
         ax.grid(linestyle=':')
         self.canvas.flush_events()
