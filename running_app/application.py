@@ -56,7 +56,7 @@ class Application(tk.Tk):
             'show_plan': self.show_plan,
         }
 
-        self.menu = v.MainMenu(self, self.callbacks)
+        self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
         self.config(menu=self.menu)
 
         # create database and table if non-existent
