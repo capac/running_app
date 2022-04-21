@@ -349,11 +349,11 @@ class LabelInput(tk.Frame):
             input_args['text'] = label
             input_args['variable'] = self.variable
         else:
-            self.label = ttk.Label(self, text=label, width=20, **label_args)
+            self.label = ttk.Label(self, text=label, width=18, **label_args)
             self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
             input_args['textvariable'] = self.variable
 
-        self.input = input_class(self, width=15, **input_args)
+        self.input = input_class(self, width=14, **input_args)
         self.input.grid(row=1, column=0, sticky=(tk.W + tk.E))
         self.columnconfigure(0, weight=1)
         # show actual error message
@@ -390,7 +390,7 @@ class LabelInput(tk.Frame):
 class BarChartWidget(tk.Frame):
     '''Graphical plots showing some statistics on running'''
 
-    def __init__(self, parent, x_label, y_label, title, figsize=(12, 3), *args, **kwargs):
+    def __init__(self, parent, x_label, y_label, title, figsize=(13, 3), *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.figure = Figure(figsize=figsize, dpi=75, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
