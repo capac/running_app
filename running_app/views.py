@@ -177,14 +177,14 @@ class RecordList(tk.Frame):
 
     column_defs = {
         '#0': {'label': 'Row', 'anchor': tk.W},
-        'Date': {'label': 'Date (YYYY-mm-dd)', 'width': 140},
-        'Duration': {'label': 'Duration (hh:mm:ss)', 'width': 140},
+        'Date': {'label': 'Date (YYYY-mm-dd)', 'width': 120},
+        'Duration': {'label': 'Duration (hh:mm:ss)', 'width': 120},
         'Distance': {'label': 'Distance (km)'},
         'Pace': {'label': 'Pace (min/km)'},
         'Speed': {'label': 'Speed (km/hr)'},
-        'Location': {'label': 'Location (City, Country)', 'width': 180},
+        'Location': {'label': 'Location (City, Country)', 'width': 154},
     }
-    default_width = 100
+    default_width = 90
     default_minwidth = 20
     default_anchor = tk.W
 
