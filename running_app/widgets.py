@@ -390,7 +390,7 @@ class LabelInput(tk.Frame):
 class BarChartWidget(tk.Frame):
     '''Graphical plots showing some statistics on running'''
 
-    def __init__(self, parent, x_label, y_label, title, figsize=(13, 3), *args, **kwargs):
+    def __init__(self, parent, x_label, y_label, title, figsize=(12, 3), *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.figure = Figure(figsize=figsize, dpi=75, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
@@ -402,7 +402,6 @@ class BarChartWidget(tk.Frame):
         self.axes.set_title(title, fontsize=16)
 
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
-        self.axes.clear()
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.8)
         y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
@@ -433,7 +432,6 @@ class BarChartWidget(tk.Frame):
         return new_cmap
 
     def draw_stacked_bar_chart(self, table_name):
-        self.axes.clear()
         # color map
         cmap = plt.get_cmap('jet')
         truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
