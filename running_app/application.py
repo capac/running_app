@@ -297,7 +297,7 @@ class Application(tk.Tk):
                 detail=str(e)
             )
         else:
-            stackedbarchart.grid(row=0, padx=5, sticky='W')
+            stackedbarchart.grid(row=0, padx=5, pady=5, sticky='NSEW')
             stackedbarchart.columnconfigure(0, weight=1)
 
     def load_settings(self):
