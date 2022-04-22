@@ -22,6 +22,9 @@ class SQLModel:
         }
 
     program_fields = {
+        # value for 'DeleteTableForm' class
+        'Program dropdown': {'req': True, 'type': FT.string_list, 'values': []},
+        # values for individual daily session for mararthon program
         'Mon': {'req': True, 'type': FT.decimal},
         'Tue': {'req': True, 'type': FT.decimal},
         'Wed': {'req': True, 'type': FT.decimal},
@@ -40,25 +43,10 @@ class SQLModel:
                                     'Speed TEXT NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
-    # create program table regardless if existing or not
-    create_program_table_command = ('CREATE TABLE {} '
-                                    '(Mon Distance REAL, '
-                                    'Tue Distance REAL, '
-                                    'Wed Distance REAL, '
-                                    'Thu Distance REAL, '
-                                    'Fri Distance REAL, '
-                                    'Sat Distance REAL, '
-                                    'Sun Distance REAL)')
-
     # insert running session in running table
     running_insert_command = ('INSERT INTO running VALUES (:Date, '
                               ':Duration, :Distance, :Pace, :Speed, '
                               ':Location)')
-
-    # insert program data into table
-    program_insert_command = ('INSERT INTO {} VALUES (:Mon, '
-                              ':Tue, :Wed, :Thu, :Fri, :Sat, '
-                              ':Sun)')
 
     # update running session in running table
     running_update_command = ('UPDATE running SET Duration=:Duration, '
@@ -71,11 +59,29 @@ class SQLModel:
     # delete running record
     running_delete_command = ('DELETE FROM running WHERE Date=:Date')
 
+    # create program table regardless if existing or not
+    create_program_table_command = ('CREATE TABLE {} '
+                                    '(Mon Distance REAL, '
+                                    'Tue Distance REAL, '
+                                    'Wed Distance REAL, '
+                                    'Thu Distance REAL, '
+                                    'Fri Distance REAL, '
+                                    'Sat Distance REAL, '
+                                    'Sun Distance REAL)')
+
+    # insert program data into table
+    insert_program_command = ('INSERT INTO {} VALUES (:Mon, '
+                              ':Tue, :Wed, :Thu, :Fri, :Sat, '
+                              ':Sun)')
+
     # check program tables
     check_program_tables_command = ("SELECT name FROM sqlite_schema "
                                     "WHERE type='table' AND name "
                                     "NOT LIKE 'sqlite_%' AND name "
                                     "IS NOT 'running'")
+
+    # drop program table command
+    drop_program_table_command = ('DROP TABLE {}')
 
     # create or connect to a database
     def __init__(self, database):
@@ -207,12 +213,12 @@ class SQLModel:
         return self.query(query)
 
     def add_program_record(self, table, record):
-        query = self.program_insert_command.format(table)
+        query = self.insert_program_command.format(table)
         self.query(query, record)
 
-    def remove_program_records(self, program):
-        query = ('DROP TABLE {}'.format(program))
-        return self.query(query)
+    def remove_program_table(self, table):
+        query = ('DROP TABLE {}'.format(table))
+        self.query(query)
 
     def check_program_tables(self):
         results = self.query(self.check_program_tables_command)
