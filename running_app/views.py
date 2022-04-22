@@ -305,11 +305,11 @@ class BarChartView(tk.Frame):
         distance_chart = w.BarChartWidget(self, "Weeks", "Distance (km)",
                                           "Distance per week")
         distance_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
-        speed_chart = w.BarChartWidget(self, "Weeks", "Average speed (km/h)",
-                                       "Weekly average speed")
+        speed_chart = w.BarChartWidget(self, "Weeks", "Mean speed (km/h)",
+                                       "Weekly mean speed")
         speed_chart.grid(row=1, column=0, sticky=(tk.W + tk.E))
         count_chart = w.BarChartWidget(self, "Weeks", "Number of sessions",
-                                       "Number of sessions")
+                                       "Number of sessions per week")
         count_chart.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
         periods, distances, counts, average_speed = self.fields(period=selection)
