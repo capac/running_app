@@ -36,11 +36,12 @@ class MainMenu(tk.Menu):
         self.file_menu.add_command(
                  # 8230: ASCII value for horizontal ellipsis
                  label='Add marathon plan'+chr(8230),
-                 command=self.callbacks['add_plan']
+                 command=self.callbacks['file->add_plan']
                  )
+        self.add_remove_program_menu(self.table_checks)
         if self.table_checks:
             for table in self.table_checks:
-                self.add_menu(table)
+                self.add_program_menu(table)
         self.add_cascade(label='File', menu=self.file_menu)
 
         # the help menu
@@ -49,16 +50,27 @@ class MainMenu(tk.Menu):
         self.add_cascade(label='Help', menu=help_menu)
 
     # add marathon program to drop down menu when importing program
-    def add_menu(self, table_name):
+    def add_program_menu(self, table_name):
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
-                command=lambda: self.callbacks['show_plan'](table_name)
-        )
-        self.add_cascade(label='File', menu=self.file_menu)
+                command=lambda: self.callbacks['on_show_plan'](table_name),
+                )
 
-    def remove_menu(self, table_name):
+    def add_remove_program_menu(self, tables=None):
+        if len(tables) == 1:
+            self.file_menu.add_command(
+                # 8230: ASCII value for horizontal ellipsis
+                label='Remove marathon plan'+chr(8230),
+                command=self.callbacks['on_open_remove_plan_window']
+                )
+
+    # just removes marathon plan entry from file menu
+    def remove_menu(self, table_name, tables):
         self.file_menu.delete("Show "+table_name+" marathon plan"+chr(8230))
+        if not tables:
+            self.file_menu.delete("Remove marathon plan"+chr(8230))
+        self.file_menu.update()
 
     def show_about(self):
         '''Show the about dialog'''
@@ -293,6 +305,40 @@ class RecordList(tk.Frame):
             self.treeview.focus_set()
             self.treeview.selection_set(firstrow)
             self.treeview.focus(firstrow)
+
+
+class DeleteTableForm(tk.Frame):
+    '''Widget input form for deleting marathon program'''
+
+    def __init__(self, parent, fields, callbacks, updated_table_names, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.callbacks = callbacks
+
+        # a dictionary to keep track of input widgets
+        self.inputs = {}
+
+        # marathon program information
+        tableinfo = tk.LabelFrame(self, text='Marathon program information', padx=5, pady=5)
+
+        # line 1
+        self.inputs['Table name'] = w.LabelInput(tableinfo, 'Program plans',
+                                                 field_spec=fields['Program dropdown'],
+                                                 input_args={'values': updated_table_names})
+        self.inputs['Table name'].grid(row=0, column=0)
+        self.deletebutton = w.LabelInput(tableinfo, 'Delete plan',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_remove_plan'])
+        self.deletebutton.grid(row=0, column=1, padx=10, pady=(16, 0))
+        tableinfo.grid(row=0, column=0, sticky=tk.W)
+        tableinfo.columnconfigure(0, weight=1)
+
+    def get(self):
+        '''Retrieve data from Tkinter and place it in regular Python objects'''
+
+        data = {}
+        for key, widget in self.inputs.items():
+            data[key] = widget.get()
+        return data
 
 
 class BarChartView(tk.Frame):
