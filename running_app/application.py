@@ -47,13 +47,15 @@ class Application(tk.Tk):
             # menu bar callbacks
             'file->import': self.file_import,
             'file->export': self.file_export,
-            'on_period_dropdown': self.period_dropdown,
+            'file->add_plan': self.add_plan,
+            'on_show_plan': self.show_plan,
+            'on_open_remove_plan_window': self.open_remove_plan_window,
             # method callbacks
             'on_open_record': self.open_record,
             'on_insert': self.insert,
             'on_remove': self.remove,
-            'add_plan': self.add_plan,
-            'show_plan': self.show_plan,
+            'on_remove_plan': self.remove_plan,
+            'on_period_dropdown': self.period_dropdown,
         }
 
         self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
@@ -278,7 +280,8 @@ class Application(tk.Tk):
                     for row in records:
                         self.data_model.add_program_record(basename, row)
                     self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
-            self.menu.add_menu(basename)
+            self.menu.add_remove_program_menu(self.data_model.check_program_tables())
+            self.menu.add_program_menu(basename)
 
     def show_plan(self, table_name):
         '''opens new window for marathon program stacked bar chart'''
@@ -299,6 +302,49 @@ class Application(tk.Tk):
         else:
             stackedbarchart.grid(row=0, padx=5, sticky='W')
             stackedbarchart.columnconfigure(0, weight=1)
+
+    def open_remove_plan_window(self):
+        '''opens new window for marathon program removal'''
+
+        self.removal_window = tk.Toplevel()
+        self.removal_window.resizable(width=False, height=False)
+        self.removal_window.title('Marathon program')
+
+        # retrieval marathon program tables
+        try:
+            updated_tables = self.data_model.check_program_tables()
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem reading database',
+                detail=str(e)
+            )
+
+        # property form
+        self.deletetableform = v.DeleteTableForm(self.removal_window,
+                                                 self.data_model.program_fields,
+                                                 self.callbacks, updated_tables)
+        self.deletetableform.grid(row=0, padx=5, sticky='W')
+        self.deletetableform.columnconfigure(0, weight=1)
+
+    def remove_plan(self):
+        '''Removes property from database'''
+
+        # get table
+        table = self.deletetableform.get()['Table name']
+        try:
+            self.data_model.remove_program_table(table)
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem deleting table',
+                detail=str(e)
+            )
+        else:
+            self.records_deleted += 1
+            self.status.set(f'{self.records_deleted} table(s) deleted this session')
+            self.menu.remove_menu(table, self.data_model.check_program_tables())
+            self.removal_window.destroy()
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
