@@ -397,32 +397,39 @@ class BarChartWidget(tk.Frame):
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
         self.axes = self.figure.add_subplot(1, 1, 1)
-        self.axes.set_xlabel(x_label, fontsize=14)
-        self.axes.set_ylabel(y_label, fontsize=14)
+        self.axes.set_xlabel(x_label, fontsize=15)
+        self.axes.set_ylabel(y_label, fontsize=15)
         self.axes.set_title(title, fontsize=16)
 
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
         self.bar = self.axes.bar(periods, total_distances, color=color,
                                  edgecolor='k', label=periods, alpha=0.8)
-        y_text_loc = float(self.axes.yaxis.get_data_interval()[1])
-        self.axes.set_xlim([self.axes.xaxis.get_data_interval()[0], self.axes.xaxis.get_data_interval()[1]])
-        self.axes.set_ylim([0, y_text_loc + 3.5])
+        self.axes.set_xlim(float(self.axes.xaxis.get_data_interval()[0])-0.01,
+                           float(self.axes.xaxis.get_data_interval()[1])+0.01)
         # annotate labels
         if not isinstance(total_distances, int):
             total_distances = [round(float(x), 1) for x in total_distances]
             for x, y in zip(periods, total_distances):
                 if not integer:
-                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, y_text_loc+3.2),
-                                       ha='center', size=14-int(int(selection)/4.0),
-                                       color='k', rotation_mode="anchor", rotation=35)
+                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, y+8.0),
+                                       ha='center', size=14-int(int(selection)/2.0),
+                                       color='k', weight='bold', rotation_mode="anchor",
+                                       rotation=45)
+                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0])-0.25,
+                                       float(self.axes.yaxis.get_data_interval()[1])+16.0)
+
                 else:
-                    self.axes.annotate('{0}'.format(int(y)), xy=(x, y_text_loc+1.8),
-                                       ha='center', size=14-int(int(selection)/4.0),
-                                       color='k', rotation_mode="anchor", rotation=35)
+                    self.axes.annotate('{0}'.format(int(y)), xy=(x, y+0.8),
+                                       ha='center', size=14-int(int(selection)/2.0),
+                                       color='k', weight='bold', rotation_mode="anchor",
+                                       rotation=45)
+                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0])-0.25,
+                                       float(self.axes.yaxis.get_data_interval()[1])+1.65)
+
         plt.setp(self.axes.get_xticklabels(), ha="right",
-                 rotation_mode="anchor", rotation=35,
+                 rotation_mode="anchor", rotation=45,
                  fontsize=14-int(int(selection)/4.0))
-        plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/4.0))
+        plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/3.0))
         self.canvas.flush_events()
 
     def truncate_colormap(self, cmap, minval=0.0, maxval=1.0, n=100):
