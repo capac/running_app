@@ -399,7 +399,7 @@ class BarChartWidget(tk.Frame):
         self.axes = self.figure.add_subplot(1, 1, 1)
         self.axes.set_xlabel(x_label, fontsize=15)
         self.axes.set_ylabel(y_label, fontsize=15)
-        self.axes.set_title(title, fontsize=16)
+        self.axes.set_title(title, fontsize=17)
 
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
         self.bar = self.axes.bar(periods, total_distances, color=color,
