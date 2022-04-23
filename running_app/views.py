@@ -178,7 +178,7 @@ class DataSelectionForm(tk.Frame):
         selectioninfo = tk.LabelFrame(self, text='Selection information', padx=5, pady=5)
         self.selectionvalue = w.LabelInput(selectioninfo, 'Select period',
                                            field_spec=fields['Period'])
-        self.selectionvalue.set(1)
+        self.selectionvalue.set(fields['Period']['values'][0])
         self.selectionvalue.grid(row=0, column=0)
         self.selectbutton = w.LabelInput(selectioninfo, 'Select',
                                          input_class=ttk.Button,
