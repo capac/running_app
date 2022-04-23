@@ -44,7 +44,7 @@ class MainMenu(tk.Menu):
             self.add_remove_program_menu()
             self.remove_menu_count.set(self.remove_menu_count.get()+1)
             for table in self.table_checks:
-                self.add_program_menu(table)
+                self.add_program_menu(table, self.remove_menu_count.get())
         self.add_cascade(label='File', menu=self.file_menu)
 
         # the help menu
@@ -53,14 +53,15 @@ class MainMenu(tk.Menu):
         self.add_cascade(label='Help', menu=help_menu)
 
     # add marathon program to drop down menu when importing program
-    def add_program_menu(self, table_name):
-        if self.remove_menu_count.get() == 0:
+    def add_program_menu(self, table_name, count):
+        if count == 0:
             self.add_remove_program_menu()
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
                 command=lambda: self.callbacks['on_show_plan'](table_name),
                 )
+        self.file_menu.update()
 
     def add_remove_program_menu(self):
         self.file_menu.add_command(
@@ -75,6 +76,7 @@ class MainMenu(tk.Menu):
         self.file_menu.delete("Show "+table_name+" marathon plan"+chr(8230))
         if not tables:
             self.file_menu.delete("Remove marathon plan"+chr(8230))
+            self.remove_menu_count.set(0)
         self.file_menu.update()
 
     def show_about(self):
