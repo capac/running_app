@@ -403,27 +403,27 @@ class BarChartWidget(tk.Frame):
 
     def draw_bar_chart(self, periods, total_distances, selection, color, integer=False):
         self.bar = self.axes.bar(periods, total_distances, color=color,
-                                 edgecolor='k', label=periods, alpha=0.8)
-        self.axes.set_xlim(float(self.axes.xaxis.get_data_interval()[0])-0.01,
-                           float(self.axes.xaxis.get_data_interval()[1])+0.01)
+                                 label=periods, alpha=0.8)
+        self.axes.set_xlim(float(self.axes.xaxis.get_data_interval()[0])-0.05,
+                           float(self.axes.xaxis.get_data_interval()[1])+0.05)
         # annotate labels
         if not isinstance(total_distances, int):
             total_distances = [round(float(x), 1) for x in total_distances]
             for x, y in zip(periods, total_distances):
                 if not integer:
-                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, y+8.0),
-                                       ha='center', size=14-int(int(selection)/2.0),
+                    self.axes.annotate('{0:2.1f}'.format(y), xy=(x, y+y/8.0),
+                                       ha='left', size=14-int(int(selection)/2.0),
                                        color='k', weight='bold', rotation_mode="anchor",
                                        rotation=45)
-                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0])-0.25,
+                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0]),
                                        float(self.axes.yaxis.get_data_interval()[1])+16.0)
 
                 else:
-                    self.axes.annotate('{0}'.format(int(y)), xy=(x, y+0.8),
-                                       ha='center', size=14-int(int(selection)/2.0),
+                    self.axes.annotate('{0}'.format(int(y)), xy=(x, y+y/8.0),
+                                       ha='left', size=14-int(int(selection)/2.0),
                                        color='k', weight='bold', rotation_mode="anchor",
                                        rotation=45)
-                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0])-0.25,
+                    self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0]),
                                        float(self.axes.yaxis.get_data_interval()[1])+1.65)
 
         plt.setp(self.axes.get_xticklabels(), ha="right",
