@@ -42,7 +42,6 @@ class MainMenu(tk.Menu):
         self.remove_menu_count.set(0)
         if self.table_checks:
             self.add_remove_program_menu()
-            self.remove_menu_count.set(self.remove_menu_count.get()+1)
             for table in self.table_checks:
                 self.add_program_menu(table, self.remove_menu_count.get())
         self.add_cascade(label='File', menu=self.file_menu)
