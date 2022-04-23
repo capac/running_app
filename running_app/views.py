@@ -54,7 +54,7 @@ class MainMenu(tk.Menu):
     def add_program_menu(self, table_name):
         self.menu_count.set(self.menu_count.get()+1)
         if self.menu_count.get() == 1:
-            self.add_remove_program_menu()
+            self.add_remove_program_entry()
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
@@ -62,14 +62,15 @@ class MainMenu(tk.Menu):
                 )
         self.file_menu.update()
 
-    def add_remove_program_menu(self):
+    # just adds 'Remove marathon plan' label
+    def add_remove_program_entry(self):
         self.file_menu.add_command(
             # 8230: ASCII value for horizontal ellipsis
             label='Remove marathon plan'+chr(8230),
             command=self.callbacks['on_open_remove_plan_window']
             )
 
-    # just removes marathon plan entry from file menu
+    # removes marathon plan entry from file menu
     def remove_menu(self, table_name):
         self.file_menu.delete("Show "+table_name+" marathon plan"+chr(8230))
         self.menu_count.set(self.menu_count.get()-1)
