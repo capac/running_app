@@ -330,7 +330,7 @@ class Application(tk.Tk):
         '''Removes property from database'''
 
         # get table
-        table = self.deletetableform.get()['Table name']
+        table = self.deletetableform.get()
         try:
             self.data_model.remove_program_table(table)
         except Exception as e:
