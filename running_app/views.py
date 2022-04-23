@@ -19,6 +19,7 @@ class MainMenu(tk.Menu):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
         self.table_checks = table_checks
+        self.remove_menu_count = tk.IntVar()
 
         # the file menu
         self.file_menu = tk.Menu(self, tearoff=False)
@@ -38,8 +39,10 @@ class MainMenu(tk.Menu):
                  label='Add marathon plan'+chr(8230),
                  command=self.callbacks['file->add_plan']
                  )
-        self.add_remove_program_menu(self.table_checks)
+        self.remove_menu_count.set(0)
         if self.table_checks:
+            self.add_remove_program_menu()
+            self.remove_menu_count.set(self.remove_menu_count.get()+1)
             for table in self.table_checks:
                 self.add_program_menu(table)
         self.add_cascade(label='File', menu=self.file_menu)
@@ -51,19 +54,21 @@ class MainMenu(tk.Menu):
 
     # add marathon program to drop down menu when importing program
     def add_program_menu(self, table_name):
+        if self.remove_menu_count.get() == 0:
+            self.add_remove_program_menu()
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
                 label="Show "+table_name+" marathon plan"+chr(8230),
                 command=lambda: self.callbacks['on_show_plan'](table_name),
                 )
 
-    def add_remove_program_menu(self, tables=None):
-        if len(tables) == 1:
-            self.file_menu.add_command(
-                # 8230: ASCII value for horizontal ellipsis
-                label='Remove marathon plan'+chr(8230),
-                command=self.callbacks['on_open_remove_plan_window']
-                )
+    def add_remove_program_menu(self):
+        self.file_menu.add_command(
+            # 8230: ASCII value for horizontal ellipsis
+            label='Remove marathon plan'+chr(8230),
+            command=self.callbacks['on_open_remove_plan_window']
+            )
+        self.remove_menu_count.set(self.remove_menu_count.get()+1)
 
     # just removes marathon plan entry from file menu
     def remove_menu(self, table_name, tables):

@@ -280,7 +280,7 @@ class Application(tk.Tk):
                     for row in records:
                         self.data_model.add_program_record(basename, row)
                     self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
-            self.menu.add_remove_program_menu(self.data_model.check_program_tables())
+            self.menu.remove_menu_count.get()
             self.menu.add_program_menu(basename)
 
     def show_plan(self, table_name):
