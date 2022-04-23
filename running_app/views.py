@@ -19,7 +19,7 @@ class MainMenu(tk.Menu):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
         self.table_checks = table_checks
-        self.remove_menu_count = tk.IntVar()
+        self.menu_count = tk.IntVar()
 
         # the file menu
         self.file_menu = tk.Menu(self, tearoff=False)
@@ -39,11 +39,10 @@ class MainMenu(tk.Menu):
                  label='Add marathon plan'+chr(8230),
                  command=self.callbacks['file->add_plan']
                  )
-        self.remove_menu_count.set(0)
+        self.menu_count.set(0)
         if self.table_checks:
-            self.add_remove_program_menu()
             for table in self.table_checks:
-                self.add_program_menu(table, self.remove_menu_count.get())
+                self.add_program_menu(table)
         self.add_cascade(label='File', menu=self.file_menu)
 
         # the help menu
@@ -52,8 +51,9 @@ class MainMenu(tk.Menu):
         self.add_cascade(label='Help', menu=help_menu)
 
     # add marathon program to drop down menu when importing program
-    def add_program_menu(self, table_name, count):
-        if count == 0:
+    def add_program_menu(self, table_name):
+        self.menu_count.set(self.menu_count.get()+1)
+        if self.menu_count.get() == 1:
             self.add_remove_program_menu()
         self.file_menu.add_command(
                 # 8230: ASCII value for horizontal ellipsis
@@ -68,14 +68,13 @@ class MainMenu(tk.Menu):
             label='Remove marathon plan'+chr(8230),
             command=self.callbacks['on_open_remove_plan_window']
             )
-        self.remove_menu_count.set(self.remove_menu_count.get()+1)
 
     # just removes marathon plan entry from file menu
-    def remove_menu(self, table_name, tables):
+    def remove_menu(self, table_name):
         self.file_menu.delete("Show "+table_name+" marathon plan"+chr(8230))
-        if not tables:
+        self.menu_count.set(self.menu_count.get()-1)
+        if self.menu_count.get() == 0:
             self.file_menu.delete("Remove marathon plan"+chr(8230))
-            self.remove_menu_count.set(0)
         self.file_menu.update()
 
     def show_about(self):
