@@ -320,17 +320,15 @@ class DeleteTableForm(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
 
-        # a dictionary to keep track of input widgets
-        self.inputs = {}
-
         # marathon program information
         tableinfo = tk.LabelFrame(self, text='Marathon program information', padx=5, pady=5)
 
         # line 1
-        self.inputs['Table name'] = w.LabelInput(tableinfo, 'Program plans',
-                                                 field_spec=fields['Program dropdown'],
-                                                 input_args={'values': updated_table_names})
-        self.inputs['Table name'].grid(row=0, column=0)
+        self.tablevalue = w.LabelInput(tableinfo, 'Program plans',
+                                       field_spec=fields['Program dropdown'],
+                                       input_args={'values': updated_table_names})
+        self.tablevalue.set(updated_table_names[0])
+        self.tablevalue.grid(row=0, column=0)
         self.deletebutton = w.LabelInput(tableinfo, 'Delete plan',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove_plan'])
@@ -340,11 +338,7 @@ class DeleteTableForm(tk.Frame):
 
     def get(self):
         '''Retrieve data from Tkinter and place it in regular Python objects'''
-
-        data = {}
-        for key, widget in self.inputs.items():
-            data[key] = widget.get()
-        return data
+        return self.tablevalue.get()
 
 
 class BarChartView(tk.Frame):
