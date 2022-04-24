@@ -443,7 +443,7 @@ class BarChartWidget(tk.Frame):
         cmap = plt.get_cmap('jet')
         truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
         # load data from database
-        dframe = read_sql_table(table_name, 'sqlite:///running.db')
+        dframe = read_sql_table(table_name, 'sqlite:///running.db', coerce_float=False)
         # weekly cumulative distances
         cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
         # stacked bar plot using pandas dataframe
