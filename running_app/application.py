@@ -279,6 +279,10 @@ class Application(tk.Tk):
                     records = csv_read.load_records(csv_read.program_fields)
                     for row in records:
                         self.data_model.add_program_record(basename, row)
+                    messagebox.showinfo(
+                            title='Adding program',
+                            message=f'''{basename} program added.\nPress button to continue.''',
+                        )
                     self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
             self.menu.add_program_menu(basename)
 
