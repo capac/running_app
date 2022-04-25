@@ -210,7 +210,9 @@ class SQLModel:
 
     def get_all_program_records(self, program):
         query = ('SELECT * FROM {}'.format(program))
-        return self.query(query)
+        days_of_week = list(self.query(query)[0].keys())
+        weekly_distances = [list(row.values()) for row in self.query(query)]
+        return days_of_week, weekly_distances
 
     def add_program_record(self, table, record):
         query = self.insert_program_command.format(table)
