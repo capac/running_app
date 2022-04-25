@@ -295,7 +295,9 @@ class Application(tk.Tk):
 
         # get marathon plan data
         try:
-            stackedbarchart = v.StackedBarChartView(plan_window, table_name)
+            days_of_week, weekly_distances = self.data_model.get_all_program_records(table_name)
+            stackedbarchart = v.StackedBarChartView(plan_window, table_name,
+                                                    days_of_week, weekly_distances)
         except Exception as e:
             messagebox.showerror(
                 title='Error',

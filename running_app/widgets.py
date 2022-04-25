@@ -3,10 +3,10 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from .constants import FieldTypes as FT
-from numpy import linspace
-from pandas import DataFrame, Series, read_sql_table
+from numpy import linspace, zeros
 # matplotlib
 from matplotlib.figure import Figure
+from matplotlib import ticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib import use as mpl_use, pyplot as plt
 from matplotlib import colors
@@ -438,38 +438,40 @@ class BarChartWidget(tk.Frame):
             cmap(linspace(minval, maxval, n)))
         return new_cmap
 
-    def draw_stacked_bar_chart(self, table_name):
+    def draw_stacked_bar_chart(self, days_of_week, weekly_distances):
         # color map
         cmap = plt.get_cmap('jet')
         truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
-        # load data from database
-        dframe = read_sql_table(table_name, 'sqlite:///running.db', coerce_float=False)
-        # weekly cumulative distances
-        cumul_kms = Series({x: dframe.T[x].sum() for x in dframe.T.columns})
-        # stacked bar plot using pandas dataframe
-        ax = dframe.plot(kind='bar', stacked=True, ax=self.axes, alpha=0.8,
-                         cmap=truncated_cmap, fontsize=13, width=0.75)
-        # annotate cumulative distance for each week
-        for lb, x, y in zip(cumul_kms.values, cumul_kms.index, cumul_kms.values):
-            ax.annotate('{0:.1f}'.format(lb), xy=(x, y+0.5), ha='center',
-                        va='bottom', size=13, weight='bold', color='k')
-        # weekly individual distance for each day of week
-        cum_week_dists = DataFrame(
-            {wk_num: dframe.loc[wk_num].cumsum() for wk_num in dframe.index})
-        # annotate individual distance for each day of week
-        for x in dframe.index:
-            for lb, y in zip(dframe.loc[x], cum_week_dists.T.loc[x]):
-                if lb != 0.0:
-                    ax.annotate('{0:.1f}'.format(lb), xy=(x, y-0.5), ha='center',
-                                va='top', size=13, color='k')
+        color_list = list(([truncated_cmap(a) for a in linspace(0, 1, 7)]))
+        bottom = zeros(len(weekly_distances), )
+        for w_index, week in enumerate(weekly_distances):
+            for dow, day in enumerate(week):
+                bar_plot = self.axes.bar(w_index, day, align='center', bottom=bottom[w_index],
+                                         color=color_list[dow], width=0.75, alpha=0.8)
+                bottom[w_index] += day
+                bl = bar_plot[0].get_xy()
+                x = 0.5*bar_plot[0].get_width() + bl[0]
+                y = 0.5*bar_plot[0].get_height() + bl[1]
+                if day != 0.0:
+                    self.axes.text(x, y-0.5, '{0:.1f}'.format(day), ha='center', va='top')
+            self.axes.text(x, sum(week)+0.5, '{0:.1f}'.format(sum(week)), ha='center',
+                           va='bottom', size=13, weight='bold', color='k')
         # plot legend
-        ax.legend(fontsize=13, loc=0)
+        self.axes.legend(days_of_week, fontsize=13, loc='best')
         # 5% plot padding in each direction
-        ax.margins(0.05)
-        # x-axis label and tick labels
-        ax.set_xticklabels(dframe.index, rotation=0, fontsize=13)
+        self.axes.margins(0.05)
+        # fixing x-axis tick labels with matplotlib.ticker "FixedLocator"
+        # ticks_loc = self.axes.get_xticks().tolist()
+        ticks_loc = range(len(weekly_distances))
+        ticks_labels = range(1, len(weekly_distances)+1)
+        self.axes.xaxis.set_major_locator(ticker.FixedLocator(ticks_loc))
+        self.axes.xaxis.set_major_formatter(ticker.FixedFormatter(ticks_labels))
+        # self.axes.set_xticklabels(['{}'.format(x) for x in ticks_labels],
+        #                           rotation_mode='anchor', rotation=0,
+        #                           ha='center', va='bottom', fontsize=13)
         # y-axis tick frequency and label
-        ax.set_yticks(range(int(cumul_kms.max())+1), minor=True, fontsize=13)
+        longest_week = max([sum(week) for week in weekly_distances])
+        self.axes.set_yticks(range(int(longest_week)+6), minor=True, fontsize=13)
         # grid style: dotted
-        ax.grid(linestyle=':')
+        self.axes.grid(linestyle=':')
         self.canvas.flush_events()
