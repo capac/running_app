@@ -453,7 +453,7 @@ class BarChartWidget(tk.Frame):
                 x = 0.5*bar_plot[0].get_width() + bl[0]
                 y = 0.5*bar_plot[0].get_height() + bl[1]
                 if day != 0.0:
-                    self.axes.text(x, y-0.5, '{0:.1f}'.format(day), ha='center', va='top')
+                    self.axes.text(x, y, '{0:.1f}'.format(day), ha='center', va='top')
             self.axes.text(x, sum(week)+0.5, '{0:.1f}'.format(sum(week)), ha='center',
                            va='bottom', size=13, weight='bold', color='k')
         # plot legend
