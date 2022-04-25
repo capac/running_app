@@ -37,9 +37,10 @@ Notes
 =====
 
 * Import of CSV data needs columns containing Date, Duration, Distance, Pace, Speed and Location,
-* Export feature will extract to a CSV file in a likewise column fashion.
+* Export feature will extract to a CSV file in a likewise column fashion,
+* Marathon program import takes name from file basename (name without extension), import will fail if the program has already been imported.
 
 Issues
 ======
 
-* Draw feature of bar chart plots can be slow for higher look-back periods over and including 6 months.
+* Draw feature of bar chart plots can be slow for higher look-back periods for 6 months on over.
