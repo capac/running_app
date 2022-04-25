@@ -366,12 +366,16 @@ class BarChartView(tk.Frame):
 
 
 class StackedBarChartView(tk.Frame):
-    def __init__(self, parent, fields, *args, **kwargs):
+    def __init__(self, parent, table_name,
+                 days_of_week, weekly_distances,
+                 *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.fields = fields
+        self.table_name = table_name
+        self.days_of_week = days_of_week
+        self.weekly_distances = weekly_distances
 
         # stacked bar chart title
-        tmp_name = split('_', self.fields)
+        tmp_name = split('_', self.table_name)
         title_name = ' '.join(tmp_name)
 
         # bar chart plots
@@ -380,5 +384,5 @@ class StackedBarChartView(tk.Frame):
                                           "Weekly progression for " + title_name +
                                           " marathon training program", figsize=(15, 10))
         distance_chart.grid(row=0, column=0, sticky=(tk.W + tk.E))
-        distance_chart.draw_stacked_bar_chart(self.fields)
+        distance_chart.draw_stacked_bar_chart(self.days_of_week, self.weekly_distances)
         plotinfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
