@@ -355,9 +355,13 @@ class Application(tk.Tk):
             )
         else:
             self.records_deleted += 1
-            self.status.set(f'{self.records_deleted} table(s) deleted this session')
             self.menu.remove_menu(table)
             self.removal_window.destroy()
+            messagebox.showinfo(
+                title='Removing program',
+                message=f'''Removed {table} program.\nPress button to continue.''',
+                )
+            self.status.set(f'{self.records_deleted} table(s) deleted this session')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
