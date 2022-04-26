@@ -22,6 +22,14 @@ class Application(tk.Tk):
         self.title('Running Application')
         self.resizable(width=False, height=False)
 
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        x_cordinate = int(screen_width/50)
+        y_cordinate = int(screen_height/60)
+
+        self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
+
         # application name
         ttk.Label(self, text='Running List', font=('TkDefaultFont', 16)).grid(row=0, padx=60)
 
@@ -272,7 +280,7 @@ class Application(tk.Tk):
                 except Exception as e:
                     messagebox.showerror(
                         title='Error',
-                        message='Problem reading table',
+                        message='Problem adding data to database',
                         detail=str(e)
                     )
                 else:
@@ -281,7 +289,7 @@ class Application(tk.Tk):
                         self.data_model.add_program_record(basename, row)
                     messagebox.showinfo(
                             title='Adding program',
-                            message=f'''{basename} program added.\nPress button to continue.''',
+                            message=f'''Added {basename} program.\nPress button to continue.''',
                         )
                     self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
             self.menu.add_program_menu(basename)
