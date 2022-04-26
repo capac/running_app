@@ -8,6 +8,7 @@ from numpy import linspace, zeros
 from matplotlib.figure import Figure
 from matplotlib import ticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.transforms import ScaledTranslation
 from matplotlib import use as mpl_use, pyplot as plt
 from matplotlib import colors
 mpl_use('TkAgg')
@@ -392,7 +393,7 @@ class BarChartWidget(tk.Frame):
 
     def __init__(self, parent, x_label, y_label, title, figsize=(12, 3), *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.figure = Figure(figsize=figsize, dpi=75, layout='tight')
+        self.figure = Figure(figsize=figsize, dpi=80, layout='tight')
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill='both', expand=True)
         # axes
@@ -416,7 +417,7 @@ class BarChartWidget(tk.Frame):
                                        color='k', weight='bold', rotation_mode="anchor",
                                        rotation=45)
                     self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0]),
-                                       float(self.axes.yaxis.get_data_interval()[1])+16.0)
+                                       float(self.axes.yaxis.get_data_interval()[1])+22.0)
 
                 else:
                     self.axes.annotate('{0}'.format(int(y)), xy=(x, y+y/8.0),
@@ -426,10 +427,10 @@ class BarChartWidget(tk.Frame):
                     self.axes.set_ylim(float(self.axes.yaxis.get_data_interval()[0]),
                                        float(self.axes.yaxis.get_data_interval()[1])+1.65)
 
-        plt.setp(self.axes.get_xticklabels(), ha="right",
-                 rotation_mode="anchor", rotation=45,
-                 fontsize=14-int(int(selection)/4.0))
-        plt.setp(self.axes.get_yticklabels(), fontsize=13-int(int(selection)/3.0))
+        plt.setp(self.axes.get_xticklabels(), ha="right", rotation_mode="anchor",
+                 rotation=45, fontsize=13-int(int(selection)/4.0))
+        plt.setp(self.axes.get_yticklabels(),
+                 fontsize=13-int(int(selection)/3.0))
         self.canvas.flush_events()
 
     def truncate_colormap(self, cmap, minval=0.0, maxval=1.0, n=100):
@@ -442,7 +443,7 @@ class BarChartWidget(tk.Frame):
         # color map
         cmap = plt.get_cmap('jet')
         truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
-        color_list = list(([truncated_cmap(a) for a in linspace(0, 1, 7)]))
+        color_list = list(([truncated_cmap(a) for a in linspace(0, 1, len(days_of_week))]))
         bottom = zeros(len(weekly_distances), )
         for w_index, week in enumerate(weekly_distances):
             for dow, day in enumerate(week):
@@ -461,14 +462,22 @@ class BarChartWidget(tk.Frame):
         # 5% plot padding in each direction
         self.axes.margins(0.05)
         # fixing x-axis tick labels with matplotlib.ticker "FixedLocator"
+        # https://stackoverflow.com/questions/63723514/userwarning-fixedformatter-should-only-be-used-together-with-fixedlocator
         # ticks_loc = self.axes.get_xticks().tolist()
-        ticks_loc = range(len(weekly_distances))
-        ticks_labels = range(1, len(weekly_distances)+1)
-        self.axes.xaxis.set_major_locator(ticker.FixedLocator(ticks_loc))
-        self.axes.xaxis.set_major_formatter(ticker.FixedFormatter(ticks_labels))
-        # self.axes.set_xticklabels(['{}'.format(x) for x in ticks_labels],
-        #                           rotation_mode='anchor', rotation=0,
-        #                           ha='center', va='bottom', fontsize=13)
+        x_ticks_loc = range(len(weekly_distances))
+        # x_ticks_labels = range(1, len(weekly_distances)+1)
+        x_ticks_labels = ['Week '+str(w) for w in range(1, len(weekly_distances)+1)]
+        self.axes.xaxis.set_major_locator(ticker.FixedLocator(x_ticks_loc))
+        # self.axes.xaxis.set_major_formatter(ticker.FixedFormatter(ticks_labels))
+        # Create offset transform by 0.1 points in x direction
+        # https://stackoverflow.com/questions/28615887/how-to-move-a-tick-label-in-matplotlib
+        offset = ScaledTranslation(0, 0.1, self.figure.dpi_scale_trans)
+        # apply offset transform to all x ticklabels.
+        for label in self.axes.xaxis.get_majorticklabels():
+            label.set_transform(label.get_transform() - offset)
+        self.axes.set_xticklabels(['{}'.format(x) for x in x_ticks_labels],
+                                  rotation_mode='anchor', rotation=45,
+                                  ha='right', va='center', fontsize=13)
         # y-axis tick frequency and label
         longest_week = max([sum(week) for week in weekly_distances])
         self.axes.set_yticks(range(int(longest_week)+6), minor=True, fontsize=13)
