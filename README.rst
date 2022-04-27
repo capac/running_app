@@ -18,12 +18,12 @@ Features
 * Provides a validated entry form to ensure correct data,
 * Allows update / removal of record information,
 * Allows sorting by date, distance, pace, speed and location,
-* Shows bar chart of weekly cumulative distance achievement,
-* Shows bar chart of weekly average speed achievement,
-* Shows bar chart of of number of weekly running sessions,
+* Shows bar chart for weekly cumulative distance achievement,
+* Shows bar chart for weekly average speed achievement,
+* Shows bar chart for number of weekly running sessions,
 * Allows bar chart views over the previous 1, 3, 6 and 9 month spans,
 * Import and export of data in CSV formats,
-* Creates stacked bar chart for marathon training programs. Requires CSV file with runs for each day of the week.
+* Creates stacked bar chart for marathon training programs.
 
 Requirements
 ============
@@ -38,9 +38,10 @@ Notes
 
 * Import of CSV data needs columns containing Date, Duration, Distance, Pace, Speed and Location,
 * Export feature will extract to a CSV file in a likewise column fashion,
+* Marathon programs import requires CSV file with columns containing all days of the week, in the precise form: Mon, Tue, Wed, Thu, Fri, Sat and Sun.
 * Marathon program import takes name from file basename (name without extension), import will fail if the program has already been imported.
 
 Issues
 ======
 
-* Draw feature of bar chart plots can be slow for higher look-back periods for 6 months on over.
+* Draw feature of bar chart plots can be slow for higher look-back periods of 6 months or over.
