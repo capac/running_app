@@ -10,7 +10,7 @@ from matplotlib import ticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.transforms import ScaledTranslation
 from matplotlib import use as mpl_use, pyplot as plt
-from matplotlib import colors
+from matplotlib.colors import LinearSegmentedColormap
 mpl_use('TkAgg')
 # To list all available styles, use: print(plt.style.available)
 # https://matplotlib.org/stable/tutorials/introductory/customizing.html
@@ -433,8 +433,8 @@ class BarChartWidget(tk.Frame):
                  fontsize=13-int(int(selection)/3.0))
         self.canvas.flush_events()
 
-    def truncate_colormap(self, cmap, minval=0.0, maxval=1.0, n=100):
-        new_cmap = colors.LinearSegmentedColormap.from_list(
+    def _truncate_colormap(self, cmap, minval=0.0, maxval=1.0, n=100):
+        new_cmap = LinearSegmentedColormap.from_list(
             'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
             cmap(linspace(minval, maxval, n)))
         return new_cmap
@@ -442,7 +442,7 @@ class BarChartWidget(tk.Frame):
     def draw_stacked_bar_chart(self, days_of_week, weekly_distances):
         # color map
         cmap = plt.get_cmap('jet')
-        truncated_cmap = self.truncate_colormap(cmap, 0.3, 0.8)
+        truncated_cmap = self._truncate_colormap(cmap, 0.3, 0.8)
         color_list = list(([truncated_cmap(a) for a in linspace(0, 1, len(days_of_week))]))
         bottom = zeros(len(weekly_distances), )
         for w_index, week in enumerate(weekly_distances):
@@ -463,12 +463,9 @@ class BarChartWidget(tk.Frame):
         self.axes.margins(0.05)
         # fixing x-axis tick labels with matplotlib.ticker "FixedLocator"
         # https://stackoverflow.com/questions/63723514/userwarning-fixedformatter-should-only-be-used-together-with-fixedlocator
-        # ticks_loc = self.axes.get_xticks().tolist()
         x_ticks_loc = range(len(weekly_distances))
-        # x_ticks_labels = range(1, len(weekly_distances)+1)
         x_ticks_labels = ['Week '+str(w) for w in range(1, len(weekly_distances)+1)]
         self.axes.xaxis.set_major_locator(ticker.FixedLocator(x_ticks_loc))
-        # self.axes.xaxis.set_major_formatter(ticker.FixedFormatter(ticks_labels))
         # Create offset transform by 0.1 points in x direction
         # https://stackoverflow.com/questions/28615887/how-to-move-a-tick-label-in-matplotlib
         offset = ScaledTranslation(0, 0.1, self.figure.dpi_scale_trans)
