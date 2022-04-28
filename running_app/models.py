@@ -80,9 +80,6 @@ class SQLModel:
                                     "NOT LIKE 'sqlite_%' AND name "
                                     "IS NOT 'running'")
 
-    # drop program table command
-    drop_program_table_command = ('DROP TABLE {}')
-
     # create or connect to a database
     def __init__(self, database):
         self.connection = sqlite3.connect(database)
