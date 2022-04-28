@@ -289,10 +289,10 @@ class Application(tk.Tk):
                         self.data_model.add_program_record(basename, row)
                     messagebox.showinfo(
                             title='Adding program',
-                            message=f'''Added {basename} program.\nPress button to continue.''',
+                            message=f'Added {basename} program.\n\nPress button to continue.',
                         )
                     self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
-            self.menu.add_program_menu(basename)
+                    self.menu.add_program_menu(basename)
 
     def show_plan(self, table_name):
         '''opens new window for marathon program stacked bar chart'''
@@ -359,7 +359,7 @@ class Application(tk.Tk):
             self.removal_window.destroy()
             messagebox.showinfo(
                 title='Removing program',
-                message=f'''Removed {table} program.\nPress button to continue.''',
+                message=f'Removed {table} program.\n\nPress button to continue.',
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
 
