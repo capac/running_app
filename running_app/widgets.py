@@ -458,7 +458,7 @@ class BarChartWidget(tk.Frame):
             self.axes.text(x, sum(week)+0.5, '{0:.1f}'.format(sum(week)), ha='center',
                            va='bottom', size=13, weight='bold', color='k')
         # plot legend
-        self.axes.legend(days_of_week, fontsize=13, loc='best')
+        self.axes.legend(days_of_week, fontsize=13, loc='upper left', edgecolor='k')
         # 5% plot padding in each direction
         self.axes.margins(0.05)
         # fixing x-axis tick labels with matplotlib.ticker "FixedLocator"
