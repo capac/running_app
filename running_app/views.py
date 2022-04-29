@@ -375,8 +375,7 @@ class StackedBarChartView(tk.Frame):
         self.weekly_distances = weekly_distances
 
         # stacked bar chart title
-        tmp_name = split('_', self.table_name)
-        title_name = ' '.join(tmp_name)
+        title_name = ' '.join(split(r'[\-_+.]', self.table_name))
 
         # bar chart plots
         plotinfo = tk.LabelFrame(self, text='Marathon program', padx=5, pady=5)
