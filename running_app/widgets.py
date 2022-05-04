@@ -11,6 +11,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.transforms import ScaledTranslation
 from matplotlib import use as mpl_use, pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+# Supported values for backend are ['GTK3Agg', 'GTK3Cairo', 'GTK4Agg', 'GTK4Cairo', 'MacOSX',
+# 'nbAgg', 'QtAgg', 'QtCairo', 'Qt5Agg', 'Qt5Cairo', 'TkAgg', 'TkCairo', 'WebAgg', 'WX',
+# 'WXAgg', 'WXCairo', 'agg', 'cairo', 'pdf', 'pgf', 'ps', 'svg', 'template']
 mpl_use('TkAgg')
 # To list all available styles, use: print(plt.style.available)
 # https://matplotlib.org/stable/tutorials/introductory/customizing.html
