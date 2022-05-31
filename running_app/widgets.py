@@ -357,7 +357,7 @@ class LabelInput(tk.Frame):
             self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
             input_args['textvariable'] = self.variable
 
-        self.input = input_class(self, width=14, **input_args)
+        self.input = input_class(self, width=12, **input_args)
         self.input.grid(row=1, column=0, sticky=(tk.W + tk.E))
         self.columnconfigure(0, weight=1)
         # show actual error message

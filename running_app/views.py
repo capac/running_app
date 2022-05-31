@@ -124,7 +124,7 @@ class DataRecordForm(tk.Frame):
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'])
-        self.insertbutton.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.insertbutton.grid(row=0, column=0, padx=8, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
