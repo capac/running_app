@@ -64,6 +64,7 @@ class Application(tk.Tk):
             'on_remove': self.remove,
             'on_remove_plan': self.remove_plan,
             'on_period_dropdown': self.period_dropdown,
+            'on_advanced_search': self.advanced_search,
         }
 
         self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
@@ -362,6 +363,13 @@ class Application(tk.Tk):
                 message=f'Removed {table} program.\n\nPress button to continue.',
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
+
+    def advanced_search(self):
+        '''Advanced search window'''
+
+        advanced_window = tk.Toplevel()
+        advanced_window.resizable(width=False, height=False)
+        advanced_window.title('Advanced search')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
