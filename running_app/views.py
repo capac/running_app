@@ -129,6 +129,10 @@ class DataRecordForm(tk.Frame):
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
         self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
+        self.searchbutton = w.LabelInput(command_section, 'Advanced search',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_advanced_search'])
+        self.searchbutton.grid(row=0, column=2, padx=10, pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
