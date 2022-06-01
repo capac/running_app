@@ -84,7 +84,7 @@ class ValidatedMixin:
                               action=action)
 
     def _focusout_invalid(self, **kwargs):
-        '''Handle invalid data on a focus event. . By default we want to do nothing.'''
+        '''Handle invalid data on a focus event. By default we want to do nothing.'''
 
         pass
 
