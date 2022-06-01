@@ -78,12 +78,6 @@ class Application(tk.Tk):
         self.barcharts.grid(row=0, column=0, sticky=('NSEW'))
         self.barcharts.columnconfigure(0, weight=1)
 
-        # selection form
-        self.selectionform = v.DataSelectionForm(self, self.data_model.running_fields,
-                                                 self.callbacks)
-        self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
-        self.selectionform.columnconfigure(0, weight=1)
-
         # treeview record form
         self.recordlist = v.RecordList(self, self.callbacks,
                                        inserted=self.inserted_rows,
@@ -91,6 +85,12 @@ class Application(tk.Tk):
         self.recordlist.grid(row=0, column=1, padx=10, sticky='NSEW')
         self.recordlist.columnconfigure(0, weight=1)
         self.populate_recordlist()
+
+        # selection form
+        self.selectionform = v.DataSelectionForm(self, self.data_model.running_fields,
+                                                 self.callbacks)
+        self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
+        self.selectionform.columnconfigure(0, weight=1)
 
         # data record form
         self.recordform = v.DataRecordForm(self, self.data_model.running_fields, self.callbacks)
@@ -370,6 +370,14 @@ class Application(tk.Tk):
         advanced_window = tk.Toplevel()
         advanced_window.resizable(width=False, height=False)
         advanced_window.title('Advanced search')
+
+        # treeview record form
+        self.recordlist = v.RecordList(advanced_window, self.callbacks,
+                                       inserted=self.inserted_rows,
+                                       updated=self.updated_rows,)
+        self.recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
+        self.recordlist.columnconfigure(0, weight=1)
+        self.populate_recordlist()
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
