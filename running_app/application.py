@@ -379,6 +379,13 @@ class Application(tk.Tk):
         self.recordlist.columnconfigure(0, weight=1)
         self.populate_recordlist()
 
+        # advanced selection form
+        self.advancedsearch = v.AdvancedSelectionForm(advanced_window,
+                                                      self.data_model.running_fields,
+                                                      self.callbacks)
+        self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
+        self.advancedsearch.columnconfigure(0, weight=1)
+
     def load_settings(self):
         '''Load settings into our self.settings dict'''
 
