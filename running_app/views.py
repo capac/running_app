@@ -106,16 +106,20 @@ class DataRecordForm(tk.Frame):
         runninginfo = tk.LabelFrame(self, text='Running information', padx=5, pady=5)
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
-                                           field_spec=fields['Date'],)
+                                           field_spec=fields['Date'],
+                                           input_args={'width': 12},)
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
-                                               field_spec=fields['Duration'],)
+                                               field_spec=fields['Duration'],
+                                               input_args={'width': 12},)
         self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
-                                               field_spec=fields['Distance'])
+                                               field_spec=fields['Distance'],
+                                               input_args={'width': 12},)
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
-                                               field_spec=fields['Location'])
+                                               field_spec=fields['Location'],
+                                               input_args={'width': 12},)
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -192,6 +196,34 @@ class DataSelectionForm(tk.Frame):
 
     def get(self):
         return self.selectionvalue.get()
+
+
+class AdvancedSelectionForm(tk.Frame):
+    '''Selection form for advanced search, shows output in treeview'''
+
+    def __init__(self, parent, fields, callbacks, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.callbacks = callbacks
+
+        # advanced selection form
+        advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
+        self.speedrange_lo = w.LabelInput(advancedselectioninfo, 'Speed range: low',
+                                          field_spec=fields['Distance'],
+                                          input_args={'width': 6},)
+        self.speedrange_lo.grid(row=0, column=0, pady=10)
+        self.speedrange_hi = w.LabelInput(advancedselectioninfo, 'Speed range: high',
+                                          field_spec=fields['Distance'],
+                                          input_args={'width': 6},)
+        self.speedrange_hi.grid(row=0, column=1, pady=10)
+        self.distancerange_lo = w.LabelInput(advancedselectioninfo, 'Distance range: low',
+                                             field_spec=fields['Distance'],
+                                             input_args={'width': 6},)
+        self.distancerange_lo.grid(row=0, column=2, pady=10)
+        self.distancerange_hi = w.LabelInput(advancedselectioninfo, 'Distance range: high',
+                                             field_spec=fields['Distance'],
+                                             input_args={'width': 6},)
+        self.distancerange_hi.grid(row=0, column=3, pady=10)
+        advancedselectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
 
 
 class RecordList(tk.Frame):
