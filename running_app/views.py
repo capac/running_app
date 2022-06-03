@@ -107,19 +107,23 @@ class DataRecordForm(tk.Frame):
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],
-                                           input_args={'width': 12},)
+                                           input_args={'width': 12},
+                                           label_args={'width': 18})
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
                                                field_spec=fields['Duration'],
-                                               input_args={'width': 12},)
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'],
-                                               input_args={'width': 12},)
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
                                                field_spec=fields['Location'],
-                                               input_args={'width': 12},)
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -132,11 +136,11 @@ class DataRecordForm(tk.Frame):
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
-        self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
+        self.removebutton.grid(row=0, column=1, padx=8, pady=(10, 0))
         self.searchbutton = w.LabelInput(command_section, 'Advanced search',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_advanced_search'])
-        self.searchbutton.grid(row=0, column=2, padx=10, pady=(10, 0))
+                                         input_var=self.callbacks['on_advanced_search_open'])
+        self.searchbutton.grid(row=0, column=2, padx=(200, 0), pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
@@ -207,23 +211,51 @@ class AdvancedSelectionForm(tk.Frame):
 
         # advanced selection form
         advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
-        self.speedrange_lo = w.LabelInput(advancedselectioninfo, 'Speed range: low',
-                                          field_spec=fields['Distance'],
-                                          input_args={'width': 6},)
-        self.speedrange_lo.grid(row=0, column=0, pady=10)
-        self.speedrange_hi = w.LabelInput(advancedselectioninfo, 'Speed range: high',
-                                          field_spec=fields['Distance'],
-                                          input_args={'width': 6},)
-        self.speedrange_hi.grid(row=0, column=1, pady=10)
-        self.distancerange_lo = w.LabelInput(advancedselectioninfo, 'Distance range: low',
-                                             field_spec=fields['Distance'],
-                                             input_args={'width': 6},)
-        self.distancerange_lo.grid(row=0, column=2, pady=10)
-        self.distancerange_hi = w.LabelInput(advancedselectioninfo, 'Distance range: high',
-                                             field_spec=fields['Distance'],
-                                             input_args={'width': 6},)
-        self.distancerange_hi.grid(row=0, column=3, pady=10)
-        advancedselectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        self.date_lo = w.LabelInput(advancedselectioninfo, 'Date: lower',
+                                    field_spec=fields['Date'],
+                                    input_args={'width': 10},)
+        self.date_lo.grid(row=0, column=0, padx=8, pady=(20, 0), sticky=(tk.W + tk.E))
+        self.date_hi = w.LabelInput(advancedselectioninfo, 'Date: upper',
+                                    field_spec=fields['Date'],
+                                    input_args={'width': 10},)
+        self.date_hi.grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
+        self.duration_lo = w.LabelInput(advancedselectioninfo, 'Duration: lower',
+                                        field_spec=fields['Duration'],
+                                        input_args={'width': 10},)
+        self.duration_lo.grid(row=0, column=1, padx=8, pady=(20, 0), sticky=(tk.W + tk.E))
+        self.duration_hi = w.LabelInput(advancedselectioninfo, 'Duration: upper',
+                                        field_spec=fields['Duration'],
+                                        input_args={'width': 10},)
+        self.duration_hi.grid(row=1, column=1, padx=8, sticky=(tk.W + tk.E))
+        self.distance_lo = w.LabelInput(advancedselectioninfo, 'Distance: lower',
+                                        field_spec=fields['Distance'],
+                                        input_args={'width': 6},)
+        self.distance_lo.grid(row=0, column=2, padx=8, pady=(20, 0), sticky=(tk.W + tk.E))
+        self.distance_hi = w.LabelInput(advancedselectioninfo, 'Distance: upper',
+                                        field_spec=fields['Distance'],
+                                        input_args={'width': 6},)
+        self.distance_hi.grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
+        self.pace_lo = w.LabelInput(advancedselectioninfo, 'Pace: lower',
+                                    field_spec=fields['Distance'],
+                                    input_args={'width': 6},)
+        self.pace_lo.grid(row=0, column=3, padx=8, pady=(20, 0), sticky=(tk.W + tk.E))
+        self.pace_hi = w.LabelInput(advancedselectioninfo, 'Pace: upper',
+                                    field_spec=fields['Distance'],
+                                    input_args={'width': 6},)
+        self.pace_hi.grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
+        self.speed_lo = w.LabelInput(advancedselectioninfo, 'Speed: lower',
+                                     field_spec=fields['Distance'],
+                                     input_args={'width': 6},)
+        self.speed_lo.grid(row=0, column=4, padx=8, pady=(20, 0), sticky=(tk.W + tk.E))
+        self.speed_hi = w.LabelInput(advancedselectioninfo, 'Speed: upper',
+                                     field_spec=fields['Distance'],
+                                     input_args={'width': 6},)
+        self.speed_hi.grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
+        self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
+                                          input_class=ttk.Button,
+                                          input_var=self.callbacks['on_advanced_search'])
+        self.search_button.grid(row=1, column=5, padx=8, pady=(20, 5))
+        advancedselectioninfo.grid(row=0, column=0, sticky='EW')
 
 
 class RecordList(tk.Frame):
@@ -368,7 +400,7 @@ class DeleteTableForm(tk.Frame):
         self.deletebutton = w.LabelInput(tableinfo, 'Delete plan',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove_plan'])
-        self.deletebutton.grid(row=0, column=1, padx=10, pady=(16, 0))
+        self.deletebutton.grid(row=0, column=1, padx=8, pady=(16, 0))
         tableinfo.grid(row=0, column=0, sticky=tk.W)
         tableinfo.columnconfigure(0, weight=1)
 
