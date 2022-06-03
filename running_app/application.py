@@ -64,6 +64,7 @@ class Application(tk.Tk):
             'on_remove': self.remove,
             'on_remove_plan': self.remove_plan,
             'on_period_dropdown': self.period_dropdown,
+            'on_advanced_search_open': self.advanced_search_open,
             'on_advanced_search': self.advanced_search,
         }
 
@@ -364,7 +365,7 @@ class Application(tk.Tk):
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
 
-    def advanced_search(self):
+    def advanced_search_open(self):
         '''Advanced search window'''
 
         advanced_window = tk.Toplevel()
@@ -385,6 +386,9 @@ class Application(tk.Tk):
                                                       self.callbacks)
         self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
+
+    def advanced_search(self):
+        pass
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
