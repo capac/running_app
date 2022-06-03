@@ -16,4 +16,5 @@ cal_VO2Max.py
 marathon_plan.py
 mod_data_layout.py
 DateEntry.py
+Displayer.py
 running.db
