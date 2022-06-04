@@ -137,9 +137,9 @@ class DataRecordForm(tk.Frame):
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
         self.removebutton.grid(row=0, column=1, padx=8, pady=(10, 0))
-        self.searchbutton = w.LabelInput(command_section, 'Advanced search',
+        self.searchbutton = w.LabelInput(command_section, 'Search',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_advanced_search_open'])
+                                         input_var=self.callbacks['on_open_search_window'])
         self.searchbutton.grid(row=0, column=2, padx=(200, 0), pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
@@ -202,7 +202,7 @@ class DataSelectionForm(tk.Frame):
         return self.selectionvalue.get()
 
 
-class AdvancedSelectionForm(tk.Frame):
+class SearchForm(tk.Frame):
     '''Selection form for advanced search, shows output in treeview'''
 
     def __init__(self, parent, fields, callbacks, *args, **kwargs):
@@ -253,7 +253,7 @@ class AdvancedSelectionForm(tk.Frame):
         self.speed_hi.grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
         self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
                                           input_class=ttk.Button,
-                                          input_var=self.callbacks['on_advanced_search'])
+                                          input_var=self.callbacks['on_search'])
         self.search_button.grid(row=1, column=5, padx=8, pady=(20, 5))
         advancedselectioninfo.grid(row=0, column=0, sticky='EW')
 

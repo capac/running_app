@@ -64,8 +64,8 @@ class Application(tk.Tk):
             'on_remove': self.remove,
             'on_remove_plan': self.remove_plan,
             'on_period_dropdown': self.period_dropdown,
-            'on_advanced_search_open': self.advanced_search_open,
-            'on_advanced_search': self.advanced_search,
+            'on_open_search_window': self.open_search_window,
+            'on_search': self.search,
         }
 
         self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
@@ -365,7 +365,7 @@ class Application(tk.Tk):
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
 
-    def advanced_search_open(self):
+    def open_search_window(self):
         '''Advanced search window'''
 
         advanced_window = tk.Toplevel()
@@ -381,13 +381,12 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # advanced selection form
-        self.advancedsearch = v.AdvancedSelectionForm(advanced_window,
-                                                      self.data_model.running_fields,
-                                                      self.callbacks)
+        self.advancedsearch = v.SearchForm(advanced_window, self.data_model.running_fields,
+                                           self.callbacks)
         self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
 
-    def advanced_search(self):
+    def search(self):
         pass
 
     def load_settings(self):
