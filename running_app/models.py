@@ -111,6 +111,21 @@ class SQLModel:
         query = ('SELECT * FROM running ORDER BY Date DESC')
         return self.query(query)
 
+    def min_max_column_values(self, column):
+        '''Returns minimum and maximum values for a column'''
+        min_col = self.query('SELECT MIN({}) FROM running'.format(column))
+        max_col = self.query('SELECT MAX({}) FROM running'.format(column))
+        return list(min_col[0].values())[0], list(max_col[0].values())[0]
+
+    def get_record_range(self, lo_date=None, hi_date=None):
+        min_date, max_date = self.min_max_column_values('Date')
+        if not lo_date:
+            lo_date = min_date
+        if not hi_date:
+            hi_date = max_date
+        query = ('SELECT * FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
+        return self.query(query, {"Min_Date": lo_date, "Max_Date": hi_date})
+
     def get_record(self, date):
         query = ('SELECT * FROM running WHERE Date=:Date')
         result = self.query(query, {"Date": date})
