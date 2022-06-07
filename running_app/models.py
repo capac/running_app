@@ -117,14 +117,46 @@ class SQLModel:
         max_col = self.query('SELECT MAX({}) FROM running'.format(column))
         return list(min_col[0].values())[0], list(max_col[0].values())[0]
 
-    def get_record_range(self, lo_date=None, hi_date=None):
-        min_date, max_date = self.min_max_column_values('Date')
-        if not lo_date:
-            lo_date = min_date
-        if not hi_date:
-            hi_date = max_date
-        query = ('SELECT * FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
-        return self.query(query, {"Min_Date": lo_date, "Max_Date": hi_date})
+    def get_record_range(self, date_lo=None, date_hi=None,
+                         duration_lo=None, duration_hi=None,
+                         distance_lo=None, distance_hi=None,
+                         pace_lo=None, pace_hi=None,
+                         speed_lo=None, speed_hi=None):
+        col_values = []
+        columns = ['Date', 'Duration', 'Distance', 'Pace', 'Speed']
+        for col in columns:
+            col_values.append(self.min_max_column_values(col))
+        if not date_lo:
+            date_lo = col_values[0][0]
+        if not date_hi:
+            date_hi = col_values[0][1]
+        if not duration_lo:
+            duration_lo = col_values[1][0]
+        if not duration_hi:
+            duration_hi = col_values[1][1]
+        if not distance_lo:
+            distance_lo = col_values[2][0]
+        if not distance_hi:
+            distance_hi = col_values[2][1]
+        if not pace_lo:
+            pace_lo = col_values[3][0]
+        if not pace_hi:
+            pace_hi = col_values[3][1]
+        if not speed_lo:
+            speed_lo = col_values[4][0]
+        if not speed_hi:
+            speed_hi = col_values[4][1]
+        query = ('SELECT * FROM running WHERE '
+                 'Date BETWEEN :Min_Date AND :Max_Date '
+                 'AND Duration BETWEEN :Min_Duration AND :Max_Duration '
+                 'AND Distance BETWEEN :Min_Distance AND :Max_Distance '
+                 'AND Pace BETWEEN :Min_Pace AND :Max_Pace '
+                 'AND Speed BETWEEN :Min_Speed AND :Max_Speed')
+        return self.query(query, {"Min_Date": date_lo, "Max_Date": date_hi,
+                                  "Min_Duration": duration_lo, "Max_Duration": duration_hi,
+                                  "Min_Distance": distance_lo, "Max_Distance": distance_hi,
+                                  "Min_Pace": pace_lo, "Max_Pace": pace_hi,
+                                  "Min_Speed": speed_lo, "Max_Speed": speed_hi})
 
     def get_record(self, date):
         query = ('SELECT * FROM running WHERE Date=:Date')
