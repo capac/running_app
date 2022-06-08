@@ -40,7 +40,7 @@ class SQLModel:
                                     'Duration TEXT NOT NULL, '
                                     'Distance REAL NOT NULL, '
                                     'Pace TEXT NOT NULL, '
-                                    'Speed TEXT NOT NULL, '
+                                    'Speed REAL NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
     # insert running session in running table
@@ -242,7 +242,8 @@ class SQLModel:
             seconds = 0
         # zero padding added for seconds
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
-        data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
+        # save new distances as floats
+        data['Speed'] = round(3600/pace_in_secs, 1)
         return data
 
     # marathon program data import section
