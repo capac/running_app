@@ -123,7 +123,10 @@ class SQLModel:
                          pace_lo=None, pace_hi=None,
                          speed_lo=None, speed_hi=None):
         col_values = []
-        columns = ['Date', 'Duration', 'Distance', 'Pace', 'Speed']
+        # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
+        # https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database
+        columns = self.query('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
+        columns = [col['name'] for col in columns]
         col_params = {'date_lo': date_lo,
                       'date_hi': date_hi,
                       'duration_lo': duration_lo,
