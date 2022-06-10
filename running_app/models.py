@@ -150,7 +150,8 @@ class SQLModel:
                  'AND Duration BETWEEN :Min_Duration AND :Max_Duration '
                  'AND Distance BETWEEN :Min_Distance AND :Max_Distance '
                  'AND Pace BETWEEN :Min_Pace AND :Max_Pace '
-                 'AND Speed BETWEEN :Min_Speed AND :Max_Speed')
+                 'AND Speed BETWEEN :Min_Speed AND :Max_Speed '
+                 'ORDER BY Date DESC')
         return self.query(query, {"Min_Date": col_params['date_lo'],
                                   "Max_Date": col_params['date_hi'],
                                   "Min_Duration": col_params['duration_lo'],
