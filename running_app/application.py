@@ -381,8 +381,11 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # advanced selection form
+        min_date = self.data_model.min_max_column_values()[0]
+        max_date = self.data_model.min_max_column_values()[1]
+        valid_dates = self.data_model.get_dates(min_date, max_date)
         self.advancedsearch = v.SearchForm(advanced_window, self.data_model.running_fields,
-                                           self.callbacks)
+                                           self.callbacks, valid_dates=valid_dates)
         self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
 
