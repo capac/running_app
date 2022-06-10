@@ -112,7 +112,7 @@ class SQLModel:
         query = ('SELECT * FROM running ORDER BY Date DESC')
         return self.query(query)
 
-    def _min_max_column_values(self):
+    def min_max_column_values(self):
         '''Returns minimum and maximum values for a column'''
 
         # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
