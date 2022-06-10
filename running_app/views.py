@@ -205,7 +205,7 @@ class DataSelectionForm(tk.Frame):
 class SearchForm(tk.Frame):
     '''Selection form for advanced search, shows output in treeview'''
 
-    def __init__(self, parent, fields, callbacks, *args, **kwargs):
+    def __init__(self, parent, fields, callbacks, valid_dates, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
 
@@ -215,13 +215,15 @@ class SearchForm(tk.Frame):
         # advanced selection form
         advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
         self.search_inputs['date_lo'] = w.LabelInput(advancedselectioninfo, 'Date: lower',
-                                                     field_spec=fields['Date'],
-                                                     input_args={'width': 10},)
+                                                     field_spec=fields['Date dropdown'],
+                                                     input_args={'width': 12,
+                                                                 'values': valid_dates},)
         self.search_inputs['date_lo'].grid(row=0, column=0, padx=8, pady=(20, 0),
                                            sticky=(tk.W + tk.E))
         self.search_inputs['date_hi'] = w.LabelInput(advancedselectioninfo, 'Date: upper',
-                                                     field_spec=fields['Date'],
-                                                     input_args={'width': 10},)
+                                                     field_spec=fields['Date dropdown'],
+                                                     input_args={'width': 12,
+                                                                 'values': valid_dates},)
         self.search_inputs['date_hi'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['duration_lo'] = w.LabelInput(advancedselectioninfo,
                                                          'Duration: lower',
