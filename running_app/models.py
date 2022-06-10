@@ -112,22 +112,25 @@ class SQLModel:
         query = ('SELECT * FROM running ORDER BY Date DESC')
         return self.query(query)
 
-    def min_max_column_values(self, column):
+    def min_max_column_values(self):
         '''Returns minimum and maximum values for a column'''
-        min_col = self.query('SELECT MIN({}) FROM running'.format(column))
-        max_col = self.query('SELECT MAX({}) FROM running'.format(column))
-        return list(min_col[0].values())[0], list(max_col[0].values())[0]
+
+        # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
+        # https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database
+        query = ('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
+        columns = [col['name'] for col in self.query(query)]
+        col_values = []
+        for col in columns:
+            min_col = self.query('SELECT MIN({}) FROM running'.format(col))
+            max_col = self.query('SELECT MAX({}) FROM running'.format(col))
+            col_values.append([list(col[0].values())[0] for col in [min_col, max_col]])
+        return [v for val in col_values for v in val]
 
     def get_record_range(self, date_lo=None, date_hi=None,
                          duration_lo=None, duration_hi=None,
                          distance_lo=None, distance_hi=None,
                          pace_lo=None, pace_hi=None,
                          speed_lo=None, speed_hi=None):
-        col_values = []
-        # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
-        # https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database
-        columns = self.query('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
-        columns = [col['name'] for col in columns]
         col_params = {'date_lo': date_lo,
                       'date_hi': date_hi,
                       'duration_lo': duration_lo,
@@ -138,9 +141,7 @@ class SQLModel:
                       'pace_hi': pace_hi,
                       'speed_lo': speed_lo,
                       'speed_hi': speed_hi}
-        for col in columns:
-            col_values.append(self.min_max_column_values(col))
-        col_values = [v for val in col_values for v in val]
+        col_values = self.min_max_column_values()
         for (col_p_key, col_p_val), col_v in zip(col_params.items(), col_values):
             if not col_p_val:
                 col_params[col_p_key] = col_v
@@ -165,6 +166,11 @@ class SQLModel:
         query = ('SELECT * FROM running WHERE Date=:Date')
         result = self.query(query, {"Date": date})
         return result[0] if result else {}
+
+    def get_dates(self, date_lo='2021-01-01', date_hi='2021-03-01'):
+        query = ('SELECT Date FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
+        result = self.query(query, {"Min_Date": date_lo, "Max_Date": date_hi})
+        return [res['Date'] for res in result]
 
     def add_record(self, record):
         query_date = record['Date']
