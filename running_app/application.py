@@ -109,6 +109,8 @@ class Application(tk.Tk):
         self.records_deleted = 0
 
     def populate_recordlist(self):
+        '''refresh treeview with records'''
+
         try:
             rows = self.data_model.get_all_records()
         except Exception as e:
@@ -390,7 +392,28 @@ class Application(tk.Tk):
         self.advancedsearch.columnconfigure(0, weight=1)
 
     def search(self):
-        pass
+
+        # check for errors first
+        errors = self.advancedsearch.get_errors()
+        if errors:
+            message = 'Cannot search for record(s)'
+            detail = 'The following fields have errors: \n * {}'.format('\n * '.join(errors.keys()))
+            self.status.set('Cannot search for record(s)')
+            messagebox.showerror(title='Error', message=message, detail=detail)
+            return False
+        try:
+            search_inputs = self.advancedsearch.get()
+            search_outputs = self.data_model.get_record_range(**search_inputs)
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem searching for record(s)',
+                detail=str(e)
+            )
+            self.status.set('Problem searching for record(s)')
+        else:
+            self.recordlist.populate(search_outputs)
+            self.advancedsearch.reset()
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
