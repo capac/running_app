@@ -397,7 +397,8 @@ class Application(tk.Tk):
         errors = self.advancedsearch.get_errors()
         if errors:
             message = 'Cannot search for record(s)'
-            detail = 'The following fields have errors: \n * {}'.format('\n * '.join(errors.keys()))
+            detail = 'The following fields have errors: \n * {}'\
+                     .format('\n * '.join(errors.keys()))
             self.status.set('Cannot search for record(s)')
             messagebox.showerror(title='Error', message=message, detail=detail)
             return False
