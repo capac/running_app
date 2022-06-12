@@ -216,58 +216,58 @@ class SearchForm(tk.Frame):
         advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
         self.search_inputs['date_lo'] = w.LabelInput(advancedselectioninfo, 'Date: lower',
                                                      field_spec=fields['Date dropdown'],
-                                                     input_args={'width': 12,
+                                                     input_args={'width': 11,
                                                                  'values': valid_dates},)
         self.search_inputs['date_lo'].grid(row=0, column=0, padx=8, pady=(20, 0),
                                            sticky=(tk.W + tk.E))
         self.search_inputs['date_hi'] = w.LabelInput(advancedselectioninfo, 'Date: upper',
                                                      field_spec=fields['Date dropdown'],
-                                                     input_args={'width': 12,
+                                                     input_args={'width': 11,
                                                                  'values': valid_dates},)
         self.search_inputs['date_hi'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['duration_lo'] = w.LabelInput(advancedselectioninfo,
                                                          'Duration: lower',
                                                          field_spec=fields['Duration'],
-                                                         input_args={'width': 10},)
+                                                         input_args={'width': 9},)
         self.search_inputs['duration_lo'].grid(row=0, column=1, padx=8, pady=(20, 0),
                                                sticky=(tk.W + tk.E))
         self.search_inputs['duration_hi'] = w.LabelInput(advancedselectioninfo,
                                                          'Duration: upper',
                                                          field_spec=fields['Duration'],
-                                                         input_args={'width': 10},)
+                                                         input_args={'width': 9},)
         self.search_inputs['duration_hi'].grid(row=1, column=1, padx=8,
                                                sticky=(tk.W + tk.E))
         self.search_inputs['distance_lo'] = w.LabelInput(advancedselectioninfo,
                                                          'Distance: lower',
                                                          field_spec=fields['Distance'],
-                                                         input_args={'width': 6},)
+                                                         input_args={'width': 5},)
         self.search_inputs['distance_lo'].grid(row=0, column=2, padx=8, pady=(20, 0),
                                                sticky=(tk.W + tk.E))
         self.search_inputs['distance_hi'] = w.LabelInput(advancedselectioninfo,
                                                          'Distance: upper',
                                                          field_spec=fields['Distance'],
-                                                         input_args={'width': 6},)
+                                                         input_args={'width': 5},)
         self.search_inputs['distance_hi'].grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['pace_lo'] = w.LabelInput(advancedselectioninfo, 'Pace: lower',
-                                                     field_spec=fields['Distance'],
-                                                     input_args={'width': 6},)
+                                                     field_spec=fields['Pace'],
+                                                     input_args={'width': 5},)
         self.search_inputs['pace_lo'].grid(row=0, column=3, padx=8, pady=(20, 0),
                                            sticky=(tk.W + tk.E))
         self.search_inputs['pace_hi'] = w.LabelInput(advancedselectioninfo,
                                                      'Pace: upper',
-                                                     field_spec=fields['Distance'],
-                                                     input_args={'width': 6},)
+                                                     field_spec=fields['Pace'],
+                                                     input_args={'width': 5},)
         self.search_inputs['pace_hi'].grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['speed_lo'] = w.LabelInput(advancedselectioninfo,
                                                       'Speed: lower',
                                                       field_spec=fields['Distance'],
-                                                      input_args={'width': 6},)
+                                                      input_args={'width': 5},)
         self.search_inputs['speed_lo'].grid(row=0, column=4, padx=8, pady=(20, 0),
                                             sticky=(tk.W + tk.E))
         self.search_inputs['speed_hi'] = w.LabelInput(advancedselectioninfo,
                                                       'Speed: upper',
                                                       field_spec=fields['Distance'],
-                                                      input_args={'width': 6},)
+                                                      input_args={'width': 5},)
         self.search_inputs['speed_hi'].grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
         self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
                                           input_class=ttk.Button,
