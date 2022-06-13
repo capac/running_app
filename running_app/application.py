@@ -144,7 +144,8 @@ class Application(tk.Tk):
         errors = self.recordform.get_errors()
         if errors:
             message = 'Cannot save record'
-            detail = 'The following fields have errors: \n * {}'.format('\n * '.join(errors.keys()))
+            detail = 'The following fields have errors: \n * {}'\
+                     .format('\n * '.join(errors.keys()))
             self.status.set(
                 f'''Cannot save, error in fields: {', '.join(errors.keys())}'''
             )
@@ -223,7 +224,8 @@ class Application(tk.Tk):
                 for row in records:
                     row = self.data_model.data_addition(row)
                     self.data_model.add_record(row)
-                self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
+                self.status.set(f'''Loaded running records into \
+                                {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
                 self.period_dropdown()
 
@@ -391,6 +393,12 @@ class Application(tk.Tk):
         self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
 
+        # search status bar
+        self.search_status = tk.StringVar()
+        self.search_statusbar = ttk.Label(advanced_window, textvariable=self.search_status)
+        self.search_statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
+        self.search_statusbar.columnconfigure(0, weight=1)
+
     def search(self):
 
         # check for errors first
@@ -399,7 +407,7 @@ class Application(tk.Tk):
             message = 'Cannot search for record(s)'
             detail = 'The following fields have errors: \n * {}'\
                      .format('\n * '.join(errors.keys()))
-            self.status.set('Cannot search for record(s)')
+            self.search_status.set('Cannot search for record(s)')
             messagebox.showerror(title='Error', message=message, detail=detail)
             return False
         try:
@@ -411,10 +419,10 @@ class Application(tk.Tk):
                 message='Problem searching for record(s)',
                 detail=str(e)
             )
-            self.status.set('Problem searching for record(s)')
+            self.search_status.set('Problem searching for record(s)')
         else:
             self.recordlist.populate(search_outputs)
-            self.advancedsearch.reset()
+            self.search_status.set(f'Output count: {len(search_outputs)}')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
