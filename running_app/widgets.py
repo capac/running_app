@@ -26,7 +26,7 @@ class TtkSpinbox(ttk.Entry):
 
 
 class ValidatedMixin:
-    '''Adds a validation functionality to an input widget'''
+    '''Adds validation functionality to an input widget'''
 
     def __init__(self, *args, error_var=None, **kwargs):
         self.error = error_var or tk.StringVar()
