@@ -11,7 +11,6 @@ class SQLModel:
 
     running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
-        'Date dropdown': {'req': True, 'type': FT.string_list, 'values': []},
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
