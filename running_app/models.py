@@ -14,7 +14,7 @@ class SQLModel:
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.string},
+        'Pace': {'req': True, 'type': FT.iso_pace_string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         'Period': {'req': True, 'type': FT.string_list,
@@ -289,7 +289,7 @@ class CSVModel:
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.string},
+        'Pace': {'req': True, 'type': FT.iso_pace_string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         }
