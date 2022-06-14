@@ -159,6 +159,35 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
         return valid
 
 
+class PaceEntry(ValidatedMixin, ttk.Entry):
+    '''An entry for ISO-style paces (minutes-seconds)'''
+
+    def _key_validate(self, action, index, char, **kwargs):
+        valid = True
+
+        if action == '0':
+            valid = True
+        elif index in ('0', '2', '3'):
+            valid = char.isdigit()
+        elif index in ('1'):
+            valid = char == ':'
+        else:
+            valid = False
+        return valid
+
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            pass
+        else:
+            try:
+                datetime.strptime(self.get(), '%M:%S')
+            except ValueError:
+                self.error.set('Invalid pace')
+                valid = False
+        return valid
+
+
 class RequiredEntry(ValidatedMixin, ttk.Entry):
     '''A class requiring all entry fields to not be empty'''
 
@@ -318,6 +347,7 @@ class LabelInput(tk.Frame):
     field_types = {
         FT.iso_date_string: (DateEntry, tk.StringVar),
         FT.iso_time_string: (TimeEntry, tk.StringVar),
+        FT.iso_pace_string: (PaceEntry, tk.StringVar),
         FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
         FT.string: (RequiredEntry, tk.StringVar),
         FT.string_list: (ValidatedCombobox, tk.StringVar),
