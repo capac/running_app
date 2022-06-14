@@ -249,13 +249,13 @@ class SearchForm(tk.Frame):
                                                          input_args={'width': 6},)
         self.search_inputs['distance_hi'].grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['pace_lo'] = w.LabelInput(advancedselectioninfo, 'Pace: lower',
-                                                     input_class=ttk.Entry,
+                                                     field_spec=fields['Pace'],
                                                      input_args={'width': 6},)
         self.search_inputs['pace_lo'].grid(row=0, column=3, padx=8, pady=(20, 0),
                                            sticky=(tk.W + tk.E))
         self.search_inputs['pace_hi'] = w.LabelInput(advancedselectioninfo,
                                                      'Pace: upper',
-                                                     input_class=ttk.Entry,
+                                                     field_spec=fields['Pace'],
                                                      input_args={'width': 6},)
         self.search_inputs['pace_hi'].grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['speed_lo'] = w.LabelInput(advancedselectioninfo,
