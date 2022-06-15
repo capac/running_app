@@ -12,6 +12,8 @@ class SQLModel:
     running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Duration': {'req': True, 'type': FT.iso_time_string},
+        'Search duration': {'req': True,
+                            'type': FT.iso_duration_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
         'Pace': {'req': True, 'type': FT.iso_pace_string},
