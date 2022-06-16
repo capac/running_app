@@ -188,21 +188,8 @@ class PaceEntry(ValidatedMixin, ttk.Entry):
         return valid
 
 
-class DurationEntry(ValidatedMixin, ttk.Entry):
+class DurationEntry(TimeEntry):
     '''An entry for ISO-style times (hours-minutes-seconds)'''
-
-    def _key_validate(self, action, index, char, **kwargs):
-        valid = True
-
-        if action == '0':
-            valid = True
-        elif index in ('0', '1', '3', '4', '6', '7'):
-            valid = char.isdigit()
-        elif index in ('2', '5'):
-            valid = char == ':'
-        else:
-            valid = False
-        return valid
 
     def _focusout_validate(self, event):
         valid = True
