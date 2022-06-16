@@ -18,7 +18,7 @@ class SQLModel:
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         'Period': {'req': True, 'type': FT.string_list,
-                   'values': ['1', '3', '6', '9']},
+                   'values': ['1', '3', '6']},
         }
 
     program_fields = {
