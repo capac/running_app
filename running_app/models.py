@@ -169,7 +169,7 @@ class SQLModel:
         result = self.query(query, {"Date": date})
         return result[0] if result else {}
 
-    def get_dates(self, date_lo='2021-01-01', date_hi='2021-03-01'):
+    def get_dates(self, date_lo=None, date_hi=None):
         query = ('SELECT Date FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
         result = self.query(query, {"Min_Date": date_lo, "Max_Date": date_hi})
         return [res['Date'] for res in result]
