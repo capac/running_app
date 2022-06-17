@@ -353,7 +353,7 @@ class LabelInput(tk.Frame):
             input_args['text'] = label
             input_args['variable'] = self.variable
         else:
-            self.label = ttk.Label(self, text=label, width=18, **label_args)
+            self.label = ttk.Label(self, width=18, **label_args)
             self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
             input_args['textvariable'] = self.variable
 
