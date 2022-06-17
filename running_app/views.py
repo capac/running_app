@@ -167,27 +167,37 @@ class DataRecordForm(tk.Frame):
                 pass
 
 
-class DataSelectionForm(tk.Frame):
+class DataInteractionForm(tk.Frame):
     '''The selection form for our bar chart'''
 
-    def __init__(self, parent, fields, callbacks, *args, **kwargs):
+    def __init__(self, parent, fields, callbacks, api_data, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
+        self.api_data = api_data
 
-        # selection dropdown
-        selectioninfo = tk.LabelFrame(self, text='Selection information', padx=5, pady=5)
-        self.selectionvalue = w.LabelInput(selectioninfo, 'Select period',
-                                           field_spec=fields['Period'])
-        self.selectionvalue.set(fields['Period']['values'][0])
-        self.selectionvalue.grid(row=0, column=0)
-        self.selectbutton = w.LabelInput(selectioninfo, 'Select',
+        # period lookback dropdown section
+        interactionpanel = tk.LabelFrame(self, text='Interaction panel', padx=5, pady=5)
+        self.periodvalue = w.LabelInput(interactionpanel, 'Select lookback period',
+                                        field_spec=fields['Period'])
+        self.periodvalue.set(fields['Period']['values'][0])
+        self.periodvalue.grid(row=0, column=0)
+        self.selectbutton = w.LabelInput(interactionpanel, 'Select',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_period_dropdown'])
         self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
-        selectioninfo.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
+
+        # weather data panel
+        weatherpanel = tk.LabelFrame(self, text='Weather panel', padx=5, pady=5)
+        self.weatherdata = w.LabelInput(weatherpanel,
+                                        input_class=ttk.Label,
+                                        label_args={'text': 'Temperature: '
+                                                    + self.api_data + ' '+chr(176)+'C'},)
+        self.weatherdata.grid(row=0, column=0, padx=5)
+        weatherpanel.grid(row=1, column=0, sticky=('NSEW'))
 
     def get(self):
-        return self.selectionvalue.get()
+        return self.periodvalue.get()
 
 
 class RecordList(tk.Frame):
