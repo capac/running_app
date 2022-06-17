@@ -179,7 +179,7 @@ class DataRecordForm(tk.Frame):
                 pass
 
 
-class DataSelectionForm(tk.Frame):
+class BarChartSelectionForm(tk.Frame):
     '''The selection form for our bar chart'''
 
     def __init__(self, parent, fields, callbacks, *args, **kwargs):

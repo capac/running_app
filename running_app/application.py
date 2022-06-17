@@ -88,8 +88,8 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # selection form
-        self.selectionform = v.DataSelectionForm(self, self.data_model.running_fields,
-                                                 self.callbacks)
+        self.selectionform = v.BarChartSelectionForm(self, self.data_model.running_fields,
+                                                     self.callbacks)
         self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
 
