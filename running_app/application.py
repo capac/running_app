@@ -65,6 +65,8 @@ class Application(tk.Tk):
             'on_remove': self.remove,
             'on_remove_plan': self.remove_plan,
             'on_period_dropdown': self.period_dropdown,
+            'on_open_search_window': self.open_search_window,
+            'on_search': self.search,
         }
 
         self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
@@ -109,6 +111,8 @@ class Application(tk.Tk):
         self.records_deleted = 0
 
     def populate_recordlist(self):
+        '''refresh treeview with records'''
+
         try:
             rows = self.data_model.get_all_records()
         except Exception as e:
@@ -142,7 +146,8 @@ class Application(tk.Tk):
         errors = self.recordform.get_errors()
         if errors:
             message = 'Cannot save record'
-            detail = 'The following fields have errors: \n * {}'.format('\n * '.join(errors.keys()))
+            detail = 'The following fields have errors: \n * {}'\
+                     .format('\n * '.join(errors.keys()))
             self.status.set(
                 f'''Cannot save, error in fields: {', '.join(errors.keys())}'''
             )
@@ -221,7 +226,8 @@ class Application(tk.Tk):
                 for row in records:
                     row = self.data_model.data_addition(row)
                     self.data_model.add_record(row)
-                self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
+                self.status.set(f'''Loaded running records into \
+                                {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
                 self.period_dropdown()
 
@@ -364,6 +370,61 @@ class Application(tk.Tk):
                 message=f'Removed {table} program.\n\nPress button to continue.',
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
+
+    def open_search_window(self):
+        '''Advanced search window'''
+
+        advanced_window = tk.Toplevel()
+        advanced_window.resizable(width=False, height=False)
+        advanced_window.title('Advanced search')
+
+        # treeview record form
+        self.recordlist = v.RecordList(advanced_window, self.callbacks,
+                                       inserted=self.inserted_rows,
+                                       updated=self.updated_rows,)
+        self.recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
+        self.recordlist.columnconfigure(0, weight=1)
+        self.populate_recordlist()
+
+        # advanced selection form
+        min_date = self.data_model.min_max_column_values()[0]
+        max_date = self.data_model.min_max_column_values()[1]
+        valid_dates = self.data_model.get_dates(min_date, max_date)
+        self.advancedsearch = v.SearchForm(advanced_window, self.data_model.running_fields,
+                                           self.callbacks, valid_dates=valid_dates)
+        self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
+        self.advancedsearch.columnconfigure(0, weight=1)
+
+        # search status bar
+        self.search_status = tk.StringVar()
+        self.search_statusbar = ttk.Label(advanced_window, textvariable=self.search_status)
+        self.search_statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
+        self.search_statusbar.columnconfigure(0, weight=1)
+
+    def search(self):
+
+        # check for errors first
+        errors = self.advancedsearch.get_errors()
+        if errors:
+            message = 'Cannot search for record(s)'
+            detail = 'The following fields have errors: \n * {}'\
+                     .format('\n * '.join(errors.keys()))
+            self.search_status.set('Cannot search for record(s)')
+            messagebox.showerror(title='Error', message=message, detail=detail)
+            return False
+        try:
+            search_inputs = self.advancedsearch.get()
+            search_outputs = self.data_model.get_record_range(**search_inputs)
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem searching for record(s)',
+                detail=str(e)
+            )
+            self.search_status.set('Problem searching for record(s)')
+        else:
+            self.recordlist.populate(search_outputs)
+            self.search_status.set(f'Output count: {len(search_outputs)}')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''

@@ -26,7 +26,7 @@ class TtkSpinbox(ttk.Entry):
 
 
 class ValidatedMixin:
-    '''Adds a validation functionality to an input widget'''
+    '''Adds validation functionality to an input widget'''
 
     def __init__(self, *args, error_var=None, **kwargs):
         self.error = error_var or tk.StringVar()
@@ -84,7 +84,7 @@ class ValidatedMixin:
                               action=action)
 
     def _focusout_invalid(self, **kwargs):
-        '''Handle invalid data on a focus event. . By default we want to do nothing.'''
+        '''Handle invalid data on a focus event. By default we want to do nothing.'''
 
         pass
 
@@ -156,6 +156,51 @@ class TimeEntry(ValidatedMixin, ttk.Entry):
         except ValueError:
             self.error.set('Invalid duration')
             valid = False
+        return valid
+
+
+class PaceEntry(ValidatedMixin, ttk.Entry):
+    '''An entry for ISO-style paces (minutes-seconds)'''
+
+    def _key_validate(self, action, index, char, **kwargs):
+        valid = True
+
+        if action == '0':
+            valid = True
+        elif index in ('0', '2', '3'):
+            valid = char.isdigit()
+        elif index in ('1'):
+            valid = char == ':'
+        else:
+            valid = False
+        return valid
+
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            pass
+        else:
+            try:
+                datetime.strptime(self.get(), '%M:%S')
+            except ValueError:
+                self.error.set('Invalid pace')
+                valid = False
+        return valid
+
+
+class DurationEntry(TimeEntry):
+    '''An entry for ISO-style times (hours-minutes-seconds)'''
+
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            pass
+        else:
+            try:
+                datetime.strptime(self.get(), '%H:%M:%S')
+            except ValueError:
+                self.error.set('Invalid duration')
+                valid = False
         return valid
 
 
@@ -318,6 +363,8 @@ class LabelInput(tk.Frame):
     field_types = {
         FT.iso_date_string: (DateEntry, tk.StringVar),
         FT.iso_time_string: (TimeEntry, tk.StringVar),
+        FT.iso_duration_string: (DurationEntry, tk.StringVar),
+        FT.iso_pace_string: (PaceEntry, tk.StringVar),
         FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
         FT.string: (RequiredEntry, tk.StringVar),
         FT.string_list: (ValidatedCombobox, tk.StringVar),
@@ -357,7 +404,7 @@ class LabelInput(tk.Frame):
             self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
             input_args['textvariable'] = self.variable
 
-        self.input = input_class(self, width=14, **input_args)
+        self.input = input_class(self, **input_args)
         self.input.grid(row=1, column=0, sticky=(tk.W + tk.E))
         self.columnconfigure(0, weight=1)
         # show actual error message

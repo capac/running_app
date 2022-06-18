@@ -12,9 +12,11 @@ class SQLModel:
     running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Duration': {'req': True, 'type': FT.iso_time_string},
+        'Search duration': {'req': True,
+                            'type': FT.iso_duration_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.string},
+        'Pace': {'req': True, 'type': FT.iso_pace_string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         'Period': {'req': True, 'type': FT.string_list,
@@ -40,7 +42,7 @@ class SQLModel:
                                     'Duration TEXT NOT NULL, '
                                     'Distance REAL NOT NULL, '
                                     'Pace TEXT NOT NULL, '
-                                    'Speed TEXT NOT NULL, '
+                                    'Speed REAL NOT NULL, '
                                     'Location TEXT NOT NULL)')
 
     # insert running session in running table
@@ -111,10 +113,66 @@ class SQLModel:
         query = ('SELECT * FROM running ORDER BY Date DESC')
         return self.query(query)
 
+    def min_max_column_values(self):
+        '''Returns minimum and maximum values for a column'''
+
+        # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
+        # https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database
+        query = ('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
+        columns = [col['name'] for col in self.query(query)]
+        col_values = []
+        for col in columns:
+            min_col = self.query('SELECT MIN({}) FROM running'.format(col))
+            max_col = self.query('SELECT MAX({}) FROM running'.format(col))
+            col_values.append([list(col[0].values())[0] for col in [min_col, max_col]])
+        return [v for val in col_values for v in val]
+
+    def get_record_range(self, date_lo=None, date_hi=None,
+                         duration_lo=None, duration_hi=None,
+                         distance_lo=None, distance_hi=None,
+                         pace_lo=None, pace_hi=None,
+                         speed_lo=None, speed_hi=None):
+        col_params = {'date_lo': date_lo,
+                      'date_hi': date_hi,
+                      'duration_lo': duration_lo,
+                      'duration_hi': duration_hi,
+                      'distance_lo': distance_lo,
+                      'distance_hi': distance_hi,
+                      'pace_lo': pace_lo,
+                      'pace_hi': pace_hi,
+                      'speed_lo': speed_lo,
+                      'speed_hi': speed_hi}
+        col_values = self.min_max_column_values()
+        for (col_p_key, col_p_val), col_v in zip(col_params.items(), col_values):
+            if not col_p_val:
+                col_params[col_p_key] = col_v
+        query = ('SELECT * FROM running WHERE '
+                 'Date BETWEEN :Min_Date AND :Max_Date '
+                 'AND Duration BETWEEN :Min_Duration AND :Max_Duration '
+                 'AND Distance BETWEEN :Min_Distance AND :Max_Distance '
+                 'AND Pace BETWEEN :Min_Pace AND :Max_Pace '
+                 'AND Speed BETWEEN :Min_Speed AND :Max_Speed '
+                 'ORDER BY Date DESC')
+        return self.query(query, {"Min_Date": col_params['date_lo'],
+                                  "Max_Date": col_params['date_hi'],
+                                  "Min_Duration": col_params['duration_lo'],
+                                  "Max_Duration": col_params['duration_hi'],
+                                  "Min_Distance": col_params['distance_lo'],
+                                  "Max_Distance": col_params['distance_hi'],
+                                  "Min_Pace": col_params['pace_lo'],
+                                  "Max_Pace": col_params['pace_hi'],
+                                  "Min_Speed": col_params['speed_lo'],
+                                  "Max_Speed": col_params['speed_hi']})
+
     def get_record(self, date):
         query = ('SELECT * FROM running WHERE Date=:Date')
         result = self.query(query, {"Date": date})
         return result[0] if result else {}
+
+    def get_dates(self, date_lo=None, date_hi=None):
+        query = ('SELECT Date FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
+        result = self.query(query, {"Min_Date": date_lo, "Max_Date": date_hi})
+        return [res['Date'] for res in result]
 
     def add_record(self, record):
         query_date = record['Date']
@@ -196,7 +254,8 @@ class SQLModel:
             seconds = 0
         # zero padding added for seconds
         data['Pace'] = f'{int(minutes)}:{str(int(round(seconds, 0))).zfill(2)}'
-        data['Speed'] = f'{round(3600/pace_in_secs, 1)}'
+        # save new distances as floats
+        data['Speed'] = round(3600/pace_in_secs, 1)
         return data
 
     # marathon program data import section
@@ -232,7 +291,7 @@ class CSVModel:
         'Duration': {'req': True, 'type': FT.iso_time_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.string},
+        'Pace': {'req': True, 'type': FT.iso_pace_string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         }

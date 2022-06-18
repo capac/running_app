@@ -106,16 +106,24 @@ class DataRecordForm(tk.Frame):
         runninginfo = tk.LabelFrame(self, text='Running information', padx=5, pady=5)
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
-                                           field_spec=fields['Date'],)
+                                           field_spec=fields['Date'],
+                                           input_args={'width': 12},
+                                           label_args={'width': 18})
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
-                                               field_spec=fields['Duration'],)
+                                               field_spec=fields['Duration'],
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
-                                               field_spec=fields['Distance'])
+                                               field_spec=fields['Distance'],
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
-                                               field_spec=fields['Location'])
+                                               field_spec=fields['Location'],
+                                               input_args={'width': 12},
+                                               label_args={'width': 18})
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -124,11 +132,15 @@ class DataRecordForm(tk.Frame):
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'])
-        self.insertbutton.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.insertbutton.grid(row=0, column=0, padx=8, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'])
-        self.removebutton.grid(row=0, column=1, padx=10, pady=(10, 0))
+        self.removebutton.grid(row=0, column=1, padx=8, pady=(10, 0))
+        self.searchbutton = w.LabelInput(command_section, 'Search',
+                                         input_class=ttk.Button,
+                                         input_var=self.callbacks['on_open_search_window'])
+        self.searchbutton.grid(row=0, column=2, padx=(200, 0), pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
     def get(self):
@@ -203,6 +215,99 @@ class DataInteractionForm(tk.Frame):
 
     def get(self):
         return self.periodvalue.get()
+
+
+class SearchForm(tk.Frame):
+    '''Selection form for advanced search, shows output in treeview'''
+
+    def __init__(self, parent, fields, callbacks, valid_dates, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.callbacks = callbacks
+
+        # a dictionary to keep track of input widgets
+        self.search_inputs = {}
+
+        # advanced selection form
+        advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
+        self.search_inputs['date_lo'] = w.LabelInput(advancedselectioninfo, 'Date: lower',
+                                                     input_class=ttk.Combobox,
+                                                     input_args={'width': 11,
+                                                                 'values': valid_dates},)
+        self.search_inputs['date_lo'].grid(row=0, column=0, padx=8, pady=(20, 0),
+                                           sticky=(tk.W + tk.E))
+        self.search_inputs['date_hi'] = w.LabelInput(advancedselectioninfo, 'Date: upper',
+                                                     input_class=ttk.Combobox,
+                                                     input_args={'width': 11,
+                                                                 'values': valid_dates},)
+        self.search_inputs['date_hi'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
+        self.search_inputs['duration_lo'] = w.LabelInput(advancedselectioninfo,
+                                                         'Duration: lower',
+                                                         field_spec=fields['Search duration'],
+                                                         input_args={'width': 9},)
+        self.search_inputs['duration_lo'].grid(row=0, column=1, padx=8, pady=(20, 0),
+                                               sticky=(tk.W + tk.E))
+        self.search_inputs['duration_hi'] = w.LabelInput(advancedselectioninfo,
+                                                         'Duration: upper',
+                                                         field_spec=fields['Search duration'],
+                                                         input_args={'width': 9},)
+        self.search_inputs['duration_hi'].grid(row=1, column=1, padx=8,
+                                               sticky=(tk.W + tk.E))
+        self.search_inputs['distance_lo'] = w.LabelInput(advancedselectioninfo,
+                                                         'Distance: lower',
+                                                         field_spec=fields['Distance'],
+                                                         input_args={'width': 6},)
+        self.search_inputs['distance_lo'].grid(row=0, column=2, padx=8, pady=(20, 0),
+                                               sticky=(tk.W + tk.E))
+        self.search_inputs['distance_hi'] = w.LabelInput(advancedselectioninfo,
+                                                         'Distance: upper',
+                                                         field_spec=fields['Distance'],
+                                                         input_args={'width': 6},)
+        self.search_inputs['distance_hi'].grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
+        self.search_inputs['pace_lo'] = w.LabelInput(advancedselectioninfo, 'Pace: lower',
+                                                     field_spec=fields['Pace'],
+                                                     input_args={'width': 6},)
+        self.search_inputs['pace_lo'].grid(row=0, column=3, padx=8, pady=(20, 0),
+                                           sticky=(tk.W + tk.E))
+        self.search_inputs['pace_hi'] = w.LabelInput(advancedselectioninfo,
+                                                     'Pace: upper',
+                                                     field_spec=fields['Pace'],
+                                                     input_args={'width': 6},)
+        self.search_inputs['pace_hi'].grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
+        self.search_inputs['speed_lo'] = w.LabelInput(advancedselectioninfo,
+                                                      'Speed: lower',
+                                                      field_spec=fields['Distance'],
+                                                      input_args={'width': 6},)
+        self.search_inputs['speed_lo'].grid(row=0, column=4, padx=8, pady=(20, 0),
+                                            sticky=(tk.W + tk.E))
+        self.search_inputs['speed_hi'] = w.LabelInput(advancedselectioninfo,
+                                                      'Speed: upper',
+                                                      field_spec=fields['Distance'],
+                                                      input_args={'width': 6},)
+        self.search_inputs['speed_hi'].grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
+        self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
+                                          input_class=ttk.Button,
+                                          input_var=self.callbacks['on_search'])
+        self.search_button.grid(row=1, column=5, padx=8, pady=(20, 5))
+        advancedselectioninfo.grid(row=0, column=0, sticky='EW')
+
+    def get(self):
+        '''Retrieve data from Tkinter and place it in regular Python objects'''
+
+        search_data = {}
+        for key, widget in self.search_inputs.items():
+            search_data[key] = widget.get()
+        return search_data
+
+    def get_errors(self):
+        '''Get a list of field errors in the form'''
+
+        search_errors = {}
+        for key, widget in self.search_inputs.items():
+            if hasattr(widget.input, 'trigger_focusout_validation'):
+                widget.input.trigger_focusout_validation()
+            if widget.error.get():
+                search_errors[key] = widget.error.get()
+        return search_errors
 
 
 class RecordList(tk.Frame):
@@ -347,7 +452,7 @@ class DeleteTableForm(tk.Frame):
         self.deletebutton = w.LabelInput(tableinfo, 'Delete plan',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove_plan'])
-        self.deletebutton.grid(row=0, column=1, padx=10, pady=(16, 0))
+        self.deletebutton.grid(row=0, column=1, padx=8, pady=(16, 0))
         tableinfo.grid(row=0, column=0, sticky=tk.W)
         tableinfo.columnconfigure(0, weight=1)
 
