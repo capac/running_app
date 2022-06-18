@@ -133,7 +133,7 @@ class Application(tk.Tk):
             try:
                 data = self.data_model.get_record(rowkey)
                 self.recordform.load_record(rowkey, data)
-                self.recordform.tkraise(aboveThis=self.recordlist)
+                self.recordform.tkraise()
             except Exception as e:
                 messagebox.showerror(title='Error', message='Problem reading database',
                                      detail=str(e))
@@ -374,7 +374,7 @@ class Application(tk.Tk):
     def open_search_window(self):
         '''Advanced search window'''
 
-        advanced_window = tk.Toplevel()
+        advanced_window = tk.Toplevel(self)
         advanced_window.resizable(width=False, height=False)
         advanced_window.title('Advanced search')
 
