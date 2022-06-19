@@ -189,12 +189,12 @@ class DataInteractionForm(tk.Frame):
 
         # period lookback dropdown section
         interactionpanel = tk.LabelFrame(self, text='Interaction panel', padx=5, pady=5)
-        self.periodvalue = w.LabelInput(interactionpanel, 'Select lookback period',
-                                        field_spec=fields['Period'])
+        self.periodvalue = w.LabelInput(interactionpanel, 'Lookback period',
+                                        field_spec=fields['Period'], input_args={'width': 10})
         self.periodvalue.set(fields['Period']['values'][0])
         self.periodvalue.grid(row=0, column=0)
         self.selectbutton = w.LabelInput(interactionpanel, 'Select',
-                                         input_class=ttk.Button,
+                                         input_class=ttk.Button, input_args={'width': 10},
                                          input_var=self.callbacks['on_period_dropdown'])
         self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
         interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
