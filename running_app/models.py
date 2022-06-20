@@ -12,15 +12,16 @@ class SQLModel:
     running_fields = {
         'Date': {'req': True, 'type': FT.iso_date_string},
         'Duration': {'req': True, 'type': FT.iso_time_string},
-        'Search duration': {'req': True,
-                            'type': FT.iso_duration_string},
         'Distance': {'req': True, 'type': FT.decimal,
                      'min': 0, 'max': 100, 'inc': 0.1},
-        'Pace': {'req': True, 'type': FT.iso_pace_string},
         'Speed': {'req': True, 'type': FT.string},
         'Location': {'req': True, 'type': FT.string},
         'Period': {'req': True, 'type': FT.string_list,
                    'values': ['1', '3', '6']},
+        # data fields for search form
+        'Search duration': {'req': True, 'type': FT.iso_duration_string},
+        'Search date': {'req': True, 'type': FT.string_list},
+        'Search pace': {'req': True, 'type': FT.iso_pace_string},
         }
 
     program_fields = {
