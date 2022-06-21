@@ -256,7 +256,7 @@ class Application(tk.Tk):
                 csv_write.save_records(rows, csv_write.running_fields.keys())
 
     def period_dropdown(self):
-        period = self.selectionform.get()
+        period = self.selectionform.periodvalue.get()
         self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period,
                                         period)
         self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
