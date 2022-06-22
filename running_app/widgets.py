@@ -264,14 +264,14 @@ class ValidatedSpinbox(ValidatedMixin, TtkSpinbox):
         try:
             value = Decimal(value)
         except InvalidOperation:
-            self.error.set('Invalid number string: {}'.format(value))
+            self.error.set(f'Invalid string: {value}')
             return False
 
         if value < min_val:
-            self.error.set('Value is too low (min {})'.format(value))
+            self.error.set(f'Too low (min {value})')
             valid = False
         if value > max_val:
-            self.error.set('Value is too high (max {})'.format(value))
+            self.error.set(f'Too high (max {value})')
 
         return valid
 
