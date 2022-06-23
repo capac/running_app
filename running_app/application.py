@@ -379,12 +379,21 @@ class Application(tk.Tk):
         advanced_window.title('Advanced search')
 
         # treeview record form
-        self.recordlist = v.RecordList(advanced_window, self.callbacks,
-                                       inserted=self.inserted_rows,
-                                       updated=self.updated_rows,)
-        self.recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
-        self.recordlist.columnconfigure(0, weight=1)
-        self.populate_recordlist()
+        self.search_recordlist = v.RecordList(advanced_window, self.callbacks,
+                                              inserted=self.inserted_rows,
+                                              updated=self.updated_rows,)
+        self.search_recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
+        self.search_recordlist.columnconfigure(0, weight=1)
+        try:
+            rows = self.data_model.get_all_records()
+        except Exception as e:
+            messagebox.showerror(
+                title='Error',
+                message='Problem reading database',
+                detail=str(e)
+            )
+        else:
+            self.search_recordlist.populate(rows)
 
         # advanced selection form
         min_date = self.data_model.min_max_column_values()[0]
@@ -423,7 +432,7 @@ class Application(tk.Tk):
             )
             self.search_status.set('Problem searching for record(s)')
         else:
-            self.recordlist.populate(search_outputs)
+            self.search_recordlist.populate(search_outputs)
             self.search_status.set(f'Output count: {len(search_outputs)}')
 
     def load_settings(self):
