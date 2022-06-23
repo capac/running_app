@@ -237,12 +237,12 @@ class SearchForm(tk.Frame):
         self.search_inputs['date_hi'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['duration_lo'] = w.LabelInput(advancedselectioninfo, 'Duration: min',
                                                          field_spec=fields['Search duration'],
-                                                         input_args={'width': 9},)
+                                                         input_args={'width': 10},)
         self.search_inputs['duration_lo'].grid(row=0, column=1, padx=8, pady=(20, 0),
                                                sticky=(tk.W + tk.E))
         self.search_inputs['duration_hi'] = w.LabelInput(advancedselectioninfo, 'Duration: max',
                                                          field_spec=fields['Search duration'],
-                                                         input_args={'width': 9},)
+                                                         input_args={'width': 10},)
         self.search_inputs['duration_hi'].grid(row=1, column=1, padx=8,
                                                sticky=(tk.W + tk.E))
         min_distance_var = tk.DoubleVar(value='-infinity')
@@ -260,12 +260,12 @@ class SearchForm(tk.Frame):
         self.search_inputs['distance_hi'].grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['pace_lo'] = w.LabelInput(advancedselectioninfo, 'Pace: min',
                                                      field_spec=fields['Search pace'],
-                                                     input_args={'width': 6},)
+                                                     input_args={'width': 10},)
         self.search_inputs['pace_lo'].grid(row=0, column=3, padx=8, pady=(20, 0),
                                            sticky=(tk.W + tk.E))
         self.search_inputs['pace_hi'] = w.LabelInput(advancedselectioninfo, 'Pace: max',
                                                      field_spec=fields['Search pace'],
-                                                     input_args={'width': 6},)
+                                                     input_args={'width': 10},)
         self.search_inputs['pace_hi'].grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
         min_speed_var = tk.DoubleVar(value='-infinity')
         max_speed_var = tk.DoubleVar(value='infinity')
