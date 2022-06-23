@@ -348,8 +348,10 @@ class SettingsModel:
 
     variables = {
         # ('aqua', 'clam', 'alt', 'default', 'classic')
-        'theme': {'type': 'str', 'value': 'aqua'},
-        'db_name': {'type': 'str', 'value': 'running.db'},
+        'theme': {'type': 'str', 'value': ''},
+        'db_name': {'type': 'str', 'value': ''},
+        'post_code': {'type': 'str', 'value': ''},
+        'country_code': {'type': 'str', 'value': ''},
     }
 
     def __init__(self, filename='settings.json', path='~'):
