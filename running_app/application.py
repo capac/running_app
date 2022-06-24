@@ -378,31 +378,21 @@ class Application(tk.Tk):
         advanced_window.resizable(width=False, height=False)
         advanced_window.title('Advanced search')
 
-        # treeview record form
-        self.search_recordlist = v.RecordList(advanced_window, self.callbacks,
-                                              inserted=self.inserted_rows,
-                                              updated=self.updated_rows,)
-        self.search_recordlist.grid(row=0, column=0, padx=10, sticky='NSEW')
-        self.search_recordlist.columnconfigure(0, weight=1)
-        try:
-            rows = self.data_model.get_all_records()
-        except Exception as e:
-            messagebox.showerror(
-                title='Error',
-                message='Problem reading database',
-                detail=str(e)
-            )
-        else:
-            self.search_recordlist.populate(rows)
-
         # advanced selection form
         min_date = self.data_model.min_max_column_values()[0]
         max_date = self.data_model.min_max_column_values()[1]
         valid_dates = self.data_model.get_dates(min_date, max_date)
         self.advancedsearch = v.SearchForm(advanced_window, self.data_model.running_fields,
                                            self.callbacks, valid_dates=valid_dates)
-        self.advancedsearch.grid(row=1, column=0, padx=6, pady=6, sticky='NSEW')
+        self.advancedsearch.grid(row=0, column=0, padx=6, pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
+
+        # treeview record form
+        self.search_recordlist = v.RecordList(advanced_window, self.callbacks,
+                                              inserted=self.inserted_rows,
+                                              updated=self.updated_rows,)
+        self.search_recordlist.grid(row=1, column=0, padx=10, sticky='NSEW')
+        self.search_recordlist.columnconfigure(0, weight=1)
 
         # search status bar
         self.search_status = tk.StringVar()
