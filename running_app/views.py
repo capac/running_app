@@ -201,11 +201,11 @@ class DataInteractionForm(tk.Frame):
 
         # weather data panel
         weatherpanel = tk.LabelFrame(self, text='Weather panel', padx=5, pady=5)
-        self.temperature = ttk.Label(weatherpanel, text='Temperature: ' +
-                                     self.api_data['current_temperature'] + ' ' + chr(176)+'C',)
+        self.temperature = ttk.Label(weatherpanel, text='Temperature: {0:>4} {1}C'.
+                                     format(self.api_data['current_temperature'], chr(176)),)
         self.temperature.grid(row=0, column=0, padx=2, pady=5, sticky=tk.W)
-        self.pressure = ttk.Label(weatherpanel, text='Pressure: ' +
-                                  self.api_data['pressure'] + ' hPa',)
+        self.pressure = ttk.Label(weatherpanel, text='Pressure: {0:>10} hPa'.
+                                  format(self.api_data['pressure']),)
         self.pressure.grid(row=1, column=0, padx=2, pady=4, sticky=tk.W)
         self.humidity = ttk.Label(weatherpanel, text='Humidity: ' +
                                   self.api_data['humidity'] + ' '+'%',)
