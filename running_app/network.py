@@ -3,6 +3,7 @@ import requests
 import json
 import os
 import re
+from datetime import datetime
 
 # API key values
 weather_api_key = os.environ['OPEN_WEATHER_MAP_API_KEY']
@@ -42,14 +43,21 @@ def get_local_weather(post_code, country_code):
     try:
         if re.findall(pattern, post_code):
             post_code = re.sub(' ', '%20', post_code)
+            # units are metric
             url = base_url+post_code+','+country_code+'&appid='+weather_api_key+'&units=metric'
             api_request = requests.get(url)
             api_response = json.loads(api_request.content)
             flatten_response = flatten_json(api_response)
-            # temperature in Celsius
-            weather_data['temperature'] = str(flatten_response['main_temp'])
-            # pressure
+            weather_data['current_temperature'] = str(flatten_response['main_temp'])
             weather_data['pressure'] = str(flatten_response['main_pressure'])
+            weather_data['humidity'] = str(flatten_response['main_humidity'])
+            weather_data['visibility'] = str(flatten_response['visibility'])
+            weather_data['wind_speed'] = str(flatten_response['wind_speed'])
+            weather_data['wind_deg'] = str(flatten_response['wind_deg'])
+            # convert from POSIX time to naive time
+            for response in ['sys_sunrise', 'sys_sunset']:
+                weather_data[response] = str(datetime.strftime(datetime.fromtimestamp(
+                                             flatten_response[response]), '%H:%M'))
     except Exception as e:
         print(e.__doc__)
     return weather_data
