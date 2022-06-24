@@ -202,11 +202,29 @@ class DataInteractionForm(tk.Frame):
         # weather data panel
         weatherpanel = tk.LabelFrame(self, text='Weather panel', padx=5, pady=5)
         self.temperature = ttk.Label(weatherpanel, text='Temperature: ' +
-                                     self.api_data['temperature'] + ' '+chr(176)+'C',)
+                                     self.api_data['current_temperature'] + ' ' + chr(176)+'C',)
         self.temperature.grid(row=0, column=0, padx=2, pady=5, sticky=tk.W)
         self.pressure = ttk.Label(weatherpanel, text='Pressure: ' +
                                   self.api_data['pressure'] + ' hPa',)
         self.pressure.grid(row=1, column=0, padx=2, pady=4, sticky=tk.W)
+        self.humidity = ttk.Label(weatherpanel, text='Humidity: ' +
+                                  self.api_data['humidity'] + ' '+'%',)
+        self.humidity.grid(row=0, column=1, padx=2, pady=5, sticky=tk.W)
+        self.visibility = ttk.Label(weatherpanel, text='Visibility: ' +
+                                    self.api_data['visibility'] + ' m',)
+        self.visibility.grid(row=1, column=1, padx=2, pady=4, sticky=tk.W)
+        self.wind_speed = ttk.Label(weatherpanel, text='Wind speed: ' +
+                                    self.api_data['wind_speed'] + ' '+'m/s',)
+        self.wind_speed.grid(row=0, column=2, padx=2, pady=5, sticky=tk.W)
+        self.wind_deg = ttk.Label(weatherpanel, text='Wind direction: ' +
+                                  self.api_data['wind_deg'] + chr(176),)
+        self.wind_deg.grid(row=1, column=2, padx=2, pady=4, sticky=tk.W)
+        self.sys_sunrise = ttk.Label(weatherpanel, text='Sunrise: ' +
+                                     self.api_data['sys_sunrise'] + ' ',)
+        self.sys_sunrise.grid(row=0, column=3, padx=2, pady=5, sticky=tk.W)
+        self.sys_sunset = ttk.Label(weatherpanel, text='Sunset: ' +
+                                    self.api_data['sys_sunset'] + ' ',)
+        self.sys_sunset.grid(row=1, column=3, padx=2, pady=4, sticky=tk.W)
         weatherpanel.grid(row=1, column=0, sticky=('NSEW'))
 
 
