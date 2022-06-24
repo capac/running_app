@@ -91,7 +91,8 @@ class Application(tk.Tk):
         # interaction form
         self.selectionform = v.DataInteractionForm(self, self.data_model.running_fields,
                                                    self.callbacks,
-                                                   n.get_local_weather(self.settings['post_code'].get()))
+                                                   n.get_local_weather(self.settings['post_code'].get(),
+                                                                       self.settings['country_code'].get()))
         self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
 
