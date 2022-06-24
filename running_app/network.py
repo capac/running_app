@@ -48,7 +48,7 @@ def get_local_weather(post_code, country_code):
             api_request = requests.get(url)
             api_response = json.loads(api_request.content)
             flatten_response = flatten_json(api_response)
-            weather_data['current_temperature'] = str(flatten_response['main_temp'])
+            weather_data['current_temperature'] = str(round(flatten_response['main_temp'], 1))
             weather_data['pressure'] = str(flatten_response['main_pressure'])
             weather_data['humidity'] = str(flatten_response['main_humidity'])
             weather_data['visibility'] = str(flatten_response['visibility'])
