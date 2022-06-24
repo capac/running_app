@@ -7,7 +7,6 @@ import re
 # API key values
 weather_api_key = os.environ['OPEN_WEATHER_MAP_API_KEY']
 base_url = 'https://api.openweathermap.org/data/2.5/weather?zip='
-country_code = 'GB'
 
 
 # from 'Flattening JSON objects in Python', Towards Data Science:
@@ -36,7 +35,7 @@ def flatten_json(y):
 # 'main_pressure', 'main_humidity', 'visibility', 'wind_speed', 'wind_deg', 'clouds_all',
 # 'dt', 'sys_type' 'sys_id', 'sys_country', 'sys_sunrise', 'sys_sunset', 'timezone',
 # 'id', 'name', 'cod'
-def get_local_weather(post_code):
+def get_local_weather(post_code, country_code):
     weather_data = {}
     # https://stackoverflow.com/questions/13648729/python-regular-expression-for-outward-uk-post-code
     pattern = r'[A-Z]{1,2}[0-9R][0-9A-Z]?\s[0-9][A-Z]{2}'
