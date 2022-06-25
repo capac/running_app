@@ -12,7 +12,7 @@ base_url = 'https://api.openweathermap.org/data/2.5/weather?zip='
 
 # from 'Flattening JSON objects in Python', Towards Data Science:
 # https://towardsdatascience.com/flattening-json-objects-in-python-f5343c794b10
-def flatten_json(y):
+def _flatten_json(y):
     out = {}
 
     def flatten(x, name=''):
@@ -47,7 +47,7 @@ def get_local_weather(post_code, country_code):
             url = base_url+post_code+','+country_code+'&appid='+weather_api_key+'&units=metric'
             api_request = requests.get(url)
             api_response = json.loads(api_request.content)
-            flatten_response = flatten_json(api_response)
+            flatten_response = _flatten_json(api_response)
             weather_data['current_temperature'] = str(round(flatten_response['main_temp'], 1))
             weather_data['pressure'] = str(flatten_response['main_pressure'])
             weather_data['humidity'] = str(flatten_response['main_humidity'])
