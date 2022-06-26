@@ -3,6 +3,9 @@ from tkinter import ttk
 from tkinter import messagebox
 from . import widgets as w
 from re import split
+import urllib.parse
+from PIL import Image, ImageTk
+from io import BytesIO
 
 
 class MainMenu(tk.Menu):
@@ -201,30 +204,46 @@ class DataInteractionForm(tk.Frame):
 
         # weather data panel
         weatherpanel = tk.LabelFrame(self, text='Weather panel', padx=5, pady=5)
+        # weather icon in tkinter label
+        # https://stackoverflow.com/questions/38173526/displaying-images-from-url-in-tkinter
+        icon_url = 'http://openweathermap.org/img/wn/' + self.api_data['weather_0_icon'] + '@2x.png'
+        raw_data = urllib.request.urlopen(icon_url).read()
+        im = Image.open(BytesIO(raw_data)).resize((26, 26))
+        # due to how python deals with garbage collection the picture just gets erased,
+        # therefore a reference to the image in the global scope is required
+        self.weather_icon_image = ImageTk.PhotoImage(im)
+        self.weather_main = ttk.Label(weatherpanel, text='Weather: ' +
+                                      self.api_data['weather_0_main'].title(),)
+        self.weather_main.grid(row=0, column=0, padx=2, sticky=tk.W)
+        self.weather_icon = ttk.Label(weatherpanel, image=self.weather_icon_image)
+        self.weather_icon.grid(row=0, column=1, padx=2, sticky=tk.W)
+        self.visibility = ttk.Label(weatherpanel, text='Visibility: ' +
+                                    str(round(float(self.api_data['visibility'])/1000, 1)) + ' km',)
+        self.visibility.grid(row=1, column=0, padx=2, pady=4, sticky=tk.W)
         self.temperature = ttk.Label(weatherpanel, text='Temperature: {0:>4} {1}C'.
-                                     format(self.api_data['current_temperature'], chr(176)),)
-        self.temperature.grid(row=0, column=0, padx=2, pady=5, sticky=tk.W)
-        self.pressure = ttk.Label(weatherpanel, text='Pressure: {0:>10} hPa'.
+                                     format(self.api_data['main_temp'], chr(176)),)
+        self.temperature.grid(row=0, column=2, padx=2, pady=4, sticky=tk.W)
+        self.temperature_feels_like = ttk.Label(weatherpanel, text='Feels like: {0:>10} {1}C'.
+                                                format(self.api_data['main_feels_like'], chr(176)),)
+        self.temperature_feels_like.grid(row=1, column=2, padx=2, pady=4, sticky=tk.W)
+        self.pressure = ttk.Label(weatherpanel, text='Pressure: {0} hPa'.
                                   format(self.api_data['pressure']),)
-        self.pressure.grid(row=1, column=0, padx=2, pady=4, sticky=tk.W)
+        self.pressure.grid(row=0, column=3, padx=2, pady=4, sticky=tk.W)
         self.humidity = ttk.Label(weatherpanel, text='Humidity: ' +
                                   self.api_data['humidity'] + ' '+'%',)
-        self.humidity.grid(row=0, column=1, padx=2, pady=5, sticky=tk.W)
-        self.visibility = ttk.Label(weatherpanel, text='Visibility: ' +
-                                    self.api_data['visibility'] + ' m',)
-        self.visibility.grid(row=1, column=1, padx=2, pady=4, sticky=tk.W)
+        self.humidity.grid(row=1, column=3, padx=2, pady=4, sticky=tk.W)
         self.wind_speed = ttk.Label(weatherpanel, text='Wind speed: ' +
                                     self.api_data['wind_speed'] + ' '+'m/s',)
-        self.wind_speed.grid(row=0, column=2, padx=2, pady=5, sticky=tk.W)
+        self.wind_speed.grid(row=0, column=4, padx=2, pady=4, sticky=tk.W)
         self.wind_deg = ttk.Label(weatherpanel, text='Wind direction: ' +
                                   self.api_data['wind_deg'] + chr(176),)
-        self.wind_deg.grid(row=1, column=2, padx=2, pady=4, sticky=tk.W)
+        self.wind_deg.grid(row=1, column=4, padx=2, pady=4, sticky=tk.W)
         self.sys_sunrise = ttk.Label(weatherpanel, text='Sunrise: ' +
                                      self.api_data['sys_sunrise'] + ' ',)
-        self.sys_sunrise.grid(row=0, column=3, padx=2, pady=5, sticky=tk.W)
+        self.sys_sunrise.grid(row=0, column=5, padx=2, pady=4, sticky=tk.W)
         self.sys_sunset = ttk.Label(weatherpanel, text='Sunset: ' +
                                     self.api_data['sys_sunset'] + ' ',)
-        self.sys_sunset.grid(row=1, column=3, padx=2, pady=4, sticky=tk.W)
+        self.sys_sunset.grid(row=1, column=5, padx=2, pady=4, sticky=tk.W)
         weatherpanel.grid(row=1, column=0, sticky=('NSEW'))
 
 

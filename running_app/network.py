@@ -48,7 +48,8 @@ def get_local_weather(post_code, country_code):
             api_request = requests.get(url)
             api_response = json.loads(api_request.content)
             flatten_response = _flatten_json(api_response)
-            weather_data['current_temperature'] = str(round(flatten_response['main_temp'], 1))
+            weather_data['main_temp'] = str(round(flatten_response['main_temp'], 1))
+            weather_data['main_feels_like'] = str(round(flatten_response['main_feels_like'], 1))
             weather_data['pressure'] = str(flatten_response['main_pressure'])
             weather_data['humidity'] = str(flatten_response['main_humidity'])
             weather_data['visibility'] = str(flatten_response['visibility'])
@@ -58,6 +59,8 @@ def get_local_weather(post_code, country_code):
             for response in ['sys_sunrise', 'sys_sunset']:
                 weather_data[response] = str(datetime.strftime(datetime.fromtimestamp(
                                              flatten_response[response]), '%H:%M'))
+            weather_data['weather_0_main'] = str(flatten_response['weather_0_main'])
+            weather_data['weather_0_icon'] = str(flatten_response['weather_0_icon'])
     except Exception as e:
         print(e.__doc__)
     return weather_data
