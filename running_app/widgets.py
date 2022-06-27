@@ -18,6 +18,10 @@ mpl_use('TkAgg')
 # To list all available styles, use: print(plt.style.available)
 # https://matplotlib.org/stable/tutorials/introductory/customizing.html
 plt.style.use('fivethirtyeight')
+# silences warning: INFO matplotlib.category: Using categorical units to plot a list of strings
+# that are all parsable as floats or dates. If these strings should be plotted as numbers, cast
+# to the appropriate data type before plotting.
+plt.set_loglevel('WARNING')
 
 
 class TtkSpinbox(ttk.Entry):
