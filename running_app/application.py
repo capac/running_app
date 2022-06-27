@@ -227,8 +227,7 @@ class Application(tk.Tk):
                 for row in records:
                     row = self.data_model.data_addition(row)
                     self.data_model.add_record(row)
-                self.status.set(f'''Loaded running records into \
-                                {self.settings['db_name'].get()}''')
+                self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
                 self.populate_recordlist()
                 self.period_dropdown()
 
