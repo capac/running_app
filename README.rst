@@ -21,9 +21,10 @@ Features
 * Shows bar chart for weekly cumulative distance achievement,
 * Shows bar chart for weekly average speed achievement,
 * Shows bar chart for number of weekly running sessions,
-* Allows bar chart views over the previous 1, 3, 6 and 9 month spans,
+* Allows bar chart views over the previous 1, 3 and 6 month spans,
 * Import and export of data in CSV formats,
-* Creates stacked bar chart for marathon training programs.
+* Creates stacked bar chart for marathon training programs,
+* Advanced search form that allow search on dates, distances, speeds and paces.
 
 Requirements
 ============
@@ -45,3 +46,4 @@ Issues
 ======
 
 * Draw feature of bar chart plots can be slow for higher look-back periods of 6 months or over.
+For this reason, lookbacks are limited to 6 months.
