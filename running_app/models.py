@@ -39,7 +39,7 @@ class SQLModel:
 
     # create running table if not existing
     create_running_table_command = ('CREATE TABLE IF NOT EXISTS running '
-                                    '(Date TEXT PRIMARY KEY, '
+                                    '(Date DATE PRIMARY KEY, '
                                     'Duration TEXT NOT NULL, '
                                     'Distance REAL NOT NULL, '
                                     'Pace TEXT NOT NULL, '
