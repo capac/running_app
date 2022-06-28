@@ -60,7 +60,7 @@ def get_local_weather(post_code, country_code):
                 weather_data[response] = str(datetime.strftime(datetime.fromtimestamp(
                                              flatten_response[response]), '%H:%M'))
             weather_data['weather_0_main'] = str(flatten_response['weather_0_main'])
-            weather_data['weather_0_icon'] = str(flatten_response['weather_0_icon'])
+            # weather_data['weather_0_icon'] = str(flatten_response['weather_0_icon'])
     except Exception as e:
         print(e.__doc__)
     return weather_data
