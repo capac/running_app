@@ -30,6 +30,20 @@ def _flatten_json(y):
     return out
 
 
+def _validate_post_code(self, post_code):
+    '''validate post code according to format below before using it'''
+
+    # https://stackoverflow.com/questions/13648729/python-regular-expression-for-outward-uk-post-code
+    pattern = r'[A-Z]{1,2}[0-9R][0-9A-Z]?\s[0-9][A-Z]{2}'
+    if not re.findall(pattern, post_code):
+        raise Exception(
+            '''Post code isn't in valid format'''
+        )
+    else:
+        post_code = re.sub(' ', '%20', post_code)
+    return post_code
+
+
 # key code for flatten JSON weather data output
 # 'coord_lon', 'coord_lat', 'weather_0_id', 'weather_0_main', 'weather_0_description',
 # 'weather_0_icon', 'base', 'main_temp', 'main_feels_like', 'main_temp_min', 'main_temp_max',
@@ -38,29 +52,22 @@ def _flatten_json(y):
 # 'id', 'name', 'cod'
 def get_local_weather(post_code, country_code):
     weather_data = {}
-    # https://stackoverflow.com/questions/13648729/python-regular-expression-for-outward-uk-post-code
-    pattern = r'[A-Z]{1,2}[0-9R][0-9A-Z]?\s[0-9][A-Z]{2}'
-    try:
-        if re.findall(pattern, post_code):
-            post_code = re.sub(' ', '%20', post_code)
-            # units are metric
-            url = base_url+post_code+','+country_code+'&appid='+weather_api_key+'&units=metric'
-            api_request = requests.get(url)
-            api_response = json.loads(api_request.content)
-            flatten_response = _flatten_json(api_response)
-            weather_data['main_temp'] = str(round(flatten_response['main_temp'], 1))
-            weather_data['main_feels_like'] = str(round(flatten_response['main_feels_like'], 1))
-            weather_data['pressure'] = str(flatten_response['main_pressure'])
-            weather_data['humidity'] = str(flatten_response['main_humidity'])
-            weather_data['visibility'] = str(flatten_response['visibility'])
-            weather_data['wind_speed'] = str(flatten_response['wind_speed'])
-            weather_data['wind_deg'] = str(flatten_response['wind_deg'])
-            # convert from POSIX time to naive time
-            for response in ['sys_sunrise', 'sys_sunset']:
-                weather_data[response] = str(datetime.strftime(datetime.fromtimestamp(
-                                             flatten_response[response]), '%H:%M'))
-            weather_data['weather_0_main'] = str(flatten_response['weather_0_main'])
-            # weather_data['weather_0_icon'] = str(flatten_response['weather_0_icon'])
-    except Exception as e:
-        print(e.__doc__)
+    # units are metric
+    url = base_url+_validate_post_code(post_code)+','+country_code+'&appid='+weather_api_key+'&units=metric'
+    api_request = requests.get(url)
+    api_response = json.loads(api_request.content)
+    flatten_response = _flatten_json(api_response)
+    # main weather information
+    weather_data['weather_0_main'] = str(flatten_response['weather_0_main'])
+    weather_data['main_temp'] = str(round(flatten_response['main_temp'], 1))
+    weather_data['main_feels_like'] = str(round(flatten_response['main_feels_like'], 1))
+    weather_data['pressure'] = str(flatten_response['main_pressure'])
+    weather_data['humidity'] = str(flatten_response['main_humidity'])
+    weather_data['visibility'] = str(flatten_response['visibility'])
+    weather_data['wind_speed'] = str(flatten_response['wind_speed'])
+    weather_data['wind_deg'] = str(flatten_response['wind_deg'])
+    # convert from POSIX time to naive time
+    for response in ['sys_sunrise', 'sys_sunset']:
+        weather_data[response] = str(datetime.strftime(datetime.fromtimestamp(
+                                     flatten_response[response]), '%H:%M'))
     return weather_data
