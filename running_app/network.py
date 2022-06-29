@@ -30,7 +30,7 @@ def _flatten_json(y):
     return out
 
 
-def _validate_post_code(self, post_code):
+def _validate_post_code(post_code):
     '''validate post code according to format below before using it'''
 
     # https://stackoverflow.com/questions/13648729/python-regular-expression-for-outward-uk-post-code
