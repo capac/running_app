@@ -362,6 +362,29 @@ class SearchFormDurationEntry(TimeEntry):
         return valid
 
 
+class SearchFormDateEntry(DateEntry):
+
+    def _focusout_validate(self, **kwargs):
+        valid = True
+        value = self.get()
+        min_val = self.cget('from')
+        max_val = self.cget('to')
+
+        try:
+            value = Decimal(value)
+        except InvalidOperation:
+            self.error.set(f'Invalid string: {value}')
+            return False
+
+        if value < min_val:
+            self.error.set(f'Too low (min {value})')
+            valid = False
+        if value > max_val:
+            self.error.set(f'Too high (max {value})')
+
+        return valid
+
+
 class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
@@ -372,6 +395,7 @@ class LabelInput(tk.Frame):
         FT.string: (RequiredEntry, tk.StringVar),
         FT.string_list: (ValidatedCombobox, tk.StringVar),
         # unique search form types
+        FT.iso_date_list: (SearchFormDateEntry, tk.StringVar),
         FT.iso_duration_string: (SearchFormDurationEntry, tk.StringVar),
         FT.iso_pace_string: (SearchFormPaceEntry, tk.StringVar),
     }
