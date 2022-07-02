@@ -20,7 +20,7 @@ class SQLModel:
                    'values': ['1', '3', '6']},
         # data fields for search form
         'Search duration': {'req': True, 'type': FT.iso_duration_string},
-        'Search date': {'req': True, 'type': FT.string_list},
+        'Search date': {'req': True, 'type': FT.iso_date_list},
         'Search pace': {'req': True, 'type': FT.iso_pace_string},
         }
 
