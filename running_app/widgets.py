@@ -362,27 +362,9 @@ class SearchFormDurationEntry(TimeEntry):
         return valid
 
 
-class SearchFormDateEntry(DateEntry):
+class SearchFormDateEntry(ValidatedMixin, ttk.Entry):
 
-    def _focusout_validate(self, **kwargs):
-        valid = True
-        value = self.get()
-        min_val = self.cget('from')
-        max_val = self.cget('to')
-
-        try:
-            value = Decimal(value)
-        except InvalidOperation:
-            self.error.set(f'Invalid string: {value}')
-            return False
-
-        if value < min_val:
-            self.error.set(f'Too low (min {value})')
-            valid = False
-        if value > max_val:
-            self.error.set(f'Too high (max {value})')
-
-        return valid
+    pass
 
 
 class LabelInput(tk.Frame):
