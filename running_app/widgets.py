@@ -362,9 +362,56 @@ class SearchFormDurationEntry(TimeEntry):
         return valid
 
 
-class SearchFormDateEntry(ValidatedMixin, ttk.Entry):
+class SearchFormDateEntry(ValidatedMixin, ttk.Combobox):
+    '''Validate dates and check if start date is lower than finish date'''
 
-    pass
+    def __init__(self, *args, min_var=None, max_var=None,
+                 focus_update_var=None, from_=None, to=None,
+                 **kwargs):
+        super().__init__(*args, from_=from_, to=to, **kwargs)
+
+        # there should always be a variable else some of our code will fail
+        self.variable = kwargs.get('textvariable') or tk.DoubleVar
+
+        if min_var:
+            self.min_var = min_var
+            self.min_var.trace('w', self._set_minimum)
+        if max_var:
+            self.max_var = max_var
+            self.max_var.trace('w', self._set_maximum)
+        self.focus_update_var = focus_update_var
+        self.bind('<FocusOut>', self._set_focus_update_var)
+
+    def _set_focus_update_var(self, event):
+        value = self.get()
+        if self.focus_update_var and not self.error.get():
+            self.focus_update_var.set(value)
+
+    def _set_minimum(self, *args):
+        current = self.get()
+        try:
+            new_min = self.min_var.get()
+            self.config(from_=new_min)
+        except (tk.TclError, ValueError):
+            pass
+        if not current:
+            self.delete(0, tk.END)
+        else:
+            self.variable.set(current)
+        self.trigger_focusout_validation()
+
+    def _set_maximum(self, *args):
+        current = self.get()
+        try:
+            new_max = self.max_var.get()
+            self.config(to=new_max)
+        except (tk.TclError, ValueError):
+            pass
+        if not current:
+            self.delete(0, tk.END)
+        else:
+            self.variable.set(current)
+        self.trigger_focusout_validation()
 
 
 class LabelInput(tk.Frame):
