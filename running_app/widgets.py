@@ -305,7 +305,8 @@ class ValidatedCombobox(ValidatedMixin, ttk.Combobox):
         elif len(matching) == 1:
             self.set(matching[0])
             self.icursor(tk.END)
-            valid = False
+            # corrected from False
+            valid = True
         return valid
 
     def _focusout_validate(self, **kwargs):
