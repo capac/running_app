@@ -24,11 +24,6 @@ plt.style.use('fivethirtyeight')
 plt.set_loglevel('WARNING')
 
 
-class TtkSpinbox(ttk.Entry):
-    def __init__(self, parent=None, **kwargs):
-        super().__init__(parent, 'ttk::spinbox', **kwargs)
-
-
 class ValidatedMixin:
     '''Adds validation functionality to an input widget'''
 
@@ -174,7 +169,7 @@ class RequiredEntry(ValidatedMixin, ttk.Entry):
         return valid
 
 
-class ValidatedSpinbox(ValidatedMixin, TtkSpinbox):
+class ValidatedSpinbox(ValidatedMixin, ttk.Spinbox):
     def __init__(self, *args, min_var=None, max_var=None,
                  focus_update_var=None, from_='0', to='100',
                  **kwargs):
@@ -376,6 +371,94 @@ class SearchFormDurationEntry(ValidatedMixin, ttk.Entry):
         return valid
 
 
+class SearchFormDateEntry(ValidatedMixin, ttk.Combobox):
+    '''Validate dates and check if initial date is lower than final date'''
+
+    def __init__(self, *args, min_var=None, max_var=None,
+                 focus_update_var=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # there should always be a variable else some of our code will fail
+        self.variable = kwargs.get('textvariable') or tk.StringVar
+
+        if min_var:
+            self.min_var = min_var
+            self.min_var.trace('w', self._set_minimum)
+        if max_var:
+            self.max_var = max_var
+            self.max_var.trace('w', self._set_maximum)
+        self.focus_update_var = focus_update_var
+        self.bind('<FocusOut>', self._set_focus_update_var)
+
+    def _set_focus_update_var(self, event):
+        value = self.get()
+        if self.focus_update_var and not self.error.get():
+            self.focus_update_var.set(value)
+
+    def _set_minimum(self, *args):
+        current = self.get()
+        try:
+            self.min_var.set(current)
+        except (tk.TclError, ValueError):
+            pass
+        if not current:
+            self.delete(0, tk.END)
+        else:
+            self.variable.set(current)
+        self.trigger_focusout_validation()
+
+    def _set_maximum(self, *args):
+        current = self.get()
+        try:
+            self.max_var.set(current)
+        except (tk.TclError, ValueError):
+            pass
+        if not current:
+            self.delete(0, tk.END)
+        else:
+            self.variable.set(current)
+        self.trigger_focusout_validation()
+
+    def _key_validate(self, proposed, action, **kwargs):
+        valid = True
+        # if the user tries to delete, just clear the field
+        if action == '0':
+            self.set('')
+            return True
+
+        # get our value list
+        values = self.cget('values')
+        # do a case-insensitive match against the entered text
+        matching = [
+            x for x in values if x.lower().startswith(proposed.lower())
+        ]
+        if len(matching) == 0:
+            valid = False
+        elif len(matching) == 1:
+            self.set(matching[0])
+            self.icursor(tk.END)
+            valid = False
+        return valid
+
+    def _focusout_validate(self, **kwargs):
+        valid = True
+        value = self.get()
+
+        try:
+            if datetime.strptime(value, '%Y-%M-%d') < datetime.strptime(self.min_var.get(), '%Y-%M-%d'):
+                self.error.set(f'Too low {value}')
+                valid = False
+        except (AttributeError, ValueError):
+            pass
+        try:
+            if datetime.strptime(value, '%Y-%M-%d') > datetime.strptime(self.max_var.get(), '%Y-%M-%d'):
+                self.error.set(f'Too high {value}')
+                valid = False
+        except (AttributeError, ValueError):
+            pass
+        return valid
+
+
 class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
@@ -386,6 +469,7 @@ class LabelInput(tk.Frame):
         FT.string: (RequiredEntry, tk.StringVar),
         FT.string_list: (ValidatedCombobox, tk.StringVar),
         # unique search form types
+        FT.iso_date_list: (SearchFormDateEntry, tk.StringVar),
         FT.iso_duration_string: (SearchFormDurationEntry, tk.StringVar),
         FT.iso_pace_string: (SearchFormPaceEntry, tk.StringVar),
     }
