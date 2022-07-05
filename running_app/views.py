@@ -247,11 +247,11 @@ class SearchForm(tk.Frame):
 
         # advanced selection form
         advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
-        min_date_var = tk.StringVar(value='-infinity')
-        max_date_var = tk.StringVar(value='infinity')
+        min_date_var = tk.StringVar(value=valid_dates[0])
+        max_date_var = tk.StringVar(value=valid_dates[-1])
         self.search_inputs['date_min'] = w.LabelInput(advancedselectioninfo, 'Date: min',
                                                       field_spec=fields['Search date'],
-                                                      input_args={'width': 11,
+                                                      input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'max_var': max_date_var,
                                                                   'focus_update_var': min_date_var},)
@@ -260,7 +260,7 @@ class SearchForm(tk.Frame):
                                             sticky=(tk.W + tk.E))
         self.search_inputs['date_max'] = w.LabelInput(advancedselectioninfo, 'Date: max',
                                                       field_spec=fields['Search date'],
-                                                      input_args={'width': 11,
+                                                      input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'min_var': min_date_var,
                                                                   'focus_update_var': max_date_var},)
