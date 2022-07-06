@@ -446,13 +446,13 @@ class SearchFormDateEntry(ValidatedMixin, ttk.Combobox):
 
         try:
             if datetime.strptime(value, '%Y-%M-%d') < datetime.strptime(self.min_var.get(), '%Y-%M-%d'):
-                self.error.set(f'Too low {value}')
+                self.error.set(f'Too low: {value}')
                 valid = False
         except (AttributeError, ValueError):
             pass
         try:
             if datetime.strptime(value, '%Y-%M-%d') > datetime.strptime(self.max_var.get(), '%Y-%M-%d'):
-                self.error.set(f'Too high {value}')
+                self.error.set(f'Too high: {value}')
                 valid = False
         except (AttributeError, ValueError):
             pass
