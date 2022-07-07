@@ -463,6 +463,7 @@ class LabelInput(tk.Frame):
     '''A widget containing a label and input together'''
 
     field_types = {
+        # treeview data types
         FT.iso_date_string: (DateEntry, tk.StringVar),
         FT.iso_time_string: (TimeEntry, tk.StringVar),
         FT.decimal: (ValidatedSpinbox, tk.DoubleVar),
