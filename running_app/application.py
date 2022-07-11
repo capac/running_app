@@ -223,13 +223,16 @@ class Application(tk.Tk):
                     detail=str(e)
                 )
             else:
-                records = csv_read.load_records(csv_read.running_fields)
-                for row in records:
-                    row = self.data_model.data_addition(row)
-                    self.data_model.add_record(row)
-                self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
-                self.populate_recordlist()
-                self.period_dropdown()
+                try:
+                    records = csv_read.load_records(csv_read.running_fields)
+                    for row in records:
+                        row = self.data_model.data_addition(row)
+                        self.data_model.add_record(row)
+                    self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
+                    self.populate_recordlist()
+                    self.period_dropdown()
+                except TypeError:
+                    pass
 
     def file_export(self):
         '''Handles the file->export action from the menu'''

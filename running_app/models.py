@@ -4,6 +4,7 @@ import os
 import json
 from datetime import timedelta
 from .constants import FieldTypes as FT
+from tkinter import messagebox
 
 
 class SQLModel:
@@ -325,13 +326,16 @@ class CSVModel:
         with open(self.filename, 'r', encoding='utf-8-sig') as fh:
             # turning fh into a list is necessary for the unit tests
             csvreader = csv.DictReader(list(fh.readlines()))
-            missing_fields = set(fields.keys()) - set(csvreader.fieldnames)
-            if len(missing_fields) > 0:
-                raise Exception(
-                    f'''File is missing fields: {', '.join(missing_fields)}'''
-                )
-            else:
-                return list(csvreader)
+            try:
+                missing_fields = set(fields.keys()) - set(csvreader.fieldnames)
+                if len(missing_fields) > 0:
+                    messagebox.showerror(title='Error',
+                                         message=f'''File is missing fields:
+                                         {', '.join(missing_fields)}''',)
+                else:
+                    return list(csvreader)
+            except Exception:
+                pass
 
     def save_records(self, rows, keys):
         '''Save a dictionary of data to a CSV file'''
