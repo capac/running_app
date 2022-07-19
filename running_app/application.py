@@ -426,7 +426,7 @@ class Application(tk.Tk):
             self.search_status.set('Problem searching for record(s)')
         else:
             self.search_recordlist.populate(search_outputs)
-            self.search_status.set(f'Output count: {len(search_outputs)}')
+            self.search_status.set(f'Count: {len(search_outputs)}')
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
