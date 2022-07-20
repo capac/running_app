@@ -431,7 +431,7 @@ class Application(tk.Tk):
             d_ = self._stats_summary(search_outputs, 'Distance')[0]
             s_ = self._stats_summary(search_outputs, 'Speed')[1]
             t_ = self._stats_summary(search_outputs, 'Duration')[2]
-            self.search_status.set(f'''Count: {c_}, distance: {d_} km, mean speed: {s_} km/hr, time: {t_} hr''')
+            self.search_status.set(f'''Count: {c_} | Distance: {d_} km | Mean speed: {s_} km/hr | Duration: {t_} hr''')
 
     def _stats_summary(self, search_outputs, key):
         tot_dist, sum_speed, tot_time = 0, 0, 0
