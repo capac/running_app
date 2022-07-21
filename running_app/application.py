@@ -427,26 +427,22 @@ class Application(tk.Tk):
             self.search_status.set('Problem searching for record(s)')
         else:
             self.search_recordlist.populate(search_outputs)
-            c_ = len(search_outputs)
-            d_ = self._stats_summary(search_outputs, 'Distance')[0]
-            s_ = self._stats_summary(search_outputs, 'Speed')[1]
-            t_ = self._stats_summary(search_outputs, 'Duration')[2]
-            self.search_status.set(f'''Count: {c_} | Distance: {d_} km | Mean speed: {s_} km/hr | Duration: {t_} hr''')
+            self.search_status.set('Count: {} | Distance: {} km | Mean speed: {} km/hr | Duration: {} hr'
+                                   .format(*self._stats_summary(search_outputs)))
 
-    def _stats_summary(self, search_outputs, key):
+    def _stats_summary(self, search_outputs):
         tot_dist, sum_speed, tot_time = 0, 0, 0
-        for row in search_outputs:
-            if key == 'Distance':
-                tot_dist += row[key]
-            elif key == 'Speed':
-                sum_speed += row[key]
-            elif key == 'Duration':
-                tot_time += timedelta(hours=int(row[key][0:2]), minutes=int(row[key][3:5]),
-                                      seconds=int(row[key][6:8]), microseconds=0).total_seconds()
+        for count, row in enumerate(search_outputs):
+            tot_dist += row['Distance']
+            sum_speed += row['Speed']
+            tot_time += timedelta(hours=int(row['Duration'][0:2]),
+                                  minutes=int(row['Duration'][3:5]),
+                                  seconds=int(row['Duration'][6:8]),
+                                  microseconds=0).total_seconds()
         tot_dist = str(round(tot_dist, 2))
         mean_speed = str(round(sum_speed/len(search_outputs), 2))
         tot_time = str(timedelta(seconds=tot_time))
-        return tot_dist, mean_speed, tot_time
+        return count+1, tot_dist, mean_speed, tot_time
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
