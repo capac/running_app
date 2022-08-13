@@ -296,15 +296,23 @@ class Application(tk.Tk):
                         detail=str(e)
                     )
                 else:
-                    records = csv_read.load_records(csv_read.program_fields)
-                    for row in records:
-                        self.data_model.add_program_record(basename, row)
-                    messagebox.showinfo(
-                            title='Adding program',
-                            message=f'Added {basename} program.\n\nPress button to continue.',
+                    try:
+                        records = csv_read.load_records(csv_read.program_fields)
+                        for row in records:
+                            self.data_model.add_program_record(basename, row)
+                        messagebox.showinfo(
+                                title='Adding program',
+                                message=f'Added {basename} program.\n'
+                                        f'Press button to continue.',
+                            )
+                        self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
+                        self.menu.add_program_menu(basename)
+                    except TypeError:
+                        messagebox.showerror(
+                            title='Error',
+                            message='Cannot add data to database',
                         )
-                    self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
-                    self.menu.add_program_menu(basename)
+                        self.data_model.remove_program_table(basename)
 
     def show_plan(self, table_name):
         '''opens new window for marathon program stacked bar chart'''
