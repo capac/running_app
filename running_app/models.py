@@ -126,8 +126,8 @@ class SQLModel:
         columns = [col['name'] for col in self.query(query)]
         col_values = []
         for col in columns:
-            min_col = self.query('SELECT MIN({}) FROM running'.format(col))
-            max_col = self.query('SELECT MAX({}) FROM running'.format(col))
+            min_col = self.query('SELECT MIN(:col) FROM running', {'col': col})
+            max_col = self.query('SELECT MAX(:col) FROM running', {'col': col})
             col_values.append([list(col[0].values())[0] for col in [min_col, max_col]])
         return [v for val in col_values for v in val]
 
