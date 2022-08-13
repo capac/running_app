@@ -292,7 +292,7 @@ class Application(tk.Tk):
                 except Exception as e:
                     messagebox.showerror(
                         title='Error',
-                        message='Problem adding data to database',
+                        message='Problem creating table in database',
                         detail=str(e)
                     )
                 else:
@@ -310,7 +310,7 @@ class Application(tk.Tk):
                     except TypeError:
                         messagebox.showerror(
                             title='Error',
-                            message='Cannot add data to database',
+                            message='Cannot add data to table',
                         )
                         self.data_model.remove_program_table(basename)
 
@@ -379,7 +379,8 @@ class Application(tk.Tk):
             self.removal_window.destroy()
             messagebox.showinfo(
                 title='Removing program',
-                message=f'Removed {table} program.\n\nPress button to continue.',
+                message=f'Removed {table} program.\n'
+                        f'Press button to continue.',
                 )
             self.status.set(f'{self.records_deleted} table(s) deleted this session')
 
