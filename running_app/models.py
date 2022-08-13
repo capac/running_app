@@ -105,6 +105,8 @@ class SQLModel:
             if cursor.description is not None:
                 result = [dict(row) for row in cursor.fetchall()]
                 return result
+        finally:
+            cursor.close()
 
     # only upon first run of the running application
     def create_db_and_primary_table(self):
