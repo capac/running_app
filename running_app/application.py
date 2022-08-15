@@ -229,11 +229,15 @@ class Application(tk.Tk):
                     for row in records:
                         row = self.data_model.data_addition(row)
                         self.data_model.add_record(row)
-                    self.status.set(f'''Loaded running records into {self.settings['db_name'].get()}''')
+                    self.status.set(f'Loaded running records '
+                                    f'''into {self.settings['db_name'].get()}''')
                     self.populate_recordlist()
                     self.period_dropdown()
                 except TypeError:
-                    pass
+                    messagebox.showerror(
+                        title='Error',
+                        message='Cannot add data to table',
+                    )
 
     def file_export(self):
         '''Handles the file->export action from the menu'''
@@ -305,7 +309,8 @@ class Application(tk.Tk):
                                 message=f'Added {basename} program.\n'
                                         f'Press button to continue.',
                             )
-                        self.status.set(f'''Loaded {basename} records into {self.settings['db_name'].get()}''')
+                        self.status.set(f'Loaded {basename} records into '
+                                        f'''{self.settings['db_name'].get()}''')
                         self.menu.add_program_menu(basename)
                     except TypeError:
                         messagebox.showerror(
