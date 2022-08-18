@@ -125,6 +125,8 @@ class SQLModel:
         query = ('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
         columns = [col['name'] for col in self.query(query)]
         col_values = []
+        # SQLite parameter substitution problem
+        # https://stackoverflow.com/questions/228912/sqlite-parameter-substitution-problem
         for col in columns:
             min_col = self.query(f'SELECT MIN({col}) FROM running')
             max_col = self.query(f'SELECT MAX({col}) FROM running')
