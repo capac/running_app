@@ -130,10 +130,10 @@ class DataRecordForm(tk.Frame):
 
         # command section
         command_section = tk.LabelFrame(self, text='Commands',
-                                        padx=5, pady=5, fg="black",)
+                                        padx=5, pady=5, fg='black',)
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_insert'])
+                                         input_var=self.callbacks['on_insert'],)
         self.insertbutton.grid(row=0, column=0, padx=8, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
@@ -191,14 +191,17 @@ class DataInteractionForm(tk.Frame):
 
         # period lookback dropdown section
         interactionpanel = tk.LabelFrame(self, text='Interaction panel',
-                                         padx=5, pady=5, fg="black",)
+                                         padx=5, pady=5, fg='black',)
         self.periodvalue = w.LabelInput(interactionpanel, 'Lookback period',
-                                        field_spec=fields['Period'], input_args={'width': 10})
+                                        field_spec=fields['Period'],
+                                        input_args={'width': 10},
+                                        label_args={'foreground': 'black'},)
         self.periodvalue.set(fields['Period']['values'][0])
         self.periodvalue.grid(row=0, column=0)
         self.selectbutton = w.LabelInput(interactionpanel, 'Select',
-                                         input_class=ttk.Button, input_args={'width': 10},
-                                         input_var=self.callbacks['on_period_dropdown'])
+                                         input_class=ttk.Button,
+                                         input_args={'width': 10},
+                                         input_var=self.callbacks['on_period_dropdown'],)
         self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
         interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
 
@@ -207,34 +210,37 @@ class DataInteractionForm(tk.Frame):
                                      padx=5, pady=5, fg="black",)
         # weather icon in tkinter label
         self.weather_main = ttk.Label(weatherpanel, text='Weather: ' +
-                                      self.api_data['weather_0_main'].title(),)
+                                      self.api_data['weather_0_main'].title(),
+                                      foreground='black',)
         self.weather_main.grid(row=0, column=0, padx=2, sticky=tk.W)
         self.visibility = ttk.Label(weatherpanel, text='Visibility: ' +
-                                    str(round(float(self.api_data['visibility'])/1000, 1)) + ' km',)
+                                    str(round(float(self.api_data['visibility'])/1000, 1)) +
+                                    ' km', foreground='black',)
         self.visibility.grid(row=1, column=0, padx=2, pady=5, sticky=tk.W)
         self.temperature = ttk.Label(weatherpanel, text='Temperature: {0:>4} {1}C'.
-                                     format(self.api_data['main_temp'], chr(176)),)
+                                     format(self.api_data['main_temp'], chr(176)),
+                                     foreground='black',)
         self.temperature.grid(row=0, column=1, padx=2, pady=4, sticky=tk.W)
         self.temperature_feels_like = ttk.Label(weatherpanel, text='Feels like: {0:>10} {1}C'.
-                                                format(self.api_data['main_feels_like'], chr(176)),)
+                                                format(self.api_data['main_feels_like'], chr(176)), foreground='black',)
         self.temperature_feels_like.grid(row=1, column=1, padx=2, pady=5, sticky=tk.W)
         self.pressure = ttk.Label(weatherpanel, text='Pressure: {0} hPa'.
-                                  format(self.api_data['pressure']),)
+                                  format(self.api_data['pressure']), foreground='black',)
         self.pressure.grid(row=0, column=2, padx=2, pady=4, sticky=tk.W)
         self.humidity = ttk.Label(weatherpanel, text='Humidity: ' +
-                                  self.api_data['humidity'] + ' '+'%',)
+                                  self.api_data['humidity'] + ' '+'%', foreground='black',)
         self.humidity.grid(row=1, column=2, padx=2, pady=5, sticky=tk.W)
         self.wind_speed = ttk.Label(weatherpanel, text='Wind speed: {0:>8} m/s'.
-                                    format(self.api_data['wind_speed']),)
+                                    format(self.api_data['wind_speed']), foreground='black',)
         self.wind_speed.grid(row=0, column=3, padx=2, pady=4, sticky=tk.W)
         self.wind_deg = ttk.Label(weatherpanel, text='Wind direction: ' +
-                                  self.api_data['wind_deg'] + chr(176),)
+                                  self.api_data['wind_deg'] + chr(176), foreground='black',)
         self.wind_deg.grid(row=1, column=3, padx=2, pady=5, sticky=tk.W)
         self.sys_sunrise = ttk.Label(weatherpanel, text='Sunrise: ' +
-                                     self.api_data['sys_sunrise'] + ' ',)
+                                     self.api_data['sys_sunrise'] + ' ', foreground='black',)
         self.sys_sunrise.grid(row=0, column=4, padx=2, pady=4, sticky=tk.W)
         self.sys_sunset = ttk.Label(weatherpanel, text='Sunset: {0:>6}'.
-                                    format(self.api_data['sys_sunset']),)
+                                    format(self.api_data['sys_sunset']), foreground='black',)
         self.sys_sunset.grid(row=1, column=4, padx=2, pady=5, sticky=tk.W)
         weatherpanel.grid(row=1, column=0, sticky=('NSEW'))
 
