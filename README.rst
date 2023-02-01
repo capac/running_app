@@ -10,7 +10,7 @@ and show of weekly running distance and weekly average speed.
 
 Author
 ======
-Angelo Varlotta, 2022
+Angelo Varlotta, 2023
 
 Features
 ========
@@ -47,3 +47,4 @@ Issues
 * Draw feature of bar chart plots can be slow for higher look-back periods greater than 6 months.
 For this reason, lookbacks are limited to 6 months.
 * Duration and Pace in advanced search form won't return an error if lower duration and pace are higher than upper duration and pace. Fix is on TODO list.
+* When dark mode is set at the OS level the application has white text on a white background, and the TreeView lists are white text on a black field. I've decided to remove dark mode styling and make it maintain its usual visualization mode even when the OS is set for dark mode.
