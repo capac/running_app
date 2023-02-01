@@ -109,22 +109,22 @@ class DataRecordForm(tk.Frame):
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],
                                            input_args={'width': 12},
-                                           label_args={'width': 18})
+                                           label_args={'width': 18, 'foreground': 'black'},)
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
                                                field_spec=fields['Duration'],
                                                input_args={'width': 12},
-                                               label_args={'width': 18})
+                                               label_args={'width': 18, 'foreground': 'black'})
         self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'],
                                                input_args={'width': 12},
-                                               label_args={'width': 18})
+                                               label_args={'width': 18, 'foreground': 'black'})
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
                                                field_spec=fields['Location'],
                                                input_args={'width': 12},
-                                               label_args={'width': 18})
+                                               label_args={'width': 18, 'foreground': 'black'})
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -256,7 +256,8 @@ class SearchForm(tk.Frame):
         self.search_inputs = {}
 
         # advanced selection form
-        advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection', padx=5, pady=5)
+        advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection',
+                                              padx=5, pady=5, fg='black')
         min_date_var = tk.StringVar(value=valid_dates[0])
         max_date_var = tk.StringVar(value=valid_dates[-1])
         self.search_inputs['date_min'] = w.LabelInput(advancedselectioninfo, 'Date: min',
@@ -264,7 +265,8 @@ class SearchForm(tk.Frame):
                                                       input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'max_var': max_date_var,
-                                                                  'focus_update_var': min_date_var},)
+                                                                  'focus_update_var':
+                                                                  min_date_var},)
         self.search_inputs['date_min'].set(valid_dates[0])
         self.search_inputs['date_min'].grid(row=0, column=0, padx=8, pady=(20, 0),
                                             sticky=(tk.W + tk.E))
@@ -273,7 +275,8 @@ class SearchForm(tk.Frame):
                                                       input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'min_var': min_date_var,
-                                                                  'focus_update_var': max_date_var},)
+                                                                  'focus_update_var':
+                                                                  max_date_var},)
         self.search_inputs['date_max'].set(valid_dates[-1])
         self.search_inputs['date_max'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['duration_min'] = w.LabelInput(advancedselectioninfo, 'Duration: min',
