@@ -95,6 +95,10 @@ class DataRecordForm(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
 
+        # styles
+        style = ttk.Style()
+        style.configure('Select.TButton', foreground='black')
+
         # a dictionary to keep track of input widgets
         self.inputs = {}
 
@@ -133,15 +137,18 @@ class DataRecordForm(tk.Frame):
                                         padx=5, pady=5, fg='black',)
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_insert'],)
+                                         input_var=self.callbacks['on_insert'],
+                                         input_args={'style': 'Select.TButton'})
         self.insertbutton.grid(row=0, column=0, padx=8, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_remove'])
+                                         input_var=self.callbacks['on_remove'],
+                                         input_args={'style': 'Select.TButton'})
         self.removebutton.grid(row=0, column=1, padx=8, pady=(10, 0))
         self.searchbutton = w.LabelInput(command_section, 'Search',
                                          input_class=ttk.Button,
-                                         input_var=self.callbacks['on_open_search_window'])
+                                         input_var=self.callbacks['on_open_search_window'],
+                                         input_args={'style': 'Select.TButton'})
         self.searchbutton.grid(row=0, column=2, padx=(200, 0), pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
@@ -200,7 +207,8 @@ class DataInteractionForm(tk.Frame):
         self.periodvalue.grid(row=0, column=0)
         self.selectbutton = w.LabelInput(interactionpanel, 'Select',
                                          input_class=ttk.Button,
-                                         input_args={'width': 10},
+                                         input_args={'width': 10,
+                                                     'style': 'Select.TButton'},
                                          input_var=self.callbacks['on_period_dropdown'],)
         self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
         interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
@@ -262,6 +270,7 @@ class SearchForm(tk.Frame):
         max_date_var = tk.StringVar(value=valid_dates[-1])
         self.search_inputs['date_min'] = w.LabelInput(advancedselectioninfo, 'Date: min',
                                                       field_spec=fields['Search date'],
+                                                      label_args={'foreground': 'black'},
                                                       input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'max_var': max_date_var,
@@ -272,6 +281,7 @@ class SearchForm(tk.Frame):
                                             sticky=(tk.W + tk.E))
         self.search_inputs['date_max'] = w.LabelInput(advancedselectioninfo, 'Date: max',
                                                       field_spec=fields['Search date'],
+                                                      label_args={'foreground': 'black'},
                                                       input_args={'width': 13,
                                                                   'values': valid_dates,
                                                                   'min_var': min_date_var,
@@ -279,35 +289,52 @@ class SearchForm(tk.Frame):
                                                                   max_date_var},)
         self.search_inputs['date_max'].set(valid_dates[-1])
         self.search_inputs['date_max'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
-        self.search_inputs['duration_min'] = w.LabelInput(advancedselectioninfo, 'Duration: min',
-                                                          field_spec=fields['Search duration'],
+        self.search_inputs['duration_min'] = w.LabelInput(advancedselectioninfo,
+                                                          'Duration: min',
+                                                          label_args={'foreground':
+                                                                      'black'},
+                                                          field_spec=fields['Search '
+                                                                            'duration'],
                                                           input_args={'width': 10},)
         self.search_inputs['duration_min'].grid(row=0, column=1, padx=8, pady=(20, 0),
                                                 sticky=(tk.W + tk.E))
-        self.search_inputs['duration_max'] = w.LabelInput(advancedselectioninfo, 'Duration: max',
-                                                          field_spec=fields['Search duration'],
+        self.search_inputs['duration_max'] = w.LabelInput(advancedselectioninfo,
+                                                          'Duration: max',
+                                                          label_args={'foreground':
+                                                                      'black'},
+                                                          field_spec=fields['Search '
+                                                                            'duration'],
                                                           input_args={'width': 10},)
         self.search_inputs['duration_max'].grid(row=1, column=1, padx=8,
                                                 sticky=(tk.W + tk.E))
         min_distance_var = tk.DoubleVar(value='-infinity')
         max_distance_var = tk.DoubleVar(value='infinity')
-        self.search_inputs['distance_min'] = w.LabelInput(advancedselectioninfo, 'Distance: min',
+        self.search_inputs['distance_min'] = w.LabelInput(advancedselectioninfo,
+                                                          'Distance: min',
                                                           field_spec=fields['Distance'],
+                                                          label_args={'foreground':
+                                                                      'black'},
                                                           input_args={'width': 10, 'max_var': max_distance_var,
                                                                       'focus_update_var': min_distance_var, })
         self.search_inputs['distance_min'].grid(row=0, column=2, padx=8, pady=(20, 0),
                                                 sticky=(tk.W + tk.E))
-        self.search_inputs['distance_max'] = w.LabelInput(advancedselectioninfo, 'Distance: max',
+        self.search_inputs['distance_max'] = w.LabelInput(advancedselectioninfo,
+                                                          'Distance: max',
                                                           field_spec=fields['Distance'],
+                                                          label_args={'foreground':
+                                                                      'black'},
                                                           input_args={'width': 10, 'min_var': min_distance_var,
                                                                       'focus_update_var': max_distance_var, })
-        self.search_inputs['distance_max'].grid(row=1, column=2, padx=8, sticky=(tk.W + tk.E))
+        self.search_inputs['distance_max'].grid(row=1, column=2, padx=8,
+                                                sticky=(tk.W + tk.E))
         self.search_inputs['pace_min'] = w.LabelInput(advancedselectioninfo, 'Pace: min',
                                                       field_spec=fields['Search pace'],
+                                                      label_args={'foreground': 'black'},
                                                       input_args={'width': 10},)
         self.search_inputs['pace_min'].grid(row=0, column=3, padx=8, pady=(20, 0),
                                             sticky=(tk.W + tk.E))
         self.search_inputs['pace_max'] = w.LabelInput(advancedselectioninfo, 'Pace: max',
+                                                      label_args={'foreground': 'black'},
                                                       field_spec=fields['Search pace'],
                                                       input_args={'width': 10},)
         self.search_inputs['pace_max'].grid(row=1, column=3, padx=8, sticky=(tk.W + tk.E))
@@ -315,18 +342,22 @@ class SearchForm(tk.Frame):
         max_speed_var = tk.DoubleVar(value='infinity')
         self.search_inputs['speed_min'] = w.LabelInput(advancedselectioninfo, 'Speed: min',
                                                        field_spec=fields['Distance'],
+                                                       label_args={'foreground': 'black'},
                                                        input_args={'width': 10, 'max_var': max_speed_var,
                                                                    'focus_update_var': min_speed_var, })
         self.search_inputs['speed_min'].grid(row=0, column=4, padx=8, pady=(20, 0),
                                              sticky=(tk.W + tk.E))
         self.search_inputs['speed_max'] = w.LabelInput(advancedselectioninfo, 'Speed: max',
                                                        field_spec=fields['Distance'],
+                                                       label_args={'foreground': 'black'},
                                                        input_args={'width': 10, 'min_var': min_speed_var,
                                                                    'focus_update_var': max_speed_var, })
         self.search_inputs['speed_max'].grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
         # search button
-        self.search_button = w.LabelInput(advancedselectioninfo, 'Search', input_class=ttk.Button,
-                                          input_var=self.callbacks['on_search'])
+        self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
+                                          input_class=ttk.Button,
+                                          input_var=self.callbacks['on_search'],
+                                          input_args={'style': 'Select.TButton'})
         self.search_button.grid(row=2, column=0, padx=8, pady=(5, 0))
         advancedselectioninfo.grid(row=0, column=0, sticky='EW')
 
