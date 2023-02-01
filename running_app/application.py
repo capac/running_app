@@ -96,7 +96,8 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # interaction form
-        self.selectionform = v.DataInteractionForm(self, self.data_model.running_fields,
+        self.selectionform = v.DataInteractionForm(self,
+                                                   self.data_model.running_fields,
                                                    self.callbacks,
                                                    n.get_local_weather(self.settings['post_code'].get(),
                                                                        self.settings['country_code'].get()))
@@ -104,13 +105,14 @@ class Application(tk.Tk):
         self.selectionform.columnconfigure(0, weight=1)
 
         # data record form
-        self.recordform = v.DataRecordForm(self, self.data_model.running_fields, self.callbacks)
+        self.recordform = v.DataRecordForm(self, self.data_model.running_fields,
+                                           self.callbacks)
         self.recordform.grid(row=1, column=1, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
         # status bar
         self.status = tk.StringVar()
-        self.statusbar = ttk.Label(self, textvariable=self.status)
+        self.statusbar = ttk.Label(self, textvariable=self.status, foreground='black')
         self.statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
         self.statusbar.columnconfigure(0, weight=1)
 
