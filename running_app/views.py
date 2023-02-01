@@ -103,7 +103,8 @@ class DataRecordForm(tk.Frame):
         self.record_label.grid(row=0, column=0, padx=2, pady=(4, 0))
 
         # running input
-        runninginfo = tk.LabelFrame(self, text='Running information', padx=5, pady=5)
+        runninginfo = tk.LabelFrame(self, text='Running information',
+                                    padx=5, pady=5, fg="black")
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],
@@ -128,7 +129,8 @@ class DataRecordForm(tk.Frame):
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
         # command section
-        command_section = tk.LabelFrame(self, text='Commands', padx=5, pady=5)
+        command_section = tk.LabelFrame(self, text='Commands',
+                                        padx=5, pady=5, fg="black",)
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'])
@@ -188,7 +190,8 @@ class DataInteractionForm(tk.Frame):
         self.api_data = api_data
 
         # period lookback dropdown section
-        interactionpanel = tk.LabelFrame(self, text='Interaction panel', padx=5, pady=5)
+        interactionpanel = tk.LabelFrame(self, text='Interaction panel',
+                                         padx=5, pady=5, fg="black",)
         self.periodvalue = w.LabelInput(interactionpanel, 'Lookback period',
                                         field_spec=fields['Period'], input_args={'width': 10})
         self.periodvalue.set(fields['Period']['values'][0])
@@ -200,7 +203,8 @@ class DataInteractionForm(tk.Frame):
         interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
 
         # weather data panel
-        weatherpanel = tk.LabelFrame(self, text='Weather panel', padx=5, pady=5)
+        weatherpanel = tk.LabelFrame(self, text='Weather panel',
+                                     padx=5, pady=5, fg="black",)
         # weather icon in tkinter label
         self.weather_main = ttk.Label(weatherpanel, text='Weather: ' +
                                       self.api_data['weather_0_main'].title(),)
