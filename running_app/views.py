@@ -97,7 +97,7 @@ class DataRecordForm(tk.Frame):
 
         # styles
         style = ttk.Style()
-        style.configure('Select.TButton', foreground='black')
+        style.configure('Select.TButton', foreground='black', background='white')
 
         # a dictionary to keep track of input widgets
         self.inputs = {}
@@ -196,6 +196,10 @@ class DataInteractionForm(tk.Frame):
         self.callbacks = callbacks
         self.api_data = api_data
 
+        # styles
+        style = ttk.Style()
+        style.configure('Select.TButton', foreground='black')
+
         # period lookback dropdown section
         interactionpanel = tk.LabelFrame(self, text='Interaction panel',
                                          padx=5, pady=5, fg='black',)
@@ -260,6 +264,10 @@ class SearchForm(tk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.callbacks = callbacks
 
+        # styles
+        style = ttk.Style()
+        style.configure('Select.TButton', foreground='black')
+
         # a dictionary to keep track of input widgets
         self.search_inputs = {}
 
@@ -293,8 +301,7 @@ class SearchForm(tk.Frame):
                                                           'Duration: min',
                                                           label_args={'foreground':
                                                                       'black'},
-                                                          field_spec=fields['Search '
-                                                                            'duration'],
+                                                          field_spec=fields['Search duration'],
                                                           input_args={'width': 10},)
         self.search_inputs['duration_min'].grid(row=0, column=1, padx=8, pady=(20, 0),
                                                 sticky=(tk.W + tk.E))
@@ -302,8 +309,7 @@ class SearchForm(tk.Frame):
                                                           'Duration: max',
                                                           label_args={'foreground':
                                                                       'black'},
-                                                          field_spec=fields['Search '
-                                                                            'duration'],
+                                                          field_spec=fields['Search duration'],
                                                           input_args={'width': 10},)
         self.search_inputs['duration_max'].grid(row=1, column=1, padx=8,
                                                 sticky=(tk.W + tk.E))
@@ -407,9 +413,15 @@ class RecordList(tk.Frame):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
+        # styles
+        style = ttk.Style()
+        style.configure('Treeview', foreground='black', background='white',
+                        fieldbackground='white', font=('TkDefaultFont', 14))
+        style.map('Treeview', background=[('selected', 'cornflowerblue')])
+
         # create treeview
         self.treeview = ttk.Treeview(self, columns=list(self.column_defs.keys())[1:],
-                                     selectmode='browse')
+                                     selectmode='browse', style='Treeview')
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         self.treeview.grid(row=0, column=0, sticky='NSEW')
