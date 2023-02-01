@@ -33,7 +33,8 @@ class Application(tk.Tk):
         self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
 
         # application name
-        ttk.Label(self, text='Running List', font=('TkDefaultFont', 16)).grid(row=0, padx=60)
+        ttk.Label(self, text='Running List',
+                  font=('TkDefaultFont', 16),).grid(row=0, padx=60)
 
         self.inserted_rows = []
         self.updated_rows = []
@@ -51,6 +52,7 @@ class Application(tk.Tk):
         # Themes: 'aqua', 'clam', 'alt', 'default', 'classic'; 'aqua' set as default
         if theme in style.theme_names():
             style.theme_use(theme)
+        style.configure()
 
         # database login
         self.database_login()
@@ -76,7 +78,8 @@ class Application(tk.Tk):
             'on_search': self.search,
         }
 
-        self.menu = v.MainMenu(self, self.callbacks, self.data_model.check_program_tables())
+        self.menu = v.MainMenu(self, self.callbacks,
+                               self.data_model.check_program_tables())
         self.config(menu=self.menu)
 
         # create database and table if non-existent
@@ -99,8 +102,10 @@ class Application(tk.Tk):
         self.selectionform = v.DataInteractionForm(self,
                                                    self.data_model.running_fields,
                                                    self.callbacks,
-                                                   n.get_local_weather(self.settings['post_code'].get(),
-                                                                       self.settings['country_code'].get()))
+                                                   n.get_local_weather(self.settings
+                                                                       ['post_code'].get(),
+                                                                       self.settings
+                                                                       ['country_code'].get()))
         self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
 
