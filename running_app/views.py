@@ -103,7 +103,7 @@ class DataRecordForm(tk.Frame):
         self.inputs = {}
 
         # build the form
-        self.record_label = ttk.Label(self)
+        self.record_label = ttk.Label(self, foreground='black')
         self.record_label.grid(row=0, column=0, padx=2, pady=(4, 0))
 
         # running input
