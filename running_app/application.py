@@ -46,6 +46,12 @@ class Application(tk.Tk):
         self.settings_model = m.SettingsModel(path=config_dir)
         self.load_settings()
 
+        style = ttk.Style()
+        theme = self.settings.get('theme').get()
+        # Themes: 'aqua', 'clam', 'alt', 'default', 'classic'; 'aqua' set as default
+        if theme in style.theme_names():
+            style.theme_use(theme)
+
         # database login
         self.database_login()
         if not hasattr(self, 'data_model'):
