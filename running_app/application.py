@@ -52,7 +52,6 @@ class Application(tk.Tk):
         # Themes: 'aqua', 'clam', 'alt', 'default', 'classic'; 'aqua' set as default
         if theme in style.theme_names():
             style.theme_use(theme)
-        style.configure()
 
         # database login
         self.database_login()
