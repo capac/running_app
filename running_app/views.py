@@ -417,11 +417,13 @@ class RecordList(tk.Frame):
         style = ttk.Style()
         style.configure('Treeview', foreground='black', background='white',
                         fieldbackground='white', font=('TkDefaultFont', 14))
-        style.map('Treeview', background=[('selected', 'cornflowerblue')])
+        style.configure("Treeview.Heading", foreground='black', background='white')
+        style.map('Treeview', foreground=[('selected', 'white')],
+                  background=[('selected', 'cornflowerblue')])
 
         # create treeview
         self.treeview = ttk.Treeview(self, columns=list(self.column_defs.keys())[1:],
-                                     selectmode='browse', style='Treeview')
+                                     selectmode='browse')
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         self.treeview.grid(row=0, column=0, sticky='NSEW')
