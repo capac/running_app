@@ -33,9 +33,8 @@ class Application(tk.Tk):
         self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
 
         # application name
-        ttk.Label(self, text='',
-                  font=('TkDefaultFont', 16), foreground='black',).grid(row=0, padx=60,
-                                                                        pady=2)
+        ttk.Label(self, text='', font=('TkDefaultFont', 16),
+                  foreground='black',).grid(row=0, padx=60, pady=2)
 
         self.inserted_rows = []
         self.updated_rows = []

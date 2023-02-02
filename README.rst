@@ -28,7 +28,7 @@ Features
 Requirements
 ============
 
-* Python (>=3.8.x),
+* Python (>=3.10.x),
 * Tkinter (normally part of the built-in packages in Python, however if installing Python 3.9.x and above with Homebrew you may need to install it separately ('brew install python-tk@3.9')),
 * SQLite (>= 3.37.2), install with 'python -m pip install sqlite',
 * matplotlib (>=3.5.x), install with 'python -m pip install matplotlib'.
