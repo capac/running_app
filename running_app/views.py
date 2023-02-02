@@ -97,7 +97,10 @@ class DataRecordForm(tk.Frame):
 
         # styles
         style = ttk.Style()
-        style.configure('Select.TButton', foreground='black', background='white')
+        style.configure('TButton', foreground='black', background='white')
+        style.configure('TCombobox', foreground='black', background='white')
+        style.configure('TEntry', insertcolor='black', background='cornflowerblue')
+        style.configure('TSpinbox', insertcolor='black')
 
         # a dictionary to keep track of input widgets
         self.inputs = {}
@@ -113,22 +116,27 @@ class DataRecordForm(tk.Frame):
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],
                                            input_args={'width': 12},
-                                           label_args={'width': 18, 'foreground': 'black'},)
+                                           label_args={'width': 18,
+                                                       'foreground': 'black'},)
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
                                                field_spec=fields['Duration'],
                                                input_args={'width': 12},
-                                               label_args={'width': 18, 'foreground': 'black'})
+                                               label_args={'width': 18,
+                                                           'foreground': 'black'})
         self.inputs['Duration'].grid(row=0, column=1)
         self.inputs['Distance'] = w.LabelInput(runninginfo, 'Distance (km)',
                                                field_spec=fields['Distance'],
-                                               input_args={'width': 12},
-                                               label_args={'width': 18, 'foreground': 'black'})
+                                               input_args={'width': 12,
+                                                           'style': 'TSpinbox'},
+                                               label_args={'width': 18,
+                                                           'foreground': 'black'})
         self.inputs['Distance'].grid(row=0, column=2)
         self.inputs['Location'] = w.LabelInput(runninginfo, 'Location (City, Country)',
                                                field_spec=fields['Location'],
                                                input_args={'width': 12},
-                                               label_args={'width': 18, 'foreground': 'black'})
+                                               label_args={'width': 18,
+                                                           'foreground': 'black'})
         self.inputs['Location'].grid(row=0, column=3)
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -138,17 +146,17 @@ class DataRecordForm(tk.Frame):
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_insert'],
-                                         input_args={'style': 'Select.TButton'})
+                                         input_args={'style': 'TButton'})
         self.insertbutton.grid(row=0, column=0, padx=8, pady=(10, 0))
         self.removebutton = w.LabelInput(command_section, 'Remove data',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_remove'],
-                                         input_args={'style': 'Select.TButton'})
+                                         input_args={'style': 'TButton'})
         self.removebutton.grid(row=0, column=1, padx=8, pady=(10, 0))
         self.searchbutton = w.LabelInput(command_section, 'Search',
                                          input_class=ttk.Button,
                                          input_var=self.callbacks['on_open_search_window'],
-                                         input_args={'style': 'Select.TButton'})
+                                         input_args={'style': 'TButton'})
         self.searchbutton.grid(row=0, column=2, padx=(200, 0), pady=(10, 0))
         command_section.grid(row=2, column=0, sticky=(tk.W + tk.E))
 
@@ -198,7 +206,7 @@ class DataInteractionForm(tk.Frame):
 
         # styles
         style = ttk.Style()
-        style.configure('Select.TButton', foreground='black')
+        style.configure('TButton', foreground='black')
 
         # period lookback dropdown section
         interactionpanel = tk.LabelFrame(self, text='Interaction panel',
@@ -212,7 +220,7 @@ class DataInteractionForm(tk.Frame):
         self.selectbutton = w.LabelInput(interactionpanel, 'Select',
                                          input_class=ttk.Button,
                                          input_args={'width': 10,
-                                                     'style': 'Select.TButton'},
+                                                     'style': 'TButton'},
                                          input_var=self.callbacks['on_period_dropdown'],)
         self.selectbutton.grid(row=0, column=1, padx=5, pady=(18, 0))
         interactionpanel.grid(row=0, column=0, sticky=('NSEW'))
@@ -266,7 +274,7 @@ class SearchForm(tk.Frame):
 
         # styles
         style = ttk.Style()
-        style.configure('Select.TButton', foreground='black')
+        style.configure('TButton', foreground='black')
 
         # a dictionary to keep track of input widgets
         self.search_inputs = {}
@@ -283,7 +291,7 @@ class SearchForm(tk.Frame):
                                                                   'values': valid_dates,
                                                                   'max_var': max_date_var,
                                                                   'focus_update_var':
-                                                                  min_date_var},)
+                                                                  min_date_var})
         self.search_inputs['date_min'].set(valid_dates[0])
         self.search_inputs['date_min'].grid(row=0, column=0, padx=8, pady=(20, 0),
                                             sticky=(tk.W + tk.E))
@@ -294,7 +302,8 @@ class SearchForm(tk.Frame):
                                                                   'values': valid_dates,
                                                                   'min_var': min_date_var,
                                                                   'focus_update_var':
-                                                                  max_date_var},)
+                                                                  max_date_var,
+                                                                  'style': 'TCombobox'},)
         self.search_inputs['date_max'].set(valid_dates[-1])
         self.search_inputs['date_max'].grid(row=1, column=0, padx=8, sticky=(tk.W + tk.E))
         self.search_inputs['duration_min'] = w.LabelInput(advancedselectioninfo,
@@ -363,7 +372,7 @@ class SearchForm(tk.Frame):
         self.search_button = w.LabelInput(advancedselectioninfo, 'Search',
                                           input_class=ttk.Button,
                                           input_var=self.callbacks['on_search'],
-                                          input_args={'style': 'Select.TButton'})
+                                          input_args={'style': 'TButton'})
         self.search_button.grid(row=2, column=0, padx=8, pady=(5, 0))
         advancedselectioninfo.grid(row=0, column=0, sticky='EW')
 
