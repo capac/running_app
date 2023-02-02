@@ -457,8 +457,8 @@ class Application(tk.Tk):
                                    .format(*self._stats_summary(search_outputs)))
 
     def _stats_summary(self, search_outputs):
-        tot_dist, sum_speed, tot_time = 0, 0, 0
-        for count, row in enumerate(search_outputs):
+        count, tot_dist, sum_speed, tot_time, mean_speed = 0, 0, 0, 0, 0
+        for row in search_outputs:
             tot_dist += row['Distance']
             sum_speed += row['Speed']
             tot_time += timedelta(hours=int(row['Duration'][0:2]),
@@ -466,9 +466,15 @@ class Application(tk.Tk):
                                   seconds=int(row['Duration'][6:8]),
                                   microseconds=0).total_seconds()
         tot_dist = str(round(tot_dist, 2))
-        mean_speed = str(round(sum_speed/len(search_outputs), 2))
+        try:
+            mean_speed = str(round(sum_speed/len(search_outputs), 2))
+        except ZeroDivisionError:
+            messagebox.showerror(
+                title='Error',
+                message='No record(s) in search',
+            )
         tot_time = str(timedelta(seconds=tot_time))
-        return count+1, tot_dist, mean_speed, tot_time
+        return count, tot_dist, mean_speed, tot_time
 
     def load_settings(self):
         '''Load settings into our self.settings dict'''
