@@ -33,8 +33,9 @@ class Application(tk.Tk):
         self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
 
         # application name
-        ttk.Label(self, text='Running List',
-                  font=('TkDefaultFont', 16),).grid(row=0, padx=60)
+        ttk.Label(self, text='',
+                  font=('TkDefaultFont', 16), foreground='black',).grid(row=0, padx=60,
+                                                                        pady=2)
 
         self.inserted_rows = []
         self.updated_rows = []
@@ -86,14 +87,14 @@ class Application(tk.Tk):
 
         # bar chart plots
         self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period)
-        self.barcharts.grid(row=0, column=0, sticky=('NSEW'))
+        self.barcharts.grid(row=1, column=0, sticky=('NSEW'))
         self.barcharts.columnconfigure(0, weight=1)
 
         # treeview record form
         self.recordlist = v.RecordList(self, self.callbacks,
                                        inserted=self.inserted_rows,
                                        updated=self.updated_rows,)
-        self.recordlist.grid(row=0, column=1, padx=10, sticky='NSEW')
+        self.recordlist.grid(row=1, column=1, padx=10, sticky='NSEW')
         self.recordlist.columnconfigure(0, weight=1)
         self.populate_recordlist()
 
@@ -105,19 +106,19 @@ class Application(tk.Tk):
                                                                        ['post_code'].get(),
                                                                        self.settings
                                                                        ['country_code'].get()))
-        self.selectionform.grid(row=1, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
+        self.selectionform.grid(row=2, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
         self.selectionform.columnconfigure(0, weight=1)
 
         # data record form
         self.recordform = v.DataRecordForm(self, self.data_model.running_fields,
                                            self.callbacks)
-        self.recordform.grid(row=1, column=1, padx=10, sticky='NSEW')
+        self.recordform.grid(row=2, column=1, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
         # status bar
         self.status = tk.StringVar()
         self.statusbar = ttk.Label(self, textvariable=self.status, foreground='black')
-        self.statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
+        self.statusbar.grid(row=3, column=0, padx=10, sticky=('WE'))
         self.statusbar.columnconfigure(0, weight=1)
 
         self.records_saved = 0
