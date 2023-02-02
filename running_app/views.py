@@ -215,6 +215,11 @@ class DataInteractionForm(tk.Frame):
                                         field_spec=fields['Period'],
                                         input_args={'width': 10},
                                         label_args={'foreground': 'black'},)
+        self.periodvalue.master.option_add('*TCombobox*Listbox.selectBackground',
+                                           'cornflowerblue')
+        self.periodvalue.master.option_add('*TCombobox*Listbox.background', 'white')
+        self.periodvalue.master.option_add('*TCombobox*Listbox.foreground', 'black')
+
         self.periodvalue.set(fields['Period']['values'][0])
         self.periodvalue.grid(row=0, column=0)
         self.selectbutton = w.LabelInput(interactionpanel, 'Select',
