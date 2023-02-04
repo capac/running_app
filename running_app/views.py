@@ -98,9 +98,13 @@ class DataRecordForm(tk.Frame):
         # styles
         style = ttk.Style()
         style.configure('TButton', foreground='black', background='white')
-        style.configure('TCombobox', foreground='black', background='white')
-        style.configure('TEntry', insertcolor='black', background='cornflowerblue')
-        style.configure('TSpinbox', insertcolor='black')
+        style.configure('TCombobox', foreground='black', background='white',
+                        selectbackground='cornflowerblue', selectforeground='white')
+        style.configure('TEntry', insertcolor='black', background='white',
+                        selectbackground='cornflowerblue', selectforeground='white')
+        style.configure('TSpinbox', insertcolor='black',
+                        selectbackground='cornflowerblue',
+                        selectforeground='white')
 
         # a dictionary to keep track of input widgets
         self.inputs = {}
@@ -117,7 +121,7 @@ class DataRecordForm(tk.Frame):
                                            field_spec=fields['Date'],
                                            input_args={'width': 12},
                                            label_args={'width': 18,
-                                                       'foreground': 'black'},)
+                                                       'foreground': 'black'})
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo, 'Duration (hh:mm:ss)',
                                                field_spec=fields['Duration'],
