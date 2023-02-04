@@ -279,7 +279,7 @@ class Application(tk.Tk):
         period = self.selectionform.periodvalue.get()
         self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period,
                                         period)
-        self.barcharts.grid(row=0, column=0, sticky=(tk.W + tk.E))
+        self.barcharts.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
     def add_plan(self):
         '''Handles marathon program import and saves data to the database,
