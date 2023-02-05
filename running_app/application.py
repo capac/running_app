@@ -461,6 +461,7 @@ class Application(tk.Tk):
     def _stats_summary(self, search_outputs):
         count, tot_dist, sum_speed, tot_time, mean_speed = 0, 0, 0, 0, 0
         for row in search_outputs:
+            count += 1
             tot_dist += row['Distance']
             sum_speed += row['Speed']
             tot_time += timedelta(hours=int(row['Duration'][0:2]),
