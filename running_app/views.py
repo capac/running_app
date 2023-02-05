@@ -331,15 +331,16 @@ class SearchForm(tk.Frame):
                                                           input_args={'width': 10},)
         self.search_inputs['duration_max'].grid(row=1, column=1, padx=8,
                                                 sticky=(tk.W + tk.E))
-        min_distance_var = tk.DoubleVar(value='-infinity')
-        max_distance_var = tk.DoubleVar(value='infinity')
+        min_dist_var = tk.DoubleVar(value='-infinity')
+        max_dist_var = tk.DoubleVar(value='infinity')
         self.search_inputs['distance_min'] = w.LabelInput(advancedselectioninfo,
                                                           'Distance: min',
                                                           field_spec=fields['Distance'],
                                                           label_args={'foreground':
                                                                       'black'},
-                                                          input_args={'width': 10, 'max_var': max_distance_var,
-                                                                      'focus_update_var': min_distance_var, })
+                                                          input_args={'width': 10,
+                                                                      'max_var': max_dist_var,
+                                                                      'focus_update_var': min_dist_var, })
         self.search_inputs['distance_min'].grid(row=0, column=2, padx=8, pady=(20, 0),
                                                 sticky=(tk.W + tk.E))
         self.search_inputs['distance_max'] = w.LabelInput(advancedselectioninfo,
@@ -347,8 +348,9 @@ class SearchForm(tk.Frame):
                                                           field_spec=fields['Distance'],
                                                           label_args={'foreground':
                                                                       'black'},
-                                                          input_args={'width': 10, 'min_var': min_distance_var,
-                                                                      'focus_update_var': max_distance_var, })
+                                                          input_args={'width': 10,
+                                                                      'min_var': min_dist_var,
+                                                                      'focus_update_var': max_dist_var, })
         self.search_inputs['distance_max'].grid(row=1, column=2, padx=8,
                                                 sticky=(tk.W + tk.E))
         self.search_inputs['pace_min'] = w.LabelInput(advancedselectioninfo, 'Pace: min',
@@ -367,14 +369,16 @@ class SearchForm(tk.Frame):
         self.search_inputs['speed_min'] = w.LabelInput(advancedselectioninfo, 'Speed: min',
                                                        field_spec=fields['Distance'],
                                                        label_args={'foreground': 'black'},
-                                                       input_args={'width': 10, 'max_var': max_speed_var,
+                                                       input_args={'width': 10,
+                                                                   'max_var': max_speed_var,
                                                                    'focus_update_var': min_speed_var, })
         self.search_inputs['speed_min'].grid(row=0, column=4, padx=8, pady=(20, 0),
                                              sticky=(tk.W + tk.E))
         self.search_inputs['speed_max'] = w.LabelInput(advancedselectioninfo, 'Speed: max',
                                                        field_spec=fields['Distance'],
                                                        label_args={'foreground': 'black'},
-                                                       input_args={'width': 10, 'min_var': min_speed_var,
+                                                       input_args={'width': 10,
+                                                                   'min_var': min_speed_var,
                                                                    'focus_update_var': max_speed_var, })
         self.search_inputs['speed_max'].grid(row=1, column=4, padx=8, sticky=(tk.W + tk.E))
         # search button
