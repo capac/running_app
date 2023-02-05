@@ -426,7 +426,9 @@ class Application(tk.Tk):
 
         # search status bar
         self.search_status = tk.StringVar()
-        self.search_statusbar = ttk.Label(advanced_window, textvariable=self.search_status)
+        self.search_statusbar = ttk.Label(advanced_window,
+                                          textvariable=self.search_status,
+                                          foreground='black')
         self.search_statusbar.grid(row=2, column=0, padx=10, sticky=('WE'))
         self.search_statusbar.columnconfigure(0, weight=1)
 
