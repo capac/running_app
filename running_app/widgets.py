@@ -729,10 +729,12 @@ class BarChartWidget(tk.Frame):
             fontsize=13,
         )
         # y-axis tick frequency and label
-        longest_week = max([sum(week) for week in weekly_distances])
-        y_ticks_loc = range(0, int(longest_week) + 10, 5)
-        self.axes.yaxis.set_major_locator(ticker.FixedLocator(y_ticks_loc))
-        self.axes.set_yticklabels(y_ticks_loc, minor=True, fontsize=13)
+        # longest_week = max([sum(week) for week in weekly_distances])
+        # y_ticks_labels = range(int(longest_week))
+        self.axes.yaxis.set_major_locator(ticker.MaxNLocator(nbins='auto'))
+        # self.axes.yaxis.set_ticks(y_ticks_labels)
+        # self.axes.yaxis.set_ticklabels(y_ticks_labels, minor=True,
+        #                                fontsize=13)
         # grid style: dotted
         self.axes.grid(linestyle=":")
         self.canvas.flush_events()
