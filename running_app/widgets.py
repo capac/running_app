@@ -627,7 +627,7 @@ class BarChartWidget(tk.Frame):
                     )
                     self.axes.set_ylim(
                         float(self.axes.yaxis.get_data_interval()[0]),
-                        float(self.axes.yaxis.get_data_interval()[1]) + 22.0,
+                        float(self.axes.yaxis.get_data_interval()[1]) + 32.0,
                     )
 
                 else:
