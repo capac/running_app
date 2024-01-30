@@ -27,7 +27,8 @@ class SQLModel:
 
     program_fields = {
         # value for 'DeleteTableForm' class
-        'Program dropdown': {'req': True, 'type': FT.string_list, 'values': []},
+        'Program dropdown': {'req': True, 'type': FT.string_list,
+                             'values': []},
         # values for individual daily session for mararthon program
         'Mon': {'req': True, 'type': FT.decimal},
         'Tue': {'req': True, 'type': FT.decimal},
@@ -120,7 +121,8 @@ class SQLModel:
     def min_max_column_values(self):
         '''Returns minimum and maximum values for a column'''
 
-        # retrieving column names: 'Date', 'Duration', 'Distance', 'Pace', 'Speed'
+        # retrieving column names: 'Date', 'Duration',
+        # 'Distance', 'Pace', 'Speed'
         # https://stackoverflow.com/questions/947215/how-to-get-a-list-of-column-names-on-sqlite3-database
         query = ('''SELECT name FROM PRAGMA_TABLE_INFO('running')''')
         columns = [col['name'] for col in self.query(query)]
@@ -130,7 +132,8 @@ class SQLModel:
         for col in columns:
             min_col = self.query(f'SELECT MIN({col}) FROM running')
             max_col = self.query(f'SELECT MAX({col}) FROM running')
-            col_values.append([list(col[0].values())[0] for col in [min_col, max_col]])
+            col_values.append([list(col[0].values())[0] for col
+                               in [min_col, max_col]])
         return [v for val in col_values for v in val]
 
     def get_record_range(self, date_min=None, date_max=None,
@@ -149,7 +152,8 @@ class SQLModel:
                       'speed_min': speed_min,
                       'speed_max': speed_max}
         col_values = self.min_max_column_values()
-        for (col_p_key, col_p_val), col_v in zip(col_params.items(), col_values):
+        for (col_p_key, col_p_val), col_v in zip(col_params.items(),
+                                                 col_values):
             if not col_p_val:
                 col_params[col_p_key] = col_v
         query = ('SELECT * FROM running WHERE '
@@ -176,7 +180,8 @@ class SQLModel:
         return result[0] if result else {}
 
     def get_dates(self, date_lo=None, date_hi=None):
-        query = ('SELECT Date FROM running WHERE Date BETWEEN :Min_Date AND :Max_Date')
+        query = ('SELECT Date FROM running WHERE Date '
+                 'BETWEEN :Min_Date AND :Max_Date')
         result = self.query(query, {"Min_Date": date_lo, "Max_Date": date_hi})
         return [res['Date'] for res in result]
 
@@ -198,7 +203,7 @@ class SQLModel:
         delete_query = self.running_delete_command
         self.query(delete_query, record)
 
-    def group_records_by_period(self, period):
+    def group_records(self, period):
         # group records by weekly data per year,
         # 'start_of_week' table created using suggestion below
         # https://stackoverflow.com/questions/9322313/how-to-group-by-week-no-and-get-start-date-and-end-date-for-the-week-number-in-s,
@@ -212,8 +217,8 @@ class SQLModel:
                  "SELECT date_entry, "
                  "COALESCE(ROUND(Weekly_Distance, 1), 0) AS Weekly_Distance, "
                  "COALESCE(Num_Weekly_Sessions, 0) AS Num_Weekly_Sessions, "
-                 "COALESCE(ROUND(Weekly_Mean_Speed, 1), 0) AS Weekly_Mean_Speed "
-                 "FROM start_of_week AS sow "
+                 "COALESCE(ROUND(Weekly_Mean_Speed, 1), 0) AS "
+                 "Weekly_Mean_Speed FROM start_of_week AS sow "
                  "LEFT JOIN "
                  "(SELECT DATE(rng.Date, 'weekday 0') AS Sunday, "
                  "SUM(rng.Distance) AS Weekly_Distance, "
@@ -244,7 +249,8 @@ class SQLModel:
         try:
             separators = [str(duration[item]) for item in range(2, 9, 3)]
             if separators == ['h', 'm', 's']:
-                data['Duration'] = f'{duration[0:2]}:{duration[3:5]}:{duration[6:8]}'
+                data['Duration'] = f'{duration[0:2]}:{duration[3:5]}:\
+                    {duration[6:8]}'
         except IndexError:
             pass
         time_in_secs = timedelta(hours=int(duration[0:2]),
@@ -373,7 +379,8 @@ class SettingsModel:
         '''Set a variable value'''
 
         if (
-            key in self.variables and type(value).__name__ == self.variables[key]['type']
+            key in self.variables and type(value).__name__ ==
+                self.variables[key]['type']
         ):
             self.variables[key]['value'] = value
         else:

@@ -49,7 +49,8 @@ class Application(tk.Tk):
 
         style = ttk.Style()
         theme = self.settings.get('theme').get()
-        # Themes: 'aqua', 'clam', 'alt', 'default', 'classic'; 'aqua' set as default
+        # Themes: 'aqua', 'clam', 'alt', 'default',
+        # 'classic'; 'aqua' set as default
         if theme in style.theme_names():
             style.theme_use(theme)
 
@@ -85,7 +86,8 @@ class Application(tk.Tk):
         self.data_model.create_db_and_primary_table()
 
         # bar chart plots
-        self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period)
+        self.barcharts = v.BarChartView(self,
+                                        self.data_model.group_records)
         self.barcharts.grid(row=1, column=0, sticky=('NSEW'))
         self.barcharts.columnconfigure(0, weight=1)
 
@@ -98,25 +100,30 @@ class Application(tk.Tk):
         self.populate_recordlist()
 
         # interaction form
-        self.selectionform = v.DataInteractionForm(self,
-                                                   self.data_model.running_fields,
-                                                   self.callbacks,
-                                                   n.get_local_weather(self.settings
-                                                                       ['post_code'].get(),
-                                                                       self.settings
-                                                                       ['country_code'].get()))
-        self.selectionform.grid(row=2, column=0, padx=4, pady=(25, 0), sticky=('NSEW'))
-        self.selectionform.columnconfigure(0, weight=1)
+        self.selectform = v.DataInteractionForm(self,
+                                                self.data_model.running_fields,
+                                                self.callbacks,
+                                                n.get_weather(self.settings
+                                                              ['post_code'].
+                                                              get(),
+                                                              self.settings
+                                                              ['country_code'].
+                                                              get()))
+        self.selectform.grid(row=2, column=0, padx=4, pady=(25, 0),
+                             sticky=('NSEW'))
+        self.selectform.columnconfigure(0, weight=1)
 
         # data record form
-        self.recordform = v.DataRecordForm(self, self.data_model.running_fields,
+        self.recordform = v.DataRecordForm(self,
+                                           self.data_model.running_fields,
                                            self.callbacks)
         self.recordform.grid(row=2, column=1, padx=10, sticky='NSEW')
         self.recordform.columnconfigure(0, weight=1)
 
         # status bar
         self.status = tk.StringVar()
-        self.statusbar = ttk.Label(self, textvariable=self.status, foreground='black')
+        self.statusbar = ttk.Label(self, textvariable=self.status,
+                                   foreground='black')
         self.statusbar.grid(row=3, column=0, padx=10, sticky=('WE'))
         self.statusbar.columnconfigure(0, weight=1)
 
@@ -139,7 +146,8 @@ class Application(tk.Tk):
             self.recordlist.populate(rows)
 
     def open_record(self, rowkey=None):
-        '''rowkey is simply date, while data contains the information for the date'''
+        '''rowkey is simply date, while data contains
+        the information for the date'''
 
         if rowkey is None:
             data = None
@@ -149,7 +157,8 @@ class Application(tk.Tk):
                 self.recordform.load_record(rowkey, data)
                 self.recordform.tkraise()
             except Exception as e:
-                messagebox.showerror(title='Error', message='Problem reading database',
+                messagebox.showerror(title='Error',
+                                     message='Problem reading database',
                                      detail=str(e))
                 return
 
@@ -181,7 +190,8 @@ class Application(tk.Tk):
             self.status.set('Problem saving record')
         else:
             self.records_updated += 1
-            self.status.set(f'{self.records_updated} record(s) updated this session')
+            self.status.set(f'{self.records_updated}'
+                            f'record(s) updated this session')
             key = (str(data['Date']), str(data['Duration']),
                    str(data['Distance']), str(data['Pace']),
                    str(data['Speed']), str(data['Location']))
@@ -210,7 +220,8 @@ class Application(tk.Tk):
             self.status.set('Problem deleting record')
         else:
             self.records_deleted += 1
-            self.status.set(f'{self.records_deleted} record(s) deleted this session')
+            self.status.set(f'{self.records_deleted}'
+                            f'record(s) deleted this session')
             self.recordform.reset()
             self.populate_recordlist()
             self.period_dropdown()
@@ -241,8 +252,8 @@ class Application(tk.Tk):
                     for row in records:
                         row = self.data_model.data_addition(row)
                         self.data_model.add_record(row)
-                    self.status.set(f'Loaded running records '
-                                    f'''into {self.settings['db_name'].get()}''')
+                    self.status.set(f'Loaded running records into '
+                                    f'''{self.settings['db_name'].get()}''')
                     self.populate_recordlist()
                     self.period_dropdown()
                 except TypeError:
@@ -276,8 +287,8 @@ class Application(tk.Tk):
                 csv_write.save_records(rows, csv_write.running_fields.keys())
 
     def period_dropdown(self):
-        period = self.selectionform.periodvalue.get()
-        self.barcharts = v.BarChartView(self, self.data_model.group_records_by_period,
+        period = self.selectform.periodvalue.get()
+        self.barcharts = v.BarChartView(self, self.data_model.group_records,
                                         period)
         self.barcharts.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
@@ -302,7 +313,9 @@ class Application(tk.Tk):
                     detail=str(e)
                 )
             else:
-                basename, _ = os.path.splitext(os.path.basename(self.filename.get()))
+                basename, _ = os.path.splitext(os.path.basename(
+                    self.filename.get())
+                    )
                 try:
                     self.data_model.create_program_table(basename)
                 except Exception as e:
@@ -313,7 +326,9 @@ class Application(tk.Tk):
                     )
                 else:
                     try:
-                        records = csv_read.load_records(csv_read.program_fields)
+                        records = csv_read.load_records(
+                            csv_read.program_fields
+                            )
                         for row in records:
                             self.data_model.add_program_record(basename, row)
                         messagebox.showinfo(
@@ -322,7 +337,7 @@ class Application(tk.Tk):
                                         f'Press button to continue.',
                             )
                         self.status.set(f'Loaded {basename} records into '
-                                        f'''{self.settings['db_name'].get()}''')
+                                        f"{self.settings['db_name'].get()}")
                         self.menu.add_program_menu(basename)
                     except TypeError:
                         messagebox.showerror(
@@ -340,9 +355,11 @@ class Application(tk.Tk):
 
         # get marathon plan data
         try:
-            days_of_week, weekly_distances = self.data_model.get_all_program_records(table_name)
+            days_of_week, weekly_distances = \
+                self.data_model.get_all_program_records(table_name)
             stackedbarchart = v.StackedBarChartView(plan_window, table_name,
-                                                    days_of_week, weekly_distances)
+                                                    days_of_week,
+                                                    weekly_distances)
         except Exception as e:
             messagebox.showerror(
                 title='Error',
@@ -371,9 +388,10 @@ class Application(tk.Tk):
             )
 
         # property form
-        self.deletetableform = v.DeleteTableForm(self.removal_window,
-                                                 self.data_model.program_fields,
-                                                 self.callbacks, updated_tables)
+        self.deletetableform = v.DeleteTableForm(
+            self.removal_window,
+            self.data_model.program_fields,
+            self.callbacks, updated_tables)
         self.deletetableform.grid(row=0, padx=5, sticky='W')
         self.deletetableform.columnconfigure(0, weight=1)
 
@@ -399,7 +417,8 @@ class Application(tk.Tk):
                 message=f'Removed {table} program.\n'
                         f'Press button to continue.',
                 )
-            self.status.set(f'{self.records_deleted} table(s) deleted this session')
+            self.status.set(f'{self.records_deleted}'
+                            f'table(s) deleted this session')
 
     def open_search_window(self):
         '''Advanced search window'''
@@ -412,9 +431,12 @@ class Application(tk.Tk):
         min_date = self.data_model.min_max_column_values()[0]
         max_date = self.data_model.min_max_column_values()[1]
         valid_dates = self.data_model.get_dates(min_date, max_date)
-        self.advancedsearch = v.SearchForm(advanced_window, self.data_model.running_fields,
-                                           self.callbacks, valid_dates=valid_dates)
-        self.advancedsearch.grid(row=0, column=0, padx=6, pady=6, sticky='NSEW')
+        self.advancedsearch = v.SearchForm(advanced_window,
+                                           self.data_model.running_fields,
+                                           self.callbacks,
+                                           valid_dates=valid_dates)
+        self.advancedsearch.grid(row=0, column=0, padx=6,
+                                 pady=6, sticky='NSEW')
         self.advancedsearch.columnconfigure(0, weight=1)
 
         # treeview record form
@@ -455,8 +477,11 @@ class Application(tk.Tk):
             self.search_status.set('Problem searching for record(s)')
         else:
             self.search_recordlist.populate(search_outputs)
-            self.search_status.set('Count: {} | Distance: {} km | Mean speed: {} km/hr | Duration: {} hr'
-                                   .format(*self._stats_summary(search_outputs)))
+            cols = "Count: {} | Distance: {} km | " + \
+                "Mean speed: {} km/hr | Duration: {} hr"
+            self.search_status.set(cols.format(
+                *self._stats_summary(search_outputs))
+                )
 
     def _stats_summary(self, search_outputs):
         count, tot_dist, sum_speed, tot_time, mean_speed = 0, 0, 0, 0, 0
