@@ -672,9 +672,7 @@ class BarChartWidget(tk.Frame):
         color_list = list(
             ([truncated_cmap(a) for a in linspace(0, 1, len(days_of_week))])
         )
-        bottom = zeros(
-            len(weekly_distances),
-        )
+        bottom = zeros(len(weekly_distances),)
         for w_index, week in enumerate(weekly_distances):
             for dow, day in enumerate(week):
                 bar_plot = self.axes.bar(
@@ -704,7 +702,8 @@ class BarChartWidget(tk.Frame):
                 color="k",
             )
         # plot legend
-        self.axes.legend(days_of_week, fontsize=13, loc="upper left",
+        self.axes.legend(days_of_week, fontsize=13,
+                         loc="upper left",
                          edgecolor="k")
         # 5% plot padding in each direction
         self.axes.margins(0.05)
@@ -714,7 +713,7 @@ class BarChartWidget(tk.Frame):
         x_ticks_labels = ["Week " + str(w) for w in
                           range(1, len(weekly_distances) + 1)]
         self.axes.xaxis.set_major_locator(ticker.FixedLocator(x_ticks_loc))
-        # Create offset transform by 0.1 points in x direction
+        # Create offset transform by 0.1 points in y direction
         # https://stackoverflow.com/questions/28615887/how-to-move-a-tick-label-in-matplotlib
         offset = ScaledTranslation(0, 0.1, self.figure.dpi_scale_trans)
         # apply offset transform to all x ticklabels.
@@ -729,9 +728,10 @@ class BarChartWidget(tk.Frame):
             fontsize=13,
         )
         # y-axis tick frequency and label
-        # longest_week = max([sum(week) for week in weekly_distances])
+        longest_week = max([sum(week) for week in weekly_distances]) + 4
         # y_ticks_labels = range(int(longest_week))
         self.axes.yaxis.set_major_locator(ticker.MaxNLocator(nbins='auto'))
+        self.axes.set_ylim([0, longest_week])
         # self.axes.yaxis.set_ticks(y_ticks_labels)
         # self.axes.yaxis.set_ticklabels(y_ticks_labels, minor=True,
         #                                fontsize=13)
