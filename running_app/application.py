@@ -23,6 +23,7 @@ class Application(tk.Tk):
         # application title
         self.title('Running Application')
         self.resizable(width=False, height=False)
+        self.configure(bg='#eeeeee')
 
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
@@ -33,8 +34,8 @@ class Application(tk.Tk):
         self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
 
         # application name
-        ttk.Label(self, text='', font=('TkDefaultFont', 16),
-                  foreground='black',).grid(row=0, padx=60, pady=2)
+        ttk.Label(self, text='Bar charts', font=('TkDefaultFont', 16),
+                  foreground='black').grid(row=0, padx=60, pady=2)
 
         self.inserted_rows = []
         self.updated_rows = []
@@ -287,7 +288,7 @@ class Application(tk.Tk):
                 csv_write.save_records(rows, csv_write.running_fields.keys())
 
     def period_dropdown(self):
-        period = self.selectform.periodvalue.get()
+        period = self.selectform.period_val.get()
         self.barcharts = v.BarChartView(self, self.data_model.group_records,
                                         period)
         self.barcharts.grid(row=1, column=0, sticky=(tk.W + tk.E))
