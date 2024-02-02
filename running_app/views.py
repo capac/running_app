@@ -121,13 +121,13 @@ class DataRecordForm(tk.Frame):
 
         # running input
         runninginfo = tk.LabelFrame(self, text='Running information',
-                                    padx=5, pady=5, fg="black")
+                                    padx=5, pady=5, fg="black", bg='#ECECEC')
 
         self.inputs['Date'] = w.LabelInput(runninginfo, 'Date (YYYY-mm-dd)',
                                            field_spec=fields['Date'],
                                            input_args={'width': 12},
                                            label_args={'width': 18,
-                                                       'foreground': 'black'})
+                                                       'foreground': 'black',})
         self.inputs['Date'].grid(row=0, column=0)
         self.inputs['Duration'] = w.LabelInput(runninginfo,
                                                'Duration (hh:mm:ss)',
@@ -157,7 +157,7 @@ class DataRecordForm(tk.Frame):
         runninginfo.grid(row=1, column=0, sticky=(tk.W + tk.E))
 
         # command section
-        command_section = tk.LabelFrame(self, text='Commands',
+        command_section = tk.LabelFrame(self, text='Commands', bg='#ECECEC',
                                         padx=5, pady=5, fg='black',)
         self.insertbutton = w.LabelInput(command_section, 'Add / update data',
                                          input_class=ttk.Button,
@@ -224,21 +224,24 @@ class DataInteractionForm(tk.Frame):
         # styles
         style = ttk.Style()
         style.configure('TButton', foreground='black')
+        # style.configure('TLabel', background='#ECECEC')
 
         # period lookback dropdown section
         interactionpanel = tk.LabelFrame(self, text='Interaction panel',
-                                         padx=5, pady=5, fg='black',)
+                                         padx=5, pady=5, fg='black', bg='#ECECEC')
         self.period_val = w.LabelInput(interactionpanel, 'Lookback period',
                                        field_spec=fields['Period'],
                                        input_args={'width': 10},
-                                       label_args={'foreground': 'black'},)
+                                       label_args={'background': '#ECECEC', 'foreground': 'black'},)
         self.period_val.master.option_add(
-            '*TCombobox*Listbox.selectBackground',
-            'cornflowerblue')
-        self.period_val.master.option_add('*TCombobox*Listbox.background',
-                                          'white')
-        self.period_val.master.option_add('*TCombobox*Listbox.foreground',
-                                          'black')
+                    '*TCombobox*Listbox.selectBackground',
+                    'cornflowerblue')
+        self.period_val.master.option_add(
+                    '*TCombobox*Listbox.background',
+                    'white')
+        self.period_val.master.option_add(
+                    '*TCombobox*Listbox.foreground',
+                    'black')
 
         self.period_val.set(fields['Period']['values'][0])
         self.period_val.grid(row=0, column=0)
@@ -251,7 +254,7 @@ class DataInteractionForm(tk.Frame):
 
         # weather data panel
         weatherpanel = tk.LabelFrame(self, text='Weather panel',
-                                     padx=5, pady=5, fg="black",)
+                                     padx=5, pady=5, fg="black", bg='#ECECEC')
         # weather icon in tkinter label
         self.weather_main = ttk.Label(weatherpanel, text='Weather: ' +
                                       self.api_data['weather_0_main'].title(),
@@ -321,7 +324,7 @@ class SearchForm(tk.Frame):
 
         # advanced selection form
         advancedselectioninfo = tk.LabelFrame(self, text='Advanced selection',
-                                              padx=5, pady=5, fg='black')
+                                              padx=5, pady=5, fg='black', bg='#ECECEC')
         min_date_var = tk.StringVar(value=valid_dates[0])
         max_date_var = tk.StringVar(value=valid_dates[-1])
         self.search_inputs['date_min'] = w.LabelInput(
