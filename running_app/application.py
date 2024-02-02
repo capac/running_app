@@ -23,7 +23,7 @@ class Application(tk.Tk):
         # application title
         self.title('Running Application')
         self.resizable(width=False, height=False)
-        self.configure(bg='#eeeeee')
+        self.configure(bg='#ECECEC')
 
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
@@ -34,8 +34,8 @@ class Application(tk.Tk):
         self.geometry("+{}+{}".format(x_cordinate, y_cordinate))
 
         # application name
-        ttk.Label(self, text='Bar charts', font=('TkDefaultFont', 16),
-                  foreground='black').grid(row=0, padx=60, pady=2)
+        ttk.Label(self, text='Weekly progression bar charts', font=('TkDefaultFont', 16),
+                  foreground='black', background='#ECECEC').grid(row=0, padx=60, pady=2)
 
         self.inserted_rows = []
         self.updated_rows = []
@@ -48,6 +48,7 @@ class Application(tk.Tk):
         self.settings_model = m.SettingsModel(path=config_dir)
         self.load_settings()
 
+        # styles
         style = ttk.Style()
         theme = self.settings.get('theme').get()
         # Themes: 'aqua', 'clam', 'alt', 'default',
